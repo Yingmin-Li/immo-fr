@@ -1,0 +1,4986 @@
+$(function () {
+
+	var DIR_MAPPY_IMG = "//www.pap.fr/vendor/L.Mappy-7.7.3/dist/images/";
+
+	/*************************************************************************
+	 *** Utilisé sur plusieurs pages sur le site
+	 *************************************************************************/
+
+	/** Fermer le bandeau PROMO **/
+	$("#promo-banner-bottom-fixed").doOnce(function () {
+		$("#promo-banner-bottom-fixed .btn-close").on("click", function () {
+			Cookies.set("promo-banner-bottom-fixed", 1, {"expires": 1});
+			$("#promo-banner-bottom-fixed").remove();
+		});
+	});
+
+	/** Fermer le bandeau promo Guide juridique **/
+	$("#trouver-notaire").doOnce(function () {
+		$("#trouver-notaire .btn-close").on("click", function () {
+			Cookies.set("trouver-notaire", 30, {"expires": 30});
+			$("#trouver-notaire").remove();
+		});
+	});
+	
+	/** Fermer le bandeau promo Devis diagnostic **/
+	$("#devis-diagnostic").doOnce(function () {
+		$("#devis-diagnostic .btn-close").on("click", function () {
+			Cookies.set("devis-diagnostic", 30, {"expires": 1});
+			$("#devis-diagnostic").remove();
+		});
+	});
+
+	/** Sharebar **/
+	$('.sharebar').doOnce(function () {
+		// Facebook
+		$(".article-share-widget-fb").attr("href", "https://www.facebook.com/sharer/sharer.php?" + $.param({
+			"u": $('meta[property="og:url"]').attr("content")
+		}));
+		// Twitter
+		$(".article-share-widget-twitter").attr("href", "https://twitter.com/intent/tweet?" + $.param({
+			"source": $('meta[property="og:url"]').attr("content"),
+			"text": $('meta[property="og:title"]').attr("content"),
+			"url": $('meta[property="og:url"]').attr("content"),
+			"original_refere": $('meta[property="og:url"]').attr("content"),
+			"via": "pap_fr"
+		}));
+		// Pinterest
+		$(".article-share-widget-pin").attr("href", "http://pinterest.com/pin/create/button/?" + $.param({
+			"url": $('meta[property="og:url"]').attr("content"),
+			"description": $('meta[property="og:title"]').attr("content"),
+			"media": $('meta[property="og:image"]').attr("content")
+		}));
+		// Google+
+		$(".article-share-widget-plus").attr("href", "https://plus.google.com/share?" + $.param({
+			"url": $('meta[property="og:url"]').attr("content")
+		}));
+		// E-mail
+		$(".article-share-widget-mail").attr("href", "mailto:?" + $.param({
+			"subject": $('meta[property="og:title"]').attr("content"),
+			"body": ''
+				+ $('meta[property="og:description"]').attr("content") + "\r\n"
+				+ $('meta[property="og:url"]').attr("content") + "\r\n"
+		}).replace(/\+/g, "%20"));
+	});
+
+	/** Toggle RGPD des demdandes de doc ?? **/
+	$('.more-ddd-info-button').doOnce(function () {
+		$('.more-ddd-info-button').click(function () {
+			$('.more-ddd-info').slideToggle();
+			return false;
+		});
+	});
+
+	/** Correction d'un bug Safari sur le champ TokenInput ?? **/
+	$('#geo_objets_ids').doOnce(function () {
+		if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+			$(document).on("click", ".token-input-list", function (e) { $(".token-input-input-token input", this).trigger("focus"); });
+		}
+	});
+
+	/*************************************************************************
+	 *** Homepage
+	 *************************************************************************/
+
+	/** Moteur de recherche **/
+	$('#homepage_recherche_form').doOnce(function () {
+
+		var $form = $(this);
+
+		/* Gestion du type de bien en fonction du produit */
+		$('#typesbien').on('refresh', function () {
+			var produit = $form.find('input[name="produit"]:checked').val();
+			var s = $('#typesbien')[0].sumo;
+			$('#typesbien option').each(function (index, option) {
+				var $option = $(option);
+				$option.prop('disabled', !$option.hasClass('typesbien-' + produit));
+				$option.prop('selected', $option.hasClass('typesbien-' + produit) && $option.prop('selected'));
+			});
+			s.reload();
+			$('#typesbien').closest('.SumoSelect').find('.options .opt.disabled').hide();
+		});
+		$('#produit_vente,#produit_location').on('change', function () {
+			$('#typesbien').trigger('refresh');
+		});
+
+		$('#typesbien').trigger('refresh');
+
+	});
+
+	/** Création d'alerte **/
+	$('#homepage_creer_une_alerte_form').doOnce(function () {
+
+		var $form = $(this);
+		var $dialog = $('#dialog_creer_une_alerte');
+		var $form_recherche = $('#homepage_recherche_form');
+
+		$dialog.on('dialogopen', function () {
+			var produit = $form_recherche.find('input[name="produit"]:checked').val();
+			var $origine = $form.find('input[name="origine"]');
+			var $email = $form.find('input[name="email"]');
+
+			// Copie du formulaire de recherche vers le formulaire de création d'alerte
+			$.map($form_recherche.serializeArray(), function (item, index) {
+				$origine.after($('<input type="hidden" class="copied-input">').attr('name', item.name).val(item.value));
+			});
+			$origine.val($origine.data('values')[produit]);
+
+		});
+
+		$dialog.on('dialogclose', function () {
+			$form.find('.copied-input').remove();
+		});
+
+		$("#submit-sans-creer-alerte").on('click', function() {
+
+			// Masquer les erreurs
+			$form.find('.alert-box').hide();
+
+			// Valider sans création d'alerte
+			$form.trigger("trueSubmit");
+			return false;
+
+		});
+
+		$form.on('submit', function () {
+
+			// Masquer les erreurs
+			$form.find('.alert-box').hide();
+
+			// Valider avec création d'alerte
+			$.ajax({
+				url: "/json/alerte-add",
+				data: $form.serialize(),
+				type: "post",
+				dataType: 'json'
+			}).done(function (res) {
+				if (res.reponse == 'ok') {
+					$form.trigger('trueSubmit');
+				} else {
+					if (!$.isArray(res.erreurs)) {
+						$form.find('.erreur-submit-default').show();
+					} else if (res.erreurs.length == 0) {
+						$form.find('.erreur-email-invalide').show();
+					} else if (res.erreurs[0] == 'max-annonce') {
+						$form.find('.erreur-submit-max-annonce').show();
+					} else if (res.erreurs[0] == 'max-recherche') {
+						$form.find('.erreur-submit-max-recherche').show();
+					} else {
+						$form.find('.erreur-submit-default').show();
+					}
+				}
+			}).fail(function () {
+				$form.find('.erreur-submit-default').show();
+			});
+			return false;
+
+		});
+
+		$form.find('.alert-box').hide();
+
+	});
+
+	/*************************************************************************
+	 *** Recherche
+	 *************************************************************************/
+
+	/**
+	 * Code en commun
+	 */
+
+	$('.search-results-container, .details-annonce-container').doOnce(function () {
+		// Formulaire en cas de creation d'alerte par le checkbox
+		var form_creation_alerte = $('#recherche_formulaire_creation_alerte');
+
+		// Evenement Creation d'alerte après avoir cocher sur popin ou autre
+		form_creation_alerte.on('enregistrer_alerte', function (e, email, origine) {
+			$(this).find('#creation_alerte_email').val(email);
+			if (origine) {
+				$(this).find('#alerte_origine').val(origine);
+			}
+
+			$.ajax({
+				url: form_creation_alerte.attr('action'),
+				type: form_creation_alerte.attr('method'),
+				data: form_creation_alerte.serialize(),
+				success: function (json_alerte) {}
+			});
+		});
+
+		/**
+		 * Contact Annonceur
+		 */
+
+		$(".form-contact-annonceur").on('submit', function () {
+			// Le formulaire qu'on vient d'envoyer
+			var $form = $(this);
+			// Tous les formulaires de contact annonceur
+			var $forms = $(".form-contact-annonceur");
+			var $submit = $forms.find('input[type="submit"]');
+			var $loader = $forms.find('.submit-loader');
+			var $success = $forms.find('.submit-success');
+			
+			var $email = $form.find('input[name="email"]').val() ; 
+			$('#email_creer-dossier').val($email) ; 
+			$('#email_completer-dossier').val($email) ; 
+
+			$form.find('.error-message, .alert-box').hide();
+			$submit.hide();
+			$loader.show();
+			$.ajax({
+				url: $form.attr('action'),
+				type: $form.attr('method'),
+				data: $form.serialize(),
+				success: function (json) {
+					// S'il y a des erreurs
+					if (!json.success) {
+						// Message d'erreur
+						$.each(json.message, function (k, v) {
+							$form.find('.' + v).show();
+						});
+
+						// On affiche le bouton et on masque le loading
+						$submit.show();
+						$loader.hide();
+
+						// On ne continue pas le reste
+						return false;
+
+					} else {
+						$submit.remove();
+						$loader.hide();
+						$success.show();
+						if (json.action) {
+							$('#dialog_'+ json.action).dialog("open");
+						}
+					}
+
+					// Google Analytics
+					var gaq = $form.data('gaq');
+					gtag('event', gaq.action, {'event_category': gaq.category, 'event_label': gaq.label});
+
+					// Enregistre l'alerte email si cela a été coché auparavant
+					if ($form.find('input[name^="alerte_email"]:checked').length == 1) {
+						form_creation_alerte.trigger('enregistrer_alerte', [$form.find(".utilisateur_email").val()]);
+					}
+
+					// Actualiste le bas du formulaire par le message "Proprietaire contacté le ..."
+					$(".action-annonce").trigger("refresh");
+
+				}
+			});
+			return false;
+		});
+
+		/* Propriétaire contacté le ... */
+
+		$(".action-annonce").on("refresh", function () {
+			var today = new Date();
+			var aujourdhui = (today.getDate() > 10 ? today.getDate() : "0" + (today.getDate())) + "/" + (today.getMonth() + 1 > 9 ? (today.getMonth() + 1) : "0" + (today.getMonth() + 1)) + "/" + today.getFullYear();
+			$(this).html("Propriétaire contacté le " + aujourdhui).removeClass('hidden');
+		});
+
+		/* Dossier locataire */
+
+		$('.fermer-dialogue-dossierfacile').on('click', function () {
+			$("#dialog_dossierfacile").dialog("close");
+			Cookies.set('afficher_popin_dossierfacile', 1, {expires: 1});
+		});
+
+		/* Compteur de caractères du message */
+
+		$("textarea[maxlength]").doOnce(function () {
+			$(this).parent().find('.textarea-counter-maxlength').text($(this).attr('maxlength'));
+			$(this).on('keyup', function () {
+				$(this).parent().find('.textarea-counter-curlength').text($(this).val().length);
+			});
+			$(this).trigger('keyup');
+		});
+
+	});
+
+	/**
+	 * Landing pages
+	 */
+
+	$('div.index-recherche-vente').doOnce(function () {
+
+		var $form        = $("#formulaire");
+		var $form_alerte = $("#formulaire_alerte");
+		var $email       = $("#email");
+		var $email_champ = $("#email_champ");
+		var $erreurs = $form.find(".alert-box");
+		// Actualise les erreurs
+		$form_alerte.on('refresh', function () {
+			$email_champ.toggle($('#alerte-oui').is(':checked'));
+			$erreurs.hide();
+		});
+
+		// Affiche la saisie d'adresse mail si l'on clique sur Oui
+		$(".options-group .option").on('click', function (e) {
+			$form_alerte.trigger("refresh");
+		});
+
+		// Contrôle de l'adresse e-mail
+		$email.on('check', function () {
+			$(this).data('deferred', $.ajax({
+				url: "/json/email-check",
+				data: {"email": $(this).val()},
+				type: "post",
+				dataType: 'json',
+				async: false
+			}));
+		});
+
+		// Enregistrement de l'alerte
+		$form_alerte.on("add", function () {
+			$form_alerte.data("deferred", $.ajax({
+				url: "/json/alerte-add",
+				data: $form.serialize(),
+				type: "post",
+				dataType: 'json',
+				async: false
+			}));
+		});
+
+		// Lorsque le formulaire est envoyé
+		$form.on('submit', function (e) {
+
+			// Pas d'alerte, aucune exécution javascript et le formulaire est envoyé normalement
+			if ($('#alerte-non').is(':checked')) {
+				return true;
+			}
+
+			// Masquer les messages d'erreur
+			$erreurs.hide();
+
+			// Contrôler l'e-mail
+			$email.trigger('check');
+			$email.data('deferred')
+				.done(function (res) {
+
+					if (!res.success) {
+						$erreurs.filter(".erreur-email-invalide").show();
+					} else {
+						$form_alerte.trigger("add");
+						$form_alerte.data("deferred")
+							.done(function (res) {
+								if (res.reponse == 'ko') {
+									$erreurs.filter('.erreur-submit-' + res.erreurs.join(',.erreur-submit-')).show();
+								}
+							})
+							.fail(function (res) {
+								$erreurs.filter('.erreur-submit-default').show();
+							});
+					}
+				})
+				.fail(function (res) {
+					$erreurs.filter('.erreur-submit-default').show();
+				});
+
+			// Valide le formulaire seulement si les appels AJAX ont répondu
+			return $erreurs.filter(':visible').length == 0;
+		});
+
+		// Initialisation
+		$form_alerte.trigger('refresh');
+
+	});
+
+	/**
+	 * Liste d'annonces
+	 */
+
+	$('.search-results-container').doOnce(function () {
+
+		/**
+		 * Infinite scroll
+		 */
+		$("#pages-list").doOnce(function () {
+
+			function refreshPlugins() {
+
+				// Pour le recrop des photos
+				$(".owl-carousel").each(function () {
+					$(this).owlCarousel($.extend({
+						// ... default options
+					}, $(this).data('owlCarousel') || {}));
+				});
+
+				// Refresh du czrousel
+				$('.owl-carousel').owlCarousel('refresh');
+
+				// Déplacement des liens
+				// on deplace le lien de l'item dans le carousel
+				$(".search-list-item-alt .owl-carousel").each(function () {
+					var link = $(this).find(".owl-stage-outer");
+					$(this).parent().find(".item-thumb-link").prependTo(link);
+				});
+
+				// Refresh des tooltips
+				$('.tooltip:not(.tooltipstered)').each(function () {
+					$(this).tooltipster();
+				});
+
+				if (Cookies.get('email')) {
+					$('.search-results-container').trigger("refresh");
+				}
+
+				$(".btn-add-favorite").trigger("refresh_btn");
+				$(".img-liquid").css({ "display": "block" }).imgLiquid();
+
+
+			}
+
+			function sendTiersData(infiniteParams) {
+
+				if (!infiniteParams) {
+					return;
+				}
+				//GoogleAnalytics
+				if (infiniteParams.pageView != "") {
+					gtag('event', 'page_view', {'page_path': infiniteParams.pageView});
+				}
+				//Piano
+				if (infiniteParams.pageView != "") {
+					_piq.push(['sendEvent', 'page.display', infiniteParams.pianoPage]);
+				}
+			}
+
+			var InfiniteScroll = function (options) {
+
+				var defaults = {
+					'list': '#pages-list',
+					'item': '.page-item',
+					'pagination': '#pagination',
+					'pagination-prev': '#pagination-prev',
+					'pagination-next': '#pagination-next',
+					'button-refresh': '#refresh',
+					'margin-top': 200,
+					'margin-bottom': 200,
+					'beforeloadprev': function () { },
+					'afterloadprev': function () { },
+					'failloadprev': function () { },
+					'beforeloadnext': function () { },
+					'afterloadnext': function () { },
+					'failloadnext': function () { },
+					'afterloadfirst': function () { },
+					'afterloadlast': function () { }
+				};
+
+				var settings = $.extend({}, defaults, options);
+
+				var $root = $(window);
+				var $list = $(settings.list);
+				var loading = false;
+				var url_prev;
+				var url_next;
+				var cur_scroll_top = 0;
+				var cur_item;
+
+				// Charger la page précédente
+				function load_prev() {
+					loading = true;
+					settings.beforeloadprev();
+					$.get(url_prev, function (html) {
+						var scrollTopBeforePrepend = $root.scrollTop(); // "Sometimes" prepend changes the scrollTop value
+						$list.prepend($(settings.item, html).data('url', url_prev));
+						$root.scrollTop(scrollTopBeforePrepend + $list.find(settings.item).first().outerHeight());
+						url_prev = $(settings['pagination-prev'], html).attr('href');
+						if (!url_prev)
+							settings.afterloadfirst();
+					}, 'html')
+						.always(function () {
+							loading = false;
+							settings.afterloadprev();
+						})
+						.fail(function () {
+							settings.failloadprev();
+						})
+						.done(function () {
+							refresh();
+						});
+				}
+
+				// Charger la page suivante
+				function load_next() {
+					loading = true;
+					settings.beforeloadnext();
+
+					$.get(url_next, function (html) {
+						$list.append($(settings.item, html).data('url', url_next));
+
+						url_next = $(settings['pagination-next'], html).attr('href');
+						if (!url_next)
+							settings.afterloadlast();
+					})
+						.always(function () {
+							loading = false;
+							settings.afterloadnext();
+						})
+						.fail(function () {
+							settings.failloadnext();
+						})
+						.done(function () {
+							refresh();
+						});
+				}
+
+				// Est-ce qu'il faut charger la page précédente ?
+				function should_load_prev() {
+					if (!url_prev)
+						return false;
+					if (loading)
+						return false;
+					if ($root.scrollTop() > $list.offset().top + settings['margin-top'])
+						return false;
+					return true;
+				}
+
+				// Est-ce qu'il faut charger la page suivante ?
+				function should_load_next() {
+					if (!url_next)
+						return false;
+					if (loading)
+						return false;
+					if ($root.scrollTop() + $root.height() + settings['margin-bottom'] < $list.offset().top + $list.outerHeight())
+						return false;
+					return true;
+				}
+
+				// Mise à jour de l'historique
+				function updateHistory() {
+					var new_scroll_top = $root.scrollTop();
+					var half_root = $root.height() / 2;
+					var prev_item;
+					var next_item;
+					var new_item;
+					if (new_scroll_top < cur_scroll_top) { // Quand on scrolle vers le haut
+						while ((prev_item = cur_item.prev(settings.item)) && prev_item.length > 0 && prev_item.offset().top + prev_item.outerHeight() > new_scroll_top + half_root) {
+							cur_item = prev_item;
+							history.replaceState(null, null, cur_item.data('url'));
+						}
+					}
+					if (new_scroll_top > cur_scroll_top) { // Quand on scrolle vers le bas
+						while ((next_item = cur_item.next(settings.item)) && next_item.length > 0 && next_item.offset().top < new_scroll_top + half_root) {
+							cur_item = next_item;
+							history.replaceState(null, null, cur_item.data('url'));
+						}
+					}
+					cur_scroll_top = new_scroll_top;
+				}
+
+				// On vérifie s'il y a quelque chose à faire
+				function refresh() {
+					updateHistory();
+					if (should_load_next())
+						load_next();
+					else if (should_load_prev())
+						load_prev();
+				}
+
+				// A chaque mouvement du scroll on doit vérifier si une mise à jour est nécessaire
+				$root.scroll(function () {
+					// @TODO Use throttle (not debounce) to avoid excessive calls
+					// @see https://underscorejs.org/#throttle
+					refresh();
+				});
+
+				// Au chargement, on fixe le niveau de scroll en haut de la page courante
+				// Les adresses des pages suivantes et précédentes sont initialisées
+				// On vérifie si une mise à jour est nécessaire
+				cur_scroll_top = 0;
+				cur_item = $(settings.item);
+				cur_item.data('url', window.location.href);
+				$root.scrollTop(cur_scroll_top);
+				$(settings.pagination).hide();
+				url_prev = $(settings['pagination-prev']).attr('href');
+				url_next = $(settings['pagination-next']).attr('href');
+				$(settings['button-refresh']).click(function () {
+					refresh();
+					return false;
+				});
+				refresh();
+
+			};
+
+			InfiniteScroll({
+				'list': 'body #pages-list',
+				'item': '.page-item',
+				'pagination': '#pagination',
+				'pagination-prev': '#pagination-prev',
+				'pagination-next': '#pagination-next',
+				'button-refresh': '#button-prev,#button-next',
+				'margin-top': $(window).height() / 2,
+				'margin-bottom': $(window).height() / 2,
+				'beforeloadprev': function () {
+					$('#button-prev').hide();
+					$('#loader-prev').show();
+				},
+				'afterloadprev': function () {
+					$('#loader-prev').hide();
+					refreshPlugins();
+				},
+				'failloadprev': function () {
+					// @TODO DO NOT USE : Boucle infinie
+					//			$('#button-prev').show();
+				},
+				'beforeloadnext': function () {
+					$('#button-next').hide();
+					$('#loader-next').show();
+				},
+				'afterloadnext': function () {
+					$('#loader-next').hide();
+					refreshPlugins();
+					sendTiersData($('.page-item:last').data('infiniteParams'));
+				},
+				'failloadnext': function () {
+					$('#button-next').show();
+				},
+				'afterloadfirst': function () {
+					//$('#no-prev').show();
+				},
+				'afterloadlast': function () {
+					//$('#no-next').show();
+				}
+			});
+
+
+		});
+
+		/**
+		 * Moteur de pagination annonces par pages
+		 */
+		// Recharge la page au changement de critères de pagination ou de tri
+		/***
+		 * $("#moteur_de_pagination").live("change keyup", function () {
+			$("#moteur_de_pagination").submit();
+		});
+		**/
+
+		/**
+		 * Texte guide ville placé sous le titre H1 et positionné en JS dans la sidebar.
+		 * Utilise deux wrappers <div id="guide-ville-seo-src"> et <div id="guide-ville-seo-dst">.
+		 */
+		$('#guide-ville-seo-src').removeClass('hidden').appendTo('#guide-ville-seo-dst');
+		var ti = -1;
+		$("#dialog-box-details-ville a").each(function (e) {
+			$(this).attr("tabindex", ti--);
+		});
+
+		/**
+		 * Tout le bloc de description de l'annonce est cliquable
+		 */
+		$('.search-results-list .search-list-item p.item-description').click(function () {
+			var gaq = $(this).data('gaq');
+			gtag('event', gaq.action, {'event_category': gaq.category, 'event_label': gaq.label});
+			if (gaq.blank) {
+				window.open($(this).closest(".search-list-item").find('a.btn-details').attr('href'));
+			} else {
+				window.location = $(this).closest(".search-list-item").find('a.btn-details').attr('href');
+			}
+		});
+
+
+		/**
+		 * Gestion des favoris
+		 */
+
+		$('.search-results-container').on('refresh_btn', '.btn-add-favorite', function () {
+			$(this).toggleClass('btn-add-favorite-active', $(this).data("annonce").active);
+		});
+
+		$('.search-results-container').on("refresh", function () {
+			var ids = new Array();
+			$(".btn-add-favorite").each(function () {
+				ids.push($(this).data('annonce').id);
+			});
+			$.getJSON('/json/favoris-get', {ids: ids}, function (res) {
+				if (res.success) {
+					$.each(res.ids, function (k, v) {
+						$(".btn-add-favorite").each(function () {
+							var id = $(this).data('annonce').id;
+							if (id == v.annonces_id) {
+								$(this).data('annonce').active = true;
+								$(this).tooltipster('content', 'Supprimer de vos favoris');
+							}
+						});
+					});
+					$(".btn-add-favorite").trigger("refresh_btn");
+				}
+			});
+		});
+
+
+		// Ajout ou suppression dans les favoris
+		$('.search-results-container').on('click', '.btn-add-favorite', function () {
+			var bouton = $(this);
+			if (Cookies.get('email')) {
+				// Suppression
+				if ($(this).data('annonce').active) {
+					$.ajax({
+						url: '/json/favoris-remove',
+						type: 'POST',
+						data: {
+							'annonce_id': $(this).data('annonce').id
+						},
+						success: function (res) {
+							if (res.success == true) {
+								bouton.data('annonce').active = false;
+								bouton.tooltipster('content', 'Ajouter aux favoris');
+								$(".btn-add-favorite").trigger("refresh_btn");
+							}
+						}
+					});
+				}
+				// Ajout
+				else {
+					$.ajax({
+						url: '/json/favoris-add',
+						type: 'POST',
+						data: {
+							'annonce_id': $(this).data('annonce').id
+						},
+						success: function (res) {
+							if (res.success == true) {
+								bouton.data('annonce').active = true;
+								bouton.tooltipster('content', 'Supprimer de vos favoris');
+								$(".btn-add-favorite").trigger("refresh_btn");
+							}
+						}
+					});
+				}
+			} else {
+				$('#dialog-enregistrer-email').dialog('open');
+				$('#dialog-enregistrer-email').on('click', 'input.favoris-enregistrer', function (e) {
+					var form = $('#enregistrer-email-favoris');
+					$.ajax({
+						url: form.attr('action'),
+						type: form.attr('method'),
+						data: form.serialize(),
+						success: function (res) {
+							if (res.success == true) {
+								Cookies.set('email', res.email, { expires: 30 });
+
+								$('#dialog-enregistrer-email').dialog('close');
+								$(bouton).click();
+								$('.search-results-container').trigger("refresh");
+							} else {
+								$('.error-message').text(res.errors).show();
+							}
+						}
+					});
+					return false;
+				});
+
+			}
+			return false;
+		});
+
+		if (Cookies.get('email')) {
+			$('.search-results-container').trigger("refresh");
+		}
+
+		/**
+		 * Popin Création alerte e-mail
+		 */
+		var dialog_alerte_email = $("#dialog_alerte");
+
+		//Google Analytics pour la fermeture de la popin aléatoire
+		dialog_alerte_email.on("dialogclose", function (e, ui) {
+			if (e.srcElement != undefined && dialog_alerte_email.data('actif') == '1') {
+				var gaq = dialog_alerte_email.data('gaq');
+				gtag('event', "Refuser Creation Alerte", {'event_category': gaq.category, 'event_label': gaq.label});
+			}
+		});
+
+		//Fermeture de la dialog au clic sur le bouton fermer
+		dialog_alerte_email.on('click', 'a.btn-fermer-dialog', function (e) {
+			$('.confirmation-email').removeClass('hidden');
+			$('.confirmation-alerte').addClass('hidden');
+			dialog_alerte_email.dialog('close');
+		});
+
+		var validerAlerte = function () {
+			var div_msg_erreurs = dialog_alerte_email.find('.alerte-email-erreur');
+			//on bascule les données voulues dans le formulaire de la page
+			$('#recherche_formulaire_creation_alerte').find('#alerte_origine').val(dialog_alerte_email.data("origine"));
+
+			$.ajax({
+				url: "/json/alerte-add",
+				type: "post",
+				data: $('#recherche_formulaire_creation_alerte').serialize(),
+				timeout: 10000,
+				success: function (json) {
+					if (json.reponse === 'ko') {
+						$('.confirmation-alerte .h2').addClass('hidden');
+						div_msg_erreurs.each(function () {
+							$(this).toggle(!($.inArray($(this).data('erreur'), json.erreurs)));
+						});
+					} else {
+						$('.confirmation-email').addClass('hidden');
+						$('.confirmation-alerte').removeClass('hidden');
+					}
+				},
+				error: function (flux, status) {
+					div_msg_erreurs.each(function () {
+						$(this).toggle(!($.inArray($(this).data('erreur'), 'erreur-technique')));
+					});
+				}
+			});
+			return false;
+		}
+
+		//Evenement au clic sur la validation de l'adresse email (en mode non connecté)
+		dialog_alerte_email.on('submit', 'form', function (e) {
+			$('.error-message').text("");
+			var $form = $(this);
+			$.ajax({
+				url: $form.attr('action'),
+				type: $form.attr('method'),
+				data: $form.serialize(),
+				success: function (res) {
+					if (res.success == true) {
+						Cookies.set('email', res.email, {expires: 30});
+						$('#recherche_formulaire_creation_alerte').find('#creation_alerte_email').val(res.email);
+						validerAlerte();
+					} else {
+						$('.error-message').text(res.errors).show();
+					}
+				}
+			});
+			return false;
+		});
+
+		//Evenement au clic du bouton Alerte Email en bas de page de la liste
+		$('a.cta-alerte').on('click', function (e) {
+			dialog_alerte_email.data("origine", $(this).data('origine'));
+
+			// Si l'utilisateur est connecté on essaie d'enregistrer l'alerte directement
+			if (dialog_alerte_email.data("utilisateur") == true) {
+				$('.confirmation-alerte').removeClass('hidden');
+				$('#recherche_formulaire_creation_alerte').find('#creation_alerte_email').val(dialog_alerte_email.find('input[name^="email_utilisateur"]').val());
+				validerAlerte();
+			} else if (Cookies.get('email')) {
+				$('#email-creation-alerte').val(Cookies.get('email'));
+			}
+			dialog_alerte_email.dialog('open');
+			return false;
+		});
+
+		//Google Analytics pour la popin aléatoire
+		if (dialog_alerte_email.data('actif') == '1') {
+			var gaq = dialog_alerte_email.data('gaq');
+			gtag('event', gaq.action, {'event_category': gaq.category, 'event_label': gaq.label});
+			dialog_alerte_email.dialog('open');
+		}
+
+	});
+
+	/**
+	 * Détail d'annonce
+	 */
+
+	$('.details-annonce-container').doOnce(function () {
+		/**
+		 * Popin Mappy
+		 */
+
+		$('#dialog_carte').on('dialogopen', function () {
+			// Si déjà initialisé, on n'initialise pas une autre fois
+			if ($('#carte_mappy').data('isInitialized')) {
+				return false;
+			}
+
+			L.Mappy.setImgPath(DIR_MAPPY_IMG);
+
+			// Création de la carte
+			var $map = new L.Mappy.Map('carte_mappy', {
+				clientId: 'pap',
+				center: $('#carte_mappy').data('mappy').center,
+				zoom: parseInt($('#carte_mappy').data('mappy').zoom),
+				layersControl: {
+					publicTransport: true,
+					traffic: false,
+					viewMode: false,
+					trafficLegend: false
+				},
+				logoControl: {
+					position: "topright"
+				}
+			});
+
+			// Impossible de cliquer sur le lien Mappy SW-538
+			$('.leaflet-control-attribution').on('click', 'a', function () {
+				window.open($(this).attr('href'), $(this).attr('target'));
+			});
+
+			// Afficher le disque de proximité
+			if ($('#carte_mappy').hasClass('map-annonce-adresse')) {
+				var layer = L.layerGroup().addTo($map);
+				var shape = L.circle($map.getCenter(), 300, {
+					weight: 2,
+					color: "#ffffff",
+					opacity: 0.5,
+					fillColor: "#005ea8",
+					fillOpacity: 0.2
+				}).addTo(layer);
+			}
+
+			// Enregistrer l'initialisation
+			$('#carte_mappy').data('isInitialized', 1);
+		});
+
+		// Gestion de l'ouverture
+		$('.dialog-box-handler-carte').click(function () {
+			$("#dialog_carte").dialog('open');
+			return false;
+		});
+
+		/**
+		 * Impression de la fiche (en dehors de maison/appartement)
+		 */
+
+		$('a.tool-print-fiche').on('click', function () {
+			window.print();
+			return false;
+		});
+
+		/**
+		 * Popin Envoi à un ami
+		 */
+
+		$('#form-envoyer-a-un-ami').on('submit', function () {
+			// Masquer les erreurs
+			$('#form-envoyer-a-un-ami').find('.error-message, .alert-box').hide();
+
+			// Cache le bouton envoyer / affiche le loader
+			$('#form-envoyer-a-un-ami-submit').hide();
+			$('#form-envoyer-a-un-ami-loading').show();
+			$('#form-envoyer-a-un-ami-success').hide();
+
+			// Traiter la requête en Ajax
+			$.ajax({
+				url: $('#form-envoyer-a-un-ami').attr('action'),
+				type: $('#form-envoyer-a-un-ami').attr('method'),
+				data: $('#form-envoyer-a-un-ami').serialize(),
+				success: function (json) {
+					// Tracking page virtuelle
+					gtag('event', 'page_view', {'page_path': '/recherche/fonctionnalites/envoyer-a-un-ami'});
+
+					// Si tout s'est bien passé
+					if (json.success) {
+						// On affiche le bouton et on masque le loading
+						$('#form-envoyer-a-un-ami-submit').show();
+						$('#form-envoyer-a-un-ami-loading').hide();
+						$('#form-envoyer-a-un-ami-success').show();
+					}
+					// S'il y a des erreurs
+					else {
+						// Message d'erreur
+						$.each(json.message, function (k, v) {
+							$('#form-envoyer-a-un-ami').find('.' + v).show();
+						});
+
+						// On affiche le bouton et on masque le loading
+						$('#form-envoyer-a-un-ami-submit').show();
+						$('#form-envoyer-a-un-ami-loading').hide();
+						$('#form-envoyer-a-un-ami-success').hide();
+					}
+				}
+			});
+
+			// Empêcher l'envoi du formulaire
+			return false;
+
+		});
+
+		/**
+		 * Gestion des favoris
+		 */
+
+		$(".btn-add-favorite").on("refresh_btn", function () {
+			$(".icon-thin-star").toggleClass('icon-active', $(this).data("annonce").active);
+		});
+
+		$('.btn-add-favorite').on("refresh", function () {
+			var ids = new Array();
+			ids.push($(this).data('annonce').id);
+			$.getJSON('/json/favoris-get', {ids: ids}, function (res) {
+				if (res.success) {
+					$.each(res.ids, function (k, v) {
+						var id = $(".btn-add-favorite").data('annonce').id;
+						if (id == v.annonces_id) {
+							$("#favorite-top").data('annonce').active = true;
+							$("#favorite-bottom").data('annonce').active = true;
+							$("#favorite-top").html('Supprimer de mes favoris').addClass("btn-add-favorite-active");
+							$("#favorite-bottom").html('Supprimer<br /> de mes favoris').addClass("btn-add-favorite-active");
+							$(".btn-add-favorite").trigger("refresh_btn");
+						};
+					});
+
+				}
+			});
+		});
+
+		// Ajout ou suppression dans les favoris
+		$('a.btn-add-favorite').on('click', function () {
+			var bouton = $(this);
+			if (Cookies.get('email')) {
+				// Suppression
+				if ($(this).data('annonce').active) {
+					$.ajax({
+						url: '/json/favoris-remove',
+						type: 'POST',
+						data: {
+							'annonce_id': $(this).data('annonce').id
+						},
+						success: function (res) {
+							if (res.success == true) {
+								$("#favorite-top").data('annonce').active = false;
+								$("#favorite-bottom").data('annonce').active = false;
+								$("#favorite-top").html('Ajouter à mes favoris').removeClass("btn-add-favorite-active");
+								$("#favorite-bottom").html('Ajouter<br /> à mes favoris').removeClass("btn-add-favorite-active");
+								$(".btn-add-favorite").trigger("refresh_btn");
+							}
+						}
+					});
+				}
+				// Ajout
+				else {
+					$.ajax({
+						url: '/json/favoris-add',
+						type: 'POST',
+						data: {
+							'annonce_id': $(this).data('annonce').id
+						},
+						success: function (res) {
+							if (res.success == true) {
+								$("#favorite-top").data('annonce').active = true;
+								$("#favorite-bottom").data('annonce').active = true;
+								$("#favorite-top").html('Supprimer de mes favoris').addClass("btn-add-favorite-active");
+								$("#favorite-bottom").html('Supprimer<br /> de mes favoris').addClass("btn-add-favorite-active");
+								$(".btn-add-favorite").trigger("refresh_btn");
+							}
+						}
+					});
+				}
+			} else {
+				$('#dialog-enregistrer-email').dialog('open');
+				$('#dialog-enregistrer-email').on('click', 'input.favoris-enregistrer', function (e) {
+					e.preventDefault();
+					var form = $('#enregistrer-email-favoris');
+					$.ajax({
+						url: form.attr('action'),
+						type: form.attr('method'),
+						data: form.serialize(),
+						success: function (res) {
+							if (res.success == true) {
+								Cookies.set('email', res.email, {expires: 30});
+								$('#dialog-enregistrer-email').dialog('close');
+								$(bouton).click();
+
+								$('.search-results-container').trigger("refresh");
+							} else {
+								$('.error-message').text(res.errors).show();
+							}
+						}
+					});
+					return false;
+				})
+
+			}
+			return false;
+		});
+
+		if (Cookies.get('email')) {
+			$('.btn-add-favorite').trigger("refresh");
+		}
+
+		/**
+		 * Signaler une annonce
+		 */
+
+		$('#dialog-signaler-un-probleme').doOnce(function () {
+
+			var $dialog  = $("#dialog-signaler-un-probleme");
+			var $form    = $("#form-signaler-un-probleme");
+			var $submit  = $("#submit-signaler-un-probleme");
+			var $loading = $("#div-signaler-un-probleme-loading");
+			var $success = $("#div-signaler-un-probleme-success");
+
+			// Si le lien contient l'ancre #signaler-probleme ou #signaler-un-probleme la dialog
+			// s'ouvrira automatiquement.
+			// Ce type de lien est utilisé dans un e-mail.
+			var doAutoOpen = false;
+			if (window.location.hash.substr(1) === "signaler-probleme")
+				doAutoOpen = true;
+			if (window.location.hash.substr(1) === "signaler-un-probleme")
+				doAutoOpen = true;
+
+			// Configurer la dialog
+			$dialog.dialog({
+				autoOpen: doAutoOpen,
+				open: function () {
+
+					$(".single-select").multiselect("refresh");
+
+					$submit.show();
+					$loading.hide();
+					$success.hide();
+					$form.find(".status-error").removeClass("status-error");
+					$form.find(".error-message").hide();
+
+				}
+			});
+
+			// Intercepter l'envoi du formulaire
+			$form.submit(function () {
+
+				$submit.hide();
+				$loading.show();
+				$success.hide();
+				$form.find(".status-error").removeClass("status-error");
+				$form.find(".error-message").hide();
+
+				$.ajax({
+					url: $form.attr("action"),
+					type: $form.attr("method"),
+					data: $form.serialize(),
+					success: function (json) {
+						if (json.success) {
+
+							gtag('event', 'Signaler un probleme', {'event_category': 'DETAIL', 'event_label': 'Popin'});
+
+							$submit.hide();
+							$loading.hide();
+							$success.show();
+							$form.find(".status-error").removeClass("status-error");
+							$form.find(".error-message").hide();
+
+						} else {
+
+							$submit.show();
+							$loading.hide();
+							$success.hide();
+							$.each(json.errors, function(k, v) {
+								$("#field-signaler-un-probleme-"+k).addClass("status-error");
+								$("#error-signaler-un-probleme-"+k).text(v)
+								$("#error-signaler-un-probleme-"+k).show();
+							});
+
+							$dialog.trigger("contentchanged");
+
+						}
+					}
+				});
+
+				return false;
+
+			});
+
+		});
+
+		/**
+		 * Calcul de Financement
+		 * Formulaire(Détail d'annonce)
+		 */
+		var form_mensualite = $("#form_mensualite");
+
+		// Actualise les montants
+		form_mensualite.on('refresh', function () {
+			var prix_notaire = form_mensualite.data("mensualite").prix_notaire;
+			var apport_personnel = Math.round(prix_notaire * 0.15);
+
+			$("#prix_bien_label").html(form_mensualite.data("mensualite").prix_bien_label);
+			$("#prix_avec_frais_de_notaire_label").html(form_mensualite.data("mensualite").prix_notaire_label);
+
+			if (Cookies.get('calcul_mensualite[apport_personnel]')) {
+				apport_personnel = Cookies.get('calcul_mensualite[apport_personnel]') > prix_notaire ? prix_notaire : Cookies.get('calcul_mensualite[apport_personnel]');
+			}
+
+			// apport personnel
+			$('#mensualite_apport_personnel').val(apport_personnel);
+			// montant emprunt
+			$('#montant_emprunt').val(prix_notaire - apport_personnel);
+			// taux pret
+			$('#mensualite_taux_d_interet').val(Cookies.get('calcul_mensualite[taux]') ? Cookies.get('calcul_mensualite[taux]') : 1.7);
+			// taux assurance
+			$('#mensualite_taux_d_assurance').val(Cookies.get('calcul_mensualite[taux_assurance]') ? Cookies.get('calcul_mensualite[taux_assurance]') : 0.1);
+		});
+
+		// Calcul la mensualité par le biais d'un ajax,
+		// Récupère le tableau de mensualité et les montants pour chaque annonce
+		form_mensualite.on("mensualite_calcul", function () {
+			// Init des messages d'erreurs
+			form_mensualite.trigger("refresh-errors");
+
+			// Récupération des annonces de la liste, pour le rafraichisement de la mensualité.
+			var annonces = [];
+			$('.simu-credit').each(function () {
+				annonces.push({
+					prix: $(this).data("mensualite").prix_notaire,
+					annonce_id: $(this).data("mensualite").annonce_id
+				});
+			});
+
+			$.getJSON('/json/mensualite-get', {
+				annonces: annonces,
+				montant_emprunt: $('#montant_emprunt').val(),
+				apport_personnel: $('#mensualite_apport_personnel').val(),
+				prix: form_mensualite.data("mensualite").prix_bien,
+				taux_pret: $('#mensualite_taux_d_interet').val(),
+				taux_assurance: $('#mensualite_taux_d_assurance').val(),
+				submit: 1
+			},
+				function (data) {
+					//Si retour d'erreur
+					if (data.erreurs) {
+						$.each(data.erreurs, function (key, value) {
+							form_mensualite.find("." + value).show();
+						});
+						return false;
+					}
+
+					//Si Tout est ok
+					//Actualisation de la mensualité.
+					$("#mensualites_resultats").html(data.mensualite);
+
+					//Tableau d'emprunt
+					$(".new-line").trigger("refresh", [data.htmlcontent]);
+
+					//Actualisation des mensualités des annonces presentes sur la page
+					$(".simu-credit").trigger('refresh-mensualite', [data.new_mensualite]);
+				});
+			return false;
+		});
+
+		// Actualise les erreurs
+		form_mensualite.on('refresh-errors', function () {
+			$(this).find('.error-message, .alert-box').hide();
+		});
+
+		// Actualise montant de l'emprunt en fonction de l'apport personnel saisi
+		$('#mensualite_apport_personnel').on("input", function () {
+			$('#montant_emprunt').val(form_mensualite.data("mensualite").prix_notaire - $(this).val());
+		});
+
+		$(".simu-credit").on("refresh-mensualite", function (e, liste_mensualite) {
+			$(this).each(function () {
+				$(this).find(".item-mensualite-prix").html('');
+				var annonceId = $(this).data('mensualite').annonce_id;
+				mensualite = liste_mensualite.find(function (x) {
+						return x.annonce_id == annonceId;
+					}).new_mensualite;
+				if (mensualite) {
+					$(this).find(".item-mensualite-prix").html(mensualite);
+				}
+			});
+		});
+
+		// Ajoute une nouvelle ligne au tableau d'emprunt
+		$(".new-line").on('refresh', function (e, emprunts) {
+			$('.ligne-ajoutee').remove();
+			var emprunts_length = emprunts.length;
+			for (var i = 0; i < emprunts_length; i++) {
+				var $copie = $(this).clone();
+				$copie.find(".mensualite_par_duree").html(emprunts[i].duree).end()
+					.find(".mensualite_montant").html(emprunts[i].montant).end()
+					.find(".mensualite_emprunt_total").html(emprunts[i].cout).end()
+					.addClass("ligne-ajoutee").removeClass('new-line hidden');
+				$copie.insertBefore($(this));
+			}
+		});
+
+		//Evenement bouton calculer
+		$("#calculer").on("click", function () {
+			gtag('event', 'Calculer Mensualite', {'event_category': 'DETAIL VENTE', 'event_label': 'Content'});
+
+			//Calcul la mensualité
+			form_mensualite.trigger('mensualite_calcul');
+
+			return false;
+		});
+
+		//Si c'est le detail d'annonce, on initialise au demarrage
+		if ($(".details-annonce-container").length > 0) {
+			form_mensualite.data('mensualite', $(".lien-mensualite").data("mensualite"));
+
+			//Rafraichit les montants
+			form_mensualite.trigger('refresh');
+
+			//Calcul la mensualité
+			form_mensualite.trigger('mensualite_calcul');
+		}
+	});
+
+	/*************************************************************************
+	 *** Espace utilisateur
+	 *************************************************************************/
+
+	$('.espace-utilisateur').doOnce(function () {
+
+		$('.supprimer-favoris').on('click', function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: '/json/favoris-remove',
+				type: 'POST',
+				data: {
+					'annonce_id': $(this).data('annonce').id
+				},
+				success: function (res) {
+					if (res.success == true) {
+						location.reload(true);
+					}
+				}
+			});
+		});
+
+		$('.supprimer-recherches').on('click', function () {
+
+			var email = $(this).data('recherche').email;
+			var md5 = $(this).data('recherche').md5;
+			var recherches_id = $(this).data('recherche').recherches_id;
+			var motif = $(this).data('recherche').motif;
+
+			$.ajax({
+				url: '/json/alerte-remove?' + $.param({email: email, md5: md5}),
+				type: 'POST',
+				data: {
+					'recherches_id': recherches_id,
+					'motif': motif
+				},
+				success: function (res) {
+					if (res.success == true) {
+						window.location = '/utilisateur/alertes/delete-confirm?' + $.param({ email: email, md5: md5, motif: motif });
+//						location.reload(true);
+					}
+				}
+			});
+		});
+
+		$('.supprimer-rayon').on('click', function () {
+
+			var email = $(this).data('recherche').email;
+			var md5 = $(this).data('recherche').md5;
+			var recherches_id = $(this).data('recherche').recherches_id;
+
+			$.ajax({
+				url: '/json/alerte-rayon-remove?' + $.param({email: email, md5: md5}),
+				type: 'POST',
+				data: {
+					'recherches_id': recherches_id
+				},
+				success: function (res) {
+					if (res.success == true) {
+						location.reload(true);
+					}
+				}
+			});
+		});
+
+	});
+
+	$("#espace-utilisateur").doOnce(function() {
+		
+		$("#dossierfacile-partage").doOnce(function() {
+
+			/** Envoyer un e-mail de partage dossierfacile **/
+
+			var $form = $("#dossierfacile-partage-email-form");
+			var $submit = $form.find('input[type="submit"]');
+			var $loader = $form.find('.submit-loader');
+			var $success = $form.find('.submit-success');
+			var $errors = $form.find('.submit-error');
+
+			$form.on('submit', function () {
+
+				$submit.toggleClass('hidden', true);
+				$loader.toggleClass('hidden', false);
+				$success.toggleClass('hidden', true);
+				$errors.toggleClass('hidden', true);
+
+				$.ajax({
+					url: $form.attr('action'),
+					type: $form.attr('method'),
+					data: $form.serialize(),
+					success: function (json) {
+						$submit.toggleClass('hidden', false);
+						$loader.toggleClass('hidden', true);
+						if (json.success) {
+							$success.toggleClass('hidden', false);
+						} else {
+							$.each(json.message, function (k, v) {
+								$form.find(`.submit-error-${k}-${v}`).toggleClass('hidden', false);
+							});
+						}
+					}
+				});
+				return false;
+			});
+
+			/** Copier un lien de partage dossierfacile **/
+		
+			var $url_input = $("#dossierfacile-partage-url-input");
+			var $url_button = $("#dossierfacile-partage-url-button");
+			var $url_success = $("#dossierfacile-partage-url-success");
+
+			$url_success.hide();
+
+			$url_button.on("click", function() {
+				$url_input.select();
+				var is_copied = document.execCommand("copy");
+				if (is_copied)
+					$url_success.show();
+			});
+
+		});
+
+	});
+
+	/* Locatheque */
+
+	$(".espace-utilisateur-locatheque").doOnce(function() {
+
+		$(".locatheque_autorisation").on('click',function () {
+			
+			if($(this).context.checked)
+				$("#locatheque_criteres").show();
+			else
+				$("#locatheque_criteres").hide();
+	
+			$.ajax({
+				url:  '/utilisateur/dossierfacile/locatheque',
+				type: 'POST',
+				data: {'afficher_criteres': $(this).context.checked},
+			});
+		});
+
+	});
+
+	/*************************************************************************
+	 *** Rendez-vous Coaching
+	 *************************************************************************/
+
+	$('#rdv-coach').doOnce(function () {
+		$('#btn-affiche-horaires-supp').on('click', function () {
+			$('tr#affiche-horaires-supp').hide();
+			$('tr.horaires-supp').show(0.5);
+		});
+	});
+	
+	/*************************************************************************
+	 *** Prix immo
+	 *************************************************************************/
+
+	/**
+	 * Prix au m²
+	 */
+
+	$('#prix_m2_section').doOnce(function () {
+
+		/**
+		 * Configuration Mappy
+		 */
+
+		L.Mappy.enableHttps();
+		L.Mappy.setClientId("pap");
+		L.Mappy.setImgPath(DIR_MAPPY_IMG);
+
+		/**
+		 * Champ de Géocoding Mappy
+		 * @see http://stackoverflow.com/questions/25348842/deferred-jquery-event-trigger
+		 * @usage $.when($element.triggerHandler('geocode')).then(userActionCallback);
+		 *
+		 * A intégrer dans Donuts quand ça sera stable...
+		 */
+
+		/**
+		 * Initialisation des variables
+		 */
+
+		var $exemples = $('#prix_m2_exemples');
+		var $map = $('#prix_m2_map');
+
+		var map = $map.data('map');
+		var markers = {};
+
+		/**
+		 * Custom Events
+		 */
+
+		//
+		$('#prix_m2_recherche').on('submit', function () {
+			$('#prix_m2_recherche').trigger('trueSubmit');
+		});
+
+		$('#prix_m2_recherche input:submit').on('click', function () {
+			$("#action").val($(this).data('action'));
+		});
+
+		// Recherche des exemples
+		$exemples.on('refresh', function () {
+			// Mise à jour de l'état de la carte dans le formulaire
+			$('#prix_m2_exemples_lat_min').val(map.getBounds().getSouth());
+			$('#prix_m2_exemples_lat_max').val(map.getBounds().getNorth());
+			$('#prix_m2_exemples_lng_min').val(map.getBounds().getWest());
+			$('#prix_m2_exemples_lng_max').val(map.getBounds().getEast());
+			$('#prix_m2_exemples_zoom').val(map.getZoom());
+
+			// Déclenchement de la requête
+			$self = $(this);
+			$.ajax({
+				url: $self.attr('action'),
+				data: $self.serialize(),
+				type: $self.attr('method'),
+				dataType: 'json'
+			})
+			// Mise à jour de la carte
+			.done(function (res) {
+				// En cas d'échec, on ne fait rien
+				if (!res.success) {
+					return;
+				}
+
+				// Nettoyer les précédents marqueurs
+				for (id in markers) {
+					if (res.exemples[id]) {
+						delete res.exemples[id];
+					} else if (res.annonces[id]) {
+						delete res.annonces[id];
+					} else if (res.villes[id]) {
+						delete res.villes[id];
+					} else {
+						map.removeLayer(markers[id]);
+						delete markers[id];
+					}
+				}
+
+				// Afficher les marqueurs "exemple"
+				for (id in res.exemples) {
+					var exemple = res.exemples[id];
+					markers[exemple.id] = L.marker(exemple.center, {
+						icon: L.divIcon({
+							"className": "mappy-marker mappy-marker-exemple",
+							"iconSize": null,
+							"html": null
+						})
+					})
+					.addTo(map)
+					.bindPopup(exemple.html);
+				}
+
+				// Afficher les marqueurs "annonce"
+				for (id in res.annonces) {
+					var annonce = res.annonces[id];
+					markers[annonce.id] = L.marker(annonce.center, {
+						icon: L.divIcon({
+							"className": "mappy-marker mappy-marker-annonce",
+							"iconSize": null,
+							"html": null
+						})
+					})
+					.addTo(map)
+					.bindPopup(annonce.html);
+				}
+
+				// Afficher les marqueurs "Ville"
+				for (id in res.villes) {
+					var ville = res.villes[id];
+					markers[ville.id] = L.marker(ville.center, {
+						icon: L.divIcon({
+							"className": "mappy-marker mappy-marker-commune",
+							"iconSize": null,
+							"html": null
+						})
+					})
+					.addTo(map)
+					.bindPopup(ville.html);
+				}
+			});
+			return false;
+		});
+
+		/**
+		 * Real Events
+		 */
+
+		// Mouvement de la carte
+		map.on('moveend', function () {
+			$exemples.trigger('refresh');
+		});
+
+		// Manipulation des filtres
+		$('#prix_m2_typebien,#prix_m2_nb_pieces').on('change', function () {
+
+			$exemples.trigger('refresh');
+		});
+
+		$('#prix_m2_map .options-group .option').on("click", function () {
+			$exemples.trigger('refresh');
+		});
+
+		/**
+		 * Init
+		 */
+
+		$exemples.trigger('refresh');
+
+	});
+
+	/**
+	 * Estimation gratuite
+	 */
+
+	$('#section_estimation_gratuite').doOnce(function () {
+
+		/* Actualiser les champs affichés dans le formulaire */
+		$('#form_estimation_gratuite').on('refresh', function () {
+			$('#field_etage').toggle($('#typebien_appartement:checked').length > 0);
+			$('#field_nb_etages').toggle($('#typebien_appartement:checked').length > 0);
+			$('#field_rez_de_chaussee_sur').toggle($('#typebien_appartement:checked').length > 0 && $('#etage').val() == 'rez-de-chaussee');
+			$('#field_ascenseur').toggle($('#typebien_appartement:checked').length > 0 && $('#etage').val() != 'rez-de-chaussee' && $('#etage').val() != 'etage-1');
+			$('#field_suface_terrain').toggle($('#typebien_maison:checked').length > 0);
+			$('#field_balcon_terrasse').toggle($('#typebien_appartement:checked').length > 0 && $('#etage').val() != 'rez-de-chaussee');
+			$('#field_surface_balcon').toggle($('#type_de_balcon_balcon:checked, #type_de_balcon_terrasse:checked').length > 0);
+			$('#field_particularite_garage').toggle($('#typebien_maison:checked').length > 0);
+			$('#field_particularite_parking').toggle($('#typebien_appartement:checked').length > 0);
+			$('#field_proprietaire').toggle($('#cadre_projet_vente:checked').length > 0);
+		});
+		$('#field_typebien, #field_etage, #field_nb_piece, #field_balcon_terrasse, .option').on('click', function () {
+			$('#form_estimation_gratuite').trigger('refresh');
+		});
+		$('#form_estimation_gratuite').trigger('refresh');
+
+	});
+
+	/**
+	 * Prix au m²
+	 */
+
+	$('.prix-m2-map').doOnce(function () {
+
+		/**
+		 * Configuration Mappy
+		 */
+
+		L.Mappy.enableHttps();
+		L.Mappy.setClientId("pap");
+		L.Mappy.setImgPath(DIR_MAPPY_IMG);
+
+		/**
+		 * Champ de Géocoding Mappy
+		 * @see http://stackoverflow.com/questions/25348842/deferred-jquery-event-trigger
+		 * @usage $.when($element.triggerHandler('geocode')).then(userActionCallback);
+		 *
+		 * A intégrer dans Donuts quand ça sera stable...
+		 */
+
+		/**
+		 * Initialisation des variables
+		 */
+
+		var $exemples = $('#prix_m2_exemples');
+		var $map = $('#prix_m2_map');
+
+		var map = $map.data('map');
+		var markers = {};
+
+		// Recherche des exemples
+		$exemples.on('refresh', function () {
+			// Mise à jour de l'état de la carte dans le formulaire
+			$('#prix_m2_exemples_lat_min').val(map.getBounds().getSouth());
+			$('#prix_m2_exemples_lat_max').val(map.getBounds().getNorth());
+			$('#prix_m2_exemples_lng_min').val(map.getBounds().getWest());
+			$('#prix_m2_exemples_lng_max').val(map.getBounds().getEast());
+			$('#prix_m2_exemples_zoom').val(map.getZoom());
+
+			// Déclenchement de la requête
+			$self = $(this);
+			$.ajax({
+				url: $self.attr('action'),
+				data: $self.serialize(),
+				type: $self.attr('method'),
+				dataType: 'json'
+			})
+			// Mise à jour de la carte
+			.done(function (res) {
+				// En cas d'échec, on ne fait rien
+				if (!res.success) {
+					return;
+				}
+
+				// Nettoyer les précédents marqueurs
+				for (id in markers) {
+					if (res.exemples[id]) {
+						delete res.exemples[id];
+					} else if (res.annonces[id]) {
+						delete res.annonces[id];
+					} else if (res.villes[id]) {
+						delete res.villes[id];
+					} else {
+						map.removeLayer(markers[id]);
+						delete markers[id];
+					}
+				}
+
+				// Afficher les marqueurs "exemple"
+				for (id in res.exemples) {
+					var exemple = res.exemples[id];
+					markers[exemple.id] = L.marker(exemple.center, {
+						icon: L.divIcon({
+							"className": "mappy-marker-exemple",
+							"iconSize": null,
+							"html": "<span>" + exemple.prix_m2 + "&nbsp;€/m²</span>"
+						})
+					})
+					.addTo(map)
+					.bindPopup(exemple.html);
+				}
+
+				// Afficher les marqueurs "annonce"
+				for (id in res.annonces) {
+					var annonce = res.annonces[id];
+					markers[annonce.id] = L.marker(annonce.center, {
+						icon: L.divIcon({
+							"className": "mappy-marker-annonce",
+							"iconSize": null,
+							"html": "<span>" + annonce.prix_m2 + "&nbsp;€/m²</span>"
+						})
+					})
+					.addTo(map)
+					.bindPopup(annonce.html);
+				}
+
+				// Afficher les marqueurs "Ville"
+				for (id in res.villes) {
+					var ville = res.villes[id];
+					markers[ville.id] = L.marker(ville.center, {
+						icon: L.divIcon({
+							"className": "mappy-marker mappy-marker-commune",
+							"iconSize": null,
+							"html": null
+						})
+					})
+					.addTo(map)
+					.bindPopup(ville.html);
+				}
+			});
+			return false;
+		});
+
+		/**
+		 * Real Events
+		 */
+
+		// Mouvement de la carte
+		map.on('moveend', function () {
+			$exemples.trigger('refresh');
+		});
+
+		// Manipulation des filtres
+		$('#prix_m2_typebien,#prix_m2_nb_pieces').on('change', function () {
+
+			$exemples.trigger('refresh');
+		});
+
+		$('#prix_m2_map .options-group .option').on("click", function () {
+			$exemples.trigger('refresh');
+		});
+
+		/**
+		 * Init
+		 */
+
+		$exemples.trigger('refresh');
+
+	});
+
+	/**
+	 * Geocoding
+	 * @see https://adresse.data.gouv.fr/api-doc/adresse
+	 */
+
+	$("#prix_m2_gouv_query").doOnce(function() {
+		var $query = $(this);
+		var cache = {};
+		var minLength = 2;
+		var delay = 200;
+		var limit = 10;
+		
+		$query.autocomplete({
+			minLength: minLength,
+			delay: delay,
+			source: function(request, response) {
+				var q = request.term;
+
+				if (q in cache) {
+					response(cache[q]);
+					return;
+				}
+
+				$.getJSON("https://api-adresse.data.gouv.fr/search/", {q: q, limit: limit}, function(data, status, xhr) {
+					var items = data.features
+					cache[q] = items;
+					response(items);
+				}, {
+					crossDomain: true,
+				});
+
+			},
+			focus: function(event, ui) {
+				$query.val(ui.item.properties.label);
+				return false;
+			},
+			select: function(event, ui) {
+				$("#prix_m2_gouv_lat"     ).val(ui.item.geometry.coordinates[1]);
+				$("#prix_m2_gouv_lng"     ).val(ui.item.geometry.coordinates[0]);
+				$("#prix_m2_gouv_label"   ).val(ui.item.properties.label);
+				$("#prix_m2_gouv_type"    ).val(ui.item.properties.type);
+				$("#prix_m2_gouv_name"    ).val(ui.item.properties.name);
+				$("#prix_m2_gouv_citycode").val(ui.item.properties.citycode);
+				return false;
+			}
+		});
+
+		$query.autocomplete("instance")._renderItem = function(ul, item) {
+			var $li = $("<li>");
+			$li.append(item.properties.label + " <small class=\"txt-grey-4\">" + item.properties.context + "</small>");
+			return $li.appendTo(ul);
+		};
+
+	});
+
+	/*************************************************************************
+	 *** Estimation en ligne
+	 *************************************************************************/
+
+	/**
+	 * Sur la landing page, effectue un contrôle AJAX de la référence de dossier
+	 * et redirige vers l'espace estimation. Ce système ridiculement complexe doit
+	 * être réécrit.
+	 */
+
+	$("#dialog-box-connexion-estimation form").submit(function (e) {
+		e.preventDefault();
+
+		var reference = $(this).find("#ref-eval").val();
+		reference = $.trim(reference);
+		$.ajax({
+			url: "/json/estimation-reference-check",
+			type: "POST",
+			data: {reference: reference}
+		}).success(function (response) {
+
+			var messageBox = $("#dialog-box-connexion-estimation").find(".message");
+			messageBox.parent().removeClass('alert-box');
+			messageBox.html("");
+			if (response.resultat == 2) {
+				window.location = '/estimation/index?ref=' + reference;
+			} else {
+				var message = "Une erreur est survenue. Veuillez patienter quelques instants puis essayer de nouveau. Si le problème persiste, n'hésitez pas à contactez nos services.";
+				if (response.resultat == 3) {
+					message = "Attention: Merci d'indiquer la référence estimation.";
+				} else if (response.resultat == 4) {
+					message = "Attention: La référence n'est pas valide.";
+				} else if (response.resultat == 5) {
+					message = "Attention: Cette référence n'a pas été trouvé.";
+				}
+				messageBox.html(message);
+				messageBox.parent().addClass('alert-box');
+			}
+		});
+	});
+
+	/**
+	 * Espace client
+	 */
+
+	/**
+	 * Upload des photos
+	 */
+
+	var browser = {
+		name: '',
+		version: '',
+		init: function () {
+			var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+			// Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+			var isFirefox = typeof InstallTrigger !== 'undefined'; // Firefox 1.0+
+			// Safari 3.0+ "[object HTMLElementConstructor]"
+			var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+			var isIE = /*@cc_on!@*/ false || !!document.documentMode; // >= IE6
+			var isEdge = !isIE && !!window.StyleMedia; // Edge 20+
+			var isChrome = !!window.chrome && !isOpera; // Chrome 1+
+
+			//Navigateur
+			this.name =
+				isOpera ? 'opera' :
+				isFirefox ? 'firefox' :
+				isSafari ? 'safari' :
+				isIE ? 'ie' :
+				isEdge ? 'edge' :
+				isChrome ? 'chrome' :
+				'autre';
+
+			//Version
+			switch (this.name) {
+				case 'ie':
+					//Version <= 10
+					this.version = (function () {
+						if (new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null) {
+							return parseFloat(RegExp.$1);
+						} else {
+							return false;
+						}
+					})();
+
+					if (!this.version) {
+						//Version 11
+						this.version = (!!window.MSStream) ? 11 : '-';
+					}
+					break;
+				default:
+					this.version = '-';
+					break;
+			}
+		}
+	};
+
+	var PAP_PhotosUpload_Message = {
+		success: 'succes-default',
+		succes_delete: 'succes-delete',
+		success_uploads: 'succes-uploads',
+		erreur_dl: "error-download",
+		erreur_default: "error-default",
+		erreur_poids: "error-poids",
+		erreur_jpg: "error-jpg",
+		erreur_max: 'error-nb-max',
+		erreur_ajax: 'error-ajax',
+		erreur_plan_nb_max: 'error-plans-nb-max',
+		erreur_photos_nb_max: 'error-photos-nb-max',
+
+		get: function (action, result) {
+			switch (action + ',' + result) {
+				case 'inserts,0':
+					return this.success_uploads;
+				case 'insert,0':
+					return this.success;
+				case 'insert,1':
+				case 'rotate,1':
+				case 'crop,1':
+				case 'update,1':
+				case 'update,2':
+				case 'delete,1':
+				case 'delete_invalide,1':
+				case 'order,1':
+					return this.erreur_default;
+				case 'insert,2':
+					return this.erreur_dl;
+				case 'insert,File is too large':
+				case 'insert,3':
+				case 'update,3':
+					return this.erreur_poids;
+				case 'insert,File type not allowed':
+				case 'insert,4':
+				case 'update,4':
+					return this.erreur_jpg;
+				case 'insert,5':
+					return this.erreur_max;
+				case 'insert_photo,5':
+					return this.erreur_photos_nb_max;
+				case 'insert_plan,5':
+					return this.erreur_plan_nb_max;
+				case 'rotate,0':
+				case 'crop,0':
+				case 'update,0':
+				case 'delete_invalide,0':
+				case 'order,0':
+					return '';
+				case 'delete,0':
+					return this.succes_delete;
+				default:
+					return this.erreur_default;
+			}
+		}
+	};
+
+	$('.espace-estimation').doOnce(function () {
+		$.relatedQuestions = {
+			questionOptionIds: [],
+			findSlave: function (slug) {
+				return $('[attr-master-slug="' + slug + '"]');
+			},
+			toggleInput: function ($inputs, show) {
+				if ($inputs.length === 0) {
+					return;
+				}
+
+				$inputs.each(function () {
+					var $input = $(this),
+						$inptuRow = $input.closest('.form-group');
+
+					if (show === true) {
+						$inptuRow.removeClass('hidden');
+					} else {
+						$inptuRow.addClass('hidden');
+					}
+				});
+			},
+			init: function () {
+				var parent = this;
+				$.each(this.questionOptionIds, function (i, elementId) {
+					var $radioInput = $('#' + elementId),
+						name = $radioInput.attr('name');
+
+					$("input[name='" + name + "']").change(function () {
+						var name = $(this).attr('name'),
+							inputGroups = $("input[name='" + name + "']"),
+							currentId = this.id,
+							ids = [];
+
+						inputGroups.each(function () {
+							ids.push(this.id)
+						});
+
+						// remove selected id from group
+						ids.splice($.inArray(currentId, ids), 1);
+
+						// hide other inputs;
+						$.each(ids, function (index, grId) {
+							var $input = $.relatedQuestions.findSlave(grId);
+
+							$.relatedQuestions.toggleInput($input, false);
+						});
+
+						//show selected
+						$.relatedQuestions.toggleInput($.relatedQuestions.findSlave(currentId), true);
+					});
+				});
+
+				//init dialog
+				parent.initDialogReglerDossier();
+			},
+			initDialogReglerDossier: function () {
+				$("#dialog-box-regler").dialog({
+					autoOpen: false,
+					modal: true,
+					resizable: false,
+					width: 650,
+					show: {
+						effect: "drop",
+						direction: "up",
+						easing: "easeOutCubic",
+						duration: 500
+					},
+					hide: {
+						effect: "fade",
+						duration: 250
+					}
+				});
+
+				$("#dialog-box-regler").dialog({
+					width: '920px',
+					open: function (event, ui) {
+						$(this).parent().promise().done(function () {
+							$("#js-payment-form").submit();
+						});
+					}
+				});
+
+				$(document.body).on('click', "#btn-regler", function (e) {
+					$("#dialog-box-regler").dialog('open');
+				});
+			}
+		};
+
+		//Question qui souleve d'autre questions dans le formulaire
+		$('#js-relatedQuestions').doOnce(function () {
+			$.relatedQuestions.questionOptionIds = $(this).data("questions").options;
+		});
+
+		$("#dialog-box-presentation").doOnce(function () {
+			$("#dialog-box-presentation").dialog({
+				autoOpen: false,
+				modal: true,
+				resizable: false,
+				width: 650,
+				show: {
+					effect: "drop",
+					direction: "up",
+					easing: "easeOutCubic",
+					duration: 500
+				},
+				hide: {
+					effect: "fade",
+					duration: 250
+				}
+			});
+			$("#dialog-box-presentation").dialog("open");
+		});
+
+		$("#dialog-box-dossier-complet").doOnce(function () {
+			$("#dialog-box-dossier-complet").dialog("open");
+		});
+
+		$("#dialog-box-validation").doOnce(function () {
+			$("#dialog-box-validation").dialog("open");
+		});
+
+		$("#dialog-box-regler").doOnce(function () {
+			$(document).ready(function () {
+				$(".ui-dialog[aria-labelledby='ui-dialog-title-dialog-box-regler']").find(".ui-dialog-titlebar").remove();
+				$(".ui-dialog[aria-labelledby='ui-dialog-title-dialog-box-regler']").find(".dossier-paiement-close").find("button").on('click', function () {
+					$("#dialog-box-regler").dialog("close");
+				});
+			});
+		});
+
+		function spaceToNbsp(object) {
+			if (object.find('.required') || object.find('.tooltip')) {
+				var textOriginal = object.html(),
+					text = $.trim(textOriginal.replace(/<([^ >]+)[^>]*>.*?<\/\1>|<[^\/]+\/>/ig, "")),
+					replaced = false,
+					htmlCode = textOriginal.replace(text, function (token) {replaced = true; return "";});
+
+				if (htmlCode && replaced) {
+					var tempText = text.split(" "),
+						tempTextLenght = tempText.length;
+
+					if (tempTextLenght > 2) {
+						var spanOffset = -2,
+							baseInfo = tempText.slice(0, spanOffset),
+							lastInfo = tempText.slice(spanOffset);
+
+						textOriginal = baseInfo.join(' ') + ' <span style="display:inline-table;">' + lastInfo.join('&nbsp;') + htmlCode + '</span>';
+						object.html(textOriginal);
+
+						//reinit tooltip
+						object.find('.tooltip').each(function () {
+							$(this).attr('title', $(this).attr('originalTitle'));
+							$(this).tooltipster();
+						});
+					}
+				}
+			}
+		}
+
+		$.relatedQuestions.init();
+
+		var init = $("#js-estimation-dossiers-form-id").serialize();
+
+		var isSubmit = false;
+		$("#js-estimation-dossiers-form-id").submit(function () {
+			isSubmit = true;
+			return true;
+		});
+
+		window.onbeforeunload = function () {
+			var current = $("#js-estimation-dossiers-form-id").serialize();
+			if (init != current && isSubmit == false) {
+				return 'Are you sure you want to navigate away from this page?';
+			}
+		};
+
+		//put the &nbps; instead of spaces
+		$(".form-group").find('.label, .labelText').each(function () {
+			spaceToNbsp($(this));
+		});
+
+		if ($("#dialog-box-presentation").length) {
+			$("#dialog-box-presentation").dialog({
+				autoOpen: false,
+				modal: true,
+				resizable: false,
+				width: 650,
+				show: {
+					effect: "drop",
+					direction: "up",
+					easing: "easeOutCubic",
+					duration: 500
+				},
+				hide: {
+					effect: "fade",
+					duration: 250
+				}
+			});
+		}
+
+		if ($("#dialog-box-opener-presentation").length) {
+			$("#dialog-box-opener-presentation").click(function () {
+				$("#dialog-box-presentation").dialog("open");
+				return false;
+			});
+		}
+
+		/* Activation de la popin Présentation */
+		if ($("#dialog-box-validation").length) {
+			$("#dialog-box-validation").dialog({
+				autoOpen: false,
+				modal: true,
+				resizable: false,
+				width: 650,
+				show: {
+					effect: "drop",
+					direction: "up",
+					easing: "easeOutCubic",
+					duration: 500
+				},
+				hide: {
+					effect: "fade",
+					duration: 250
+				}
+			});
+		}
+
+		if ($("#dialog-box-opener-validation").length) {
+			$("#dialog-box-opener-validation").click(function () {
+				$("#dialog-box-validation").dialog("open");
+				return false;
+			});
+		}
+
+		/* Activation de la popin Présentation */
+		if ($("#dialog-box-dossier-complet").length) {
+			$("#dialog-box-dossier-complet").dialog({
+				autoOpen: false,
+				modal: true,
+				resizable: false,
+				width: 650,
+				show: {
+					effect: "drop",
+					direction: "up",
+					easing: "easeOutCubic",
+					duration: 500
+				},
+				hide: {
+					effect: "fade",
+					duration: 250
+				}
+			});
+		}
+
+		if ($("#dialog-box-opener-dossier-complet").length) {
+			$("#dialog-box-opener-dossier-complet").click(function () {
+				$("#dialog-box-dossier-complet").dialog("open");
+				return false;
+			});
+		}
+
+		$(".dossier-complet-close").click(function () {
+			$('#dialog-box-dossier-complet').dialog('close');
+		});
+
+		$(".js-dossier-nouveau-close").click(function () {
+			$('#dialog-box-presentation').dialog('close');
+		});
+
+		$(".js-dossier-valide-close").click(function () {
+			$('#dialog-box-validation').dialog('close');
+		});
+
+		//init selectbox
+		$(".single-select").multiselect({
+			"multiple": false,
+			"selectedList": 1,
+			"header": false
+		});
+
+		$(".js-dialog-close-button").click(function () {
+			var $this = $(this),
+				parentDialogId = $this.attr('attr-parent-dialog-class');
+
+			if ($this.attr('disabled')) {
+				return;
+			}
+
+			$('.' + parentDialogId).dialog('close');
+		});
+
+		var formSubmitMM = {
+			idPopup: "dialog-box-validation-image",
+			idPopupTextContainer: "validation-images-txt",
+			idPopupOkBtn: "validation-images-ok-btn",
+			idPopupCancelBtn: "validation-images-cancel-btn",
+
+			msgEmptyPhoto: {
+				txt: "Vous n'avez pas envoyé de photos.",
+				btn: "Je confirme que je n'ai pas de photo à fournir"
+			},
+			msgEmptyPlan: {
+				txt: "Vous n'avez pas envoyé de plans.",
+				btn: "Je confirme que je n'ai pas de plan à fournir"
+			},
+			msgEmptyPhotoPlan: {
+				txt: "Vous n'avez envoyé ni photos ni plans.",
+				btn: "Je confirme que je n'ai ni photo ni plan à fournir"
+			},
+
+			idPopupObj: null,
+
+			getPopupObj: function () {
+				if (!this.idPopupObj) {
+					this.idPopupObj = $("#" + this.idPopup)
+				}
+
+				return this.idPopupObj;
+			},
+			getMesageTxt: function (emtyInputs) {
+				var rspText = '';
+				if (emtyInputs.length == 2) {
+					rspText = this.msgEmptyPhotoPlan;
+				} else if (emtyInputs[0] === "plan") {
+					rspText = this.msgEmptyPlan;
+				} else {
+					rspText = this.msgEmptyPhoto;
+				}
+
+				return rspText;
+			},
+			setMesageText: function (emtyInputs) {
+				var popupObj = this.getPopupObj(),
+					textContainer = popupObj.find('#' + this.idPopupTextContainer),
+					okBtn = popupObj.find('#' + this.idPopupOkBtn),
+					textData = this.getMesageTxt(emtyInputs);
+
+				textContainer.html(textData.txt + " Etes vous sûr de vouloir continuer ?");
+				okBtn.html(textData.btn);
+			},
+
+			openPopup: function (emtyInputs) {
+
+				if (!this.idPopupObj) {
+					this.idPopupObj = $("#" + this.idPopup)
+				}
+
+				this.setMesageText(emtyInputs);
+
+				this.idPopupObj.dialog("open");
+			},
+			canSubmitForm: function () {
+				return this.getPopupObj().dialog('isOpen');
+			}
+		};
+
+		// popup confirmation without photos ==========================================>
+		var validationImagePopup = $("#" + formSubmitMM.idPopup);
+		if (validationImagePopup.length) {
+			validationImagePopup.dialog({
+				autoOpen: false,
+				modal: true,
+				resizable: false,
+				width: 800,
+				show: {
+					effect: "drop",
+					direction: "up",
+					easing: "easeOutCubic",
+					duration: 1000
+				},
+				hide: {
+					effect: "fade",
+					duration: 250
+				}
+			});
+		}
+
+		// Gestion de l'upload des photos/plans
+		var PAP_fileUploadEstimation = {
+			index: 0,
+			input: "",
+			typeUpload: "",
+			serverImage: "",
+			serverWs: "",
+			photosMax: "",
+			plansMax: "",
+			nbPhotos: 0,
+			taillePhoto: 64 * 1024 * 1024,
+			delaiAffichages: 5000,
+			acceptFileTypes: /(\.|\/)(jpe?g|gif|png|bmp|eps|tif?f|psd|pdf)$/i,
+			listePhotos: [],
+			totalSize: 0,
+			totalProgress: 0,
+			active: false,
+			_handleComplete: function (size) {
+				PAP_fileUploadEstimation.totalProgress += size;
+				PAP_fileUploadEstimation._displayLoading(true);
+				PAP_fileUploadEstimation._start();
+			},
+			_handleProgress: function (event) {
+				PAP_fileUploadEstimation._displayLoading(true);
+			},
+			_getUploadMax: function () {
+				return PAP_fileUploadEstimation.typeUpload == 'photo' ? PAP_fileUploadEstimation.photosMax : PAP_fileUploadEstimation.plansMax;
+			},
+			_start: function () {
+				//Gestion d'erreurs avant upload
+				if (!PAP_fileUploadEstimation.active && (PAP_fileUploadEstimation.active = (PAP_fileUploadEstimation.listePhotos.length > PAP_fileUploadEstimation.index))) {
+					if (PAP_fileUploadEstimation.countPhotos() >= PAP_fileUploadEstimation._getUploadMax()) {
+						PAP_fileUploadEstimation._displayLoading(false);
+						PAP_fileUploadEstimation._showMessage(PAP_PhotosUpload_Message.get('insert' + '_' + PAP_fileUploadEstimation.typeUpload, 5));
+						PAP_fileUploadEstimation.active = false;
+						return;
+					}
+				}
+				else {
+					PAP_fileUploadEstimation._displayLoading(false);
+					return;
+				}
+
+				//Upload de la photo/plan
+				this._upload(PAP_fileUploadEstimation.listePhotos[PAP_fileUploadEstimation.index]);
+			},
+			_upload: function (file) {
+				formdata = new FormData();
+				formdata.append("Filedata[]", file);
+				formdata.append("data", $(PAP_fileUploadEstimation.input).data('formData').data);
+				formdata.append("createdAt", $(PAP_fileUploadEstimation.input).data('formData').createdAt);
+				formdata.append("uploadHost", PAP_fileUploadEstimation.serverWs);
+
+				$.ajax({
+					url: PAP_fileUploadEstimation.serverWs + '/estimation/photo',
+					type: "POST",
+					data: formdata,
+					crossDomain: true,
+					cache: false,
+					processData: false, // indique à jQuery de ne pas traiter les données
+					contentType: false, // indique à jQuery de ne pas configurer le contentType IMPORTANT
+					xhr: function () {
+						var xhr = $.ajaxSettings.xhr();
+						xhr.onload = function () {
+							PAP_fileUploadEstimation._handleComplete(file.size);
+						};
+						xhr.onerror = function () {
+							PAP_fileUploadEstimation._handleComplete(file.size);
+						};
+						xhr.upload.onprogress = function (event) {
+							PAP_fileUploadEstimation._handleProgress(event);
+						};
+						return xhr;
+					}
+				}).done(function (data) {
+					if (data.result_cdr == 0) {
+						PAP_fileUploadEstimation._showMessage(PAP_PhotosUpload_Message.get("insert", data.result_cdr));
+						PAP_fileUploadEstimation.index++;
+						PAP_fileUploadEstimation._newBlocPhoto(data);
+						PAP_fileUploadEstimation.active = false;
+					}
+					else {
+						errorMessage = data.result_lib || '';
+
+						slugError = "insert";
+						typeError = 2;
+						if (errorMessage == 'photo_count' || errorMessage == 'plan_count') {
+							slugError = (errorMessageType == 'photo_count') ? "insert_photo" : "insert_plan";
+							typeError = 5;
+						}
+
+						PAP_fileUploadEstimation._displayLoading(false);
+						PAP_fileUploadEstimation._showMessage(PAP_PhotosUpload_Message.get(slugError, typeError));
+					}
+				}).fail(function () {
+					PAP_fileUploadEstimation._displayLoading(false);
+					PAP_fileUploadEstimation._showMessage(PAP_PhotosUpload_Message.get('insert', 2));
+				});
+			},
+			_displayLoading: function (active) {
+				$(".loader-temp-" + PAP_fileUploadEstimation.typeUpload).toggle(active);
+			},
+			_showMessage: function (slug_class) {
+				$("#message-" + PAP_fileUploadEstimation.typeUpload).trigger("refresh", [slug_class]);
+			},
+			_newBlocPhoto: function (file) {
+				var newbox = 'new-' + PAP_fileUploadEstimation.typeUpload;
+				var $newbox = $('.' + newbox);
+				var $copie = $newbox.clone();
+				var photoFullPath = file.filesInfo[0].photo_full_path;
+				var newImageSrc = PAP_fileUploadEstimation.serverImage + '/estimation/' + photoFullPath + '?timestamp=' + Math.floor(Date.now() / 1000);
+
+				$copie.addClass('li-' + PAP_fileUploadEstimation.typeUpload);
+				$copie.find('.dialog-box-opener-suppression-image').attr({'attr-photo-name': file.filesInfo[0].photo_name});
+				$copie.find('.display-photo').attr({'href': newImageSrc});
+				$copie.find('.photo-upload').attr({'src': newImageSrc}).show();
+
+				if (file.filesInfo[0].show_zoom) {
+					$copie.find('.display-photo').addClass('zoom-photo');
+				}
+
+				$copie.insertBefore($newbox);
+				$copie.removeClass(newbox + ' hidden');
+
+				PAP_fileUploadEstimation._initPlugin();
+
+				if (PAP_fileUploadEstimation.countPhotos() >= PAP_fileUploadEstimation._getUploadMax()) {
+					$(".add-button-" + PAP_fileUploadEstimation.typeUpload).find('.fileinput-button').hide();
+				} else {
+					$(".add-button-" + PAP_fileUploadEstimation.typeUpload).find('.fileinput-button').show();
+				}
+			},
+			_initPlugin: function () {
+				$(".img-liquid").css({"display": "block"}).imgLiquid();
+			},
+			countPhotos: function (type) {
+				type = (!type) ? PAP_fileUploadEstimation.typeUpload : type;
+				return $(".li-" + type).find('.display-photo').length;
+			},
+			execute: function (files, $input) {
+				PAP_fileUploadEstimation.serverImage = $('#js-estimation-dossiers-form-id').data('estimation').serverImage,
+				PAP_fileUploadEstimation.serverWs = $('#js-estimation-dossiers-form-id').data('estimation').serverWs,
+				PAP_fileUploadEstimation.nbPhotos = 0,
+				PAP_fileUploadEstimation.photosMax = $('#js-estimation-dossiers-form-id').data('estimation').photosMax,
+				PAP_fileUploadEstimation.plansMax = $('#js-estimation-dossiers-form-id').data('estimation').plansMax,
+				PAP_fileUploadEstimation.input = $input[0];
+				PAP_fileUploadEstimation.typeUpload = $(PAP_fileUploadEstimation.input).data('formData').type;
+				PAP_fileUploadEstimation.totalSize = 0;
+				PAP_fileUploadEstimation.totalProgress = 0;
+				PAP_fileUploadEstimation.active = false;
+
+				var typesErrors = (PAP_fileUploadEstimation.countPhotos() > PAP_fileUploadEstimation._getUploadMax) ? 5 : false;
+
+				if (!files || !files.length || PAP_fileUploadEstimation.listePhotos.length) {typesErrors = 5};
+
+				if (!typesErrors) {
+					for (i = 0; i < files.length; i++) {
+						file = files[i];
+						if (!PAP_fileUploadEstimation.acceptFileTypes.test(file.type)) {
+							typesErrors = 4;
+							break;
+						}
+						else if (file.size > PAP_fileUploadEstimation.taillePhoto) {
+							typesErrors = 3;
+							break;
+						}
+						else {
+							PAP_fileUploadEstimation.listePhotos.push(file);
+							PAP_fileUploadEstimation.totalSize += file.size;
+						}
+					}
+				}
+
+				if (typesErrors) {
+					PAP_fileUploadEstimation._displayLoading(false);
+					PAP_fileUploadEstimation._showMessage(PAP_PhotosUpload_Message.get('insert', typesErrors));
+					return;
+				}
+				PAP_fileUploadEstimation._start();
+			},
+		};
+
+		browser.init();
+		if (browser.name == "ie" && browser.version < 10) {
+			$('.old-browser').show();
+			$("li[class^='add-button-']").hide();
+		}
+		else {
+			PAP_fileUploadEstimation._initPlugin();
+		}
+
+		$('#js-estimation-dossiers-form-id').submit(function (e) {
+			var $this = $(this),
+				inputs = $this.find('input:file'),
+				emptyTypes = [];
+
+			$.each(inputs, function (index, input) {
+				var $input = $(input);
+
+				var nrFiles = PAP_fileUploadEstimation.countPhotos($input.data('formData').type);
+				if (nrFiles === 0) {
+					emptyTypes.push($input.data('formData').type);
+				}
+			})
+
+			if (emptyTypes.length && !formSubmitMM.canSubmitForm()) {
+				if (e.preventDefault) {
+					e.preventDefault();
+				} else {
+					e.returnValue = false;
+				}
+				formSubmitMM.openPopup(emptyTypes);
+				return false;
+			} else {
+				formSubmitMM.getPopupObj().dialog('close');
+			}
+
+			return true;
+		});
+
+		$('#' + formSubmitMM.idPopupOkBtn).on('click', function () {
+			$('#js-estimation-dossiers-form-id').submit();
+		})
+
+		$("#message-photo, #message-plan").on("refresh", function (e, slug_class) {
+			if (!slug_class) {
+				return;
+			}
+
+			$(this).addClass('hidden').find("div[class^='alert'],div[class^='success']").hide();
+			$(this).removeClass('hidden').find("." + slug_class).show().delay(PAP_fileUploadEstimation.delaiAffichages).fadeOut(600).queue(function () {
+				$(this).hide().dequeue();
+			});
+		});
+
+		$(".dialog-box-suppression-image").dialog({
+			autoOpen: false,
+			modal: true,
+			open: function (event, ui) {
+				$(".ui-dialog-titlebar-close").hide();
+			},
+			resizable: false,
+			width: 450,
+			show: {
+				effect: "drop",
+				direction: "up",
+				easing: "easeOutCubic",
+				duration: 1000
+			},
+			hide: {
+				effect: "fade",
+				duration: 250
+			}
+		});
+
+		// PAP_fileUploadEstimation._initPlugin();
+		$('input[type=file]').on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
+		})
+		.on('drop', function (e) {
+			$(this).attr("value", "");
+
+			PAP_fileUploadEstimation.index = 0;
+			PAP_fileUploadEstimation.listePhotos = [];
+
+			PAP_fileUploadEstimation.execute(e.originalEvent.dataTransfer.files, $(this));
+			return false;
+		})
+		.on("click", function (e) {
+			$(this).attr("value", "");
+
+			PAP_fileUploadEstimation.index = 0;
+			PAP_fileUploadEstimation.listePhotos = [];
+
+		})
+		.on("change", function (e) {
+			PAP_fileUploadEstimation.execute(this.files, $(this));
+			return false;
+		});
+
+		$('#dialog-box-suppression-image-ok').on('click', function () {
+			var $this = $(this),
+				$parentDialog = $this.closest('.dialog-box-suppression-image'),
+				photoName = $parentDialog.attr('attr-href-photo-name'),
+				$links = $parentDialog.find('a');
+
+			var $liContainer = $("body").find("[attr-photo-name='" + photoName + "']").closest('li');
+
+			if ($this.attr('disabled')) {
+				return;
+			}
+
+			$links.each(function (i, element) {
+				var $element = $(element);
+				$element.attr('disabled', 'disabled');
+			})
+
+			$parentDialog.find('a');
+			$.ajax({
+				url: $('#js-estimation-dossiers-form-id').data('estimation').serverWs + '/estimation/photo-delete',
+				dataType: "json",
+				data: {
+					action: "delete",
+					name: photoName
+				},
+				success: function (response) {
+					var $inputContainer = $('.add-button-' + response.slug);
+
+					$inputContainer.find('.fileinput-button').show();
+
+					$liContainer.remove();
+				},
+				complete: function () {
+					$parentDialog.dialog('close');
+				}
+			});
+		});
+
+		//open confirmation popup for delete photo
+		$('body').on('click', '.dialog-box-opener-suppression-image', function () {
+			var dialogObj = $(".dialog-box-suppression-image"),
+				$this = $(this),
+				$links = dialogObj.find('a');
+
+			$links.each(function (i, element) {
+				var $element = $(element);
+				$element.removeAttr('disabled');
+			});
+
+			dialogObj.attr('attr-href-photo-name', $this.attr('attr-photo-name'));
+			dialogObj.dialog("open");
+			return false;
+		});
+	});
+
+	/*************************************************************************
+	 *** Outils
+	 *************************************************************************/
+
+	/**
+	 * Plus-value
+	 */
+
+	$("#capacite-emprunt").doOnce(function () {
+		$('#revenus,#endettement').on('keyup', function () {
+			revenus = $('#revenus').val() ;
+			endettement = $('#endettement').val() ;
+			$('#mensualite').val((revenus) * 0.33  - endettement);
+		});
+	});
+
+	$("#calculette_plus_value_immobiliere").doOnce(function () {
+		$('#toggle_res_pri').hide();
+		if (exec_bloc1) {
+			// si le type de logement est terrain on affiche pas les questions sur la résidence principale
+			if ($('#type_bien').val() == 'T') {
+				$('#toggle_res_pri').hide();
+				$('#toggle_res_pri_1').hide();
+			} else {
+				$('#toggle_res_pri').show();
+				$('#toggle_res_pri_1').show();
+
+				if ($('#residence_principale').val() == 'N') {
+					$('#toggle_res_pri').show();
+				} else {
+					$('#toggle_res_pri').hide();
+				}
+			}
+
+			if ($('#travaux').val() == 'O') {
+				$('#montant_travaux').prop('disabled', 0);
+			}
+		}
+		if (exec_bloc2) {
+			$('html').animate({scrollTop: $('#plus_value_immo2').position().top}, 1500);
+		}
+		if (exec_bloc3) {
+			$('html').animate({scrollTop: $('#results').position().top}, 1500);
+		}
+
+		$('#type_bien').change(function () {
+			if ($(this).val() == 'T') {
+				$(this).prop('title', '');
+				$('.tooltip').tooltipster({
+					trigger: 'hover'
+				});
+				$('#toggle_res_pri').hide();
+				$('#toggle_res_pri_1').hide();
+				$('#plus_value_immo2').show();
+				$('#toggle_promesse_vente').show();
+			} else {
+				$('#toggle_res_pri_1').show();
+				$('#toggle_res_pri').show();
+				$('#plus_value_immo2').hide();
+				$('#toggle_promesse_vente').hide();
+			}
+		});
+
+		$('#residence_principale').change(function () {
+			if ($('#residence_principale').val() == 'N') {
+				$('#toggle_res_pri').show();
+			} else {
+				$('#toggle_res_pri').hide();
+			}
+		});
+
+		// calcul auto des frais d'acquisition
+		$('#prix_acquisition').blur(function () {
+			if ($('#mode_acquisition').val() == 1) {
+				$('#frais_acquisition').prop('title', 'Valeur calculée par défaut à 7.5%, vous pouvez ajuster en indiquant la valeur réelle.');
+				$('#frais_acquisition').val(Math.round($('#prix_acquisition').val() * 0.075));
+				setTimeout(function () {
+					$('#frais_acquisition').focus();
+				}, 500);
+			}
+		});
+
+		$('#mode_acquisition').change(function () {
+			if ($(this).val() == 1) {
+				$('#frais_acquisition').prop('title', 'Valeur calculée par défaut à 7.5%, vous pouvez ajuster en indiquant la valeur réelle.');
+				$('#frais_acquisition').val($('#prix_acquisition').val() * 0.075);
+				setTimeout(function () {
+					$('#frais_acquisition').focus();
+				}, 500);
+			} else {
+				$('#frais_acquisition').prop('title', 'Vous devez indiquer le montant des frais de notaire et des droits de donation ou de succession.');
+				$('#frais_acquisition').val('');
+			}
+		});
+
+		$('#travaux').change(function () {
+			// on regarde si la durée d'acquisition est > 5 ans
+			mt_calcule = $('#prix_acquisition').val() * 0.15;
+
+			// $('#montant_travaux').val(mt_calcule);
+			if ($('#travaux').val() == 'O') {
+				$('#montant_travaux').prop('disabled', 0);
+			} else {
+				$('#montant_travaux').prop('disabled', 1);
+			}
+		});
+
+
+		function nb_annees_entieres() {
+			var minutes = 1000 * 60;
+			var hours = minutes * 60;
+			var days = hours * 24;
+			var years = days * 365;
+
+			var date_acquisition = new Date($('#annee_acquisition').val(), 1, $('#mois_acquisition').val());
+			var date_vente = new Date($('#annee_vente').val(), 1, $('#mois_vente').val());
+			date_acquisition = date_acquisition.getTime();
+			date_vente = date_vente.getTime();
+
+			return Math.round((date_vente - date_acquisition) / years);
+		}
+
+		$('.toggledetails').click(function () {
+			$('.toggledetails').toggle();
+			$('#details').slideToggle();
+			$('html').animate({scrollTop: $('#details').position().top}, 1500);
+		});
+
+	});
+
+	/**
+	 * Partials
+	 */
+
+	$('#partial-content-souscrire').doOnce(function () {
+		
+		$('#show-more-typesbien').on('click', function (e) {
+			$(".more-typesbien").show(50) ;
+			$("#show-more-typesbien").hide(50) ;
+			e.preventDefault();
+		});
+	});
+	
+	$('#partial-content-contrat-location').doOnce(function () {
+		
+		$('#show-pack-location-vide').on('click', function (e) {
+			$("#pack-location-vide").show(50) ;
+			$("#type-location").hide() ;
+			e.preventDefault();
+		});
+		
+		$('#show-type-location-meuble').on('click', function (e) {
+			$("#type-location-meuble").show(50) ;
+			$("#type-location").hide() ;
+			e.preventDefault();
+		});
+
+		$('#show-pack-location-meublee').on('click', function (e) {
+			$("#pack-location-meublee").show(50) ;
+			$("#type-location-meuble").hide() ;
+			e.preventDefault();
+		});
+		
+		$('#show-pack-location-etudiant').on('click', function (e) {
+			$("#pack-location-etudiant").show(50) ;
+			$("#type-location-meuble").hide() ;
+			e.preventDefault();
+		});
+		
+		$('#show-pack-bail-mobilite').on('click', function (e) {
+			$("#pack-bail-mobilite").show(50) ;
+			$("#type-location-meuble").hide() ;
+			e.preventDefault();
+		});
+
+	});
+
+	/**
+	 * Résiliation de bail
+	 */
+
+	$('#calculette_preavis').doOnce(function () {
+
+		var $form = $(this);
+
+		// Définition des champs à afficher masquer
+		$form.on('refresh', function () {
+			$('#champ_motif').toggle($('#residence').val() == 'residence-principale' && $('#type_location').val() == 'location-vide' && $('#ville_id').data('autocomplete').fixation_loyer == 'libre');
+		});
+
+		// Déclenche le rafraichissement
+		$('#type_location, #ville, #residence').on('change', function () {
+			$form.trigger('refresh');
+		});
+
+		// Initialiser le formulaire quand l'autocomplete est initialisé
+		$.when($('#ville').data('deferred')).done(function () {
+			$form.trigger('refresh');
+		});
+
+	});
+
+	$('#generateur_lettre_preavis').doOnce(function () {
+
+		var $section = $(this);
+
+		// Définition des champs à afficher masquer
+		$section.on('refresh', function () {
+			$('#champ_destinataire_email').toggle($('#destinataire_type').val() == 'particulier');
+			$('#champs_devis').toggle($('#devis-oui:checked').length > 0);
+		});
+
+		// Déclenche le rafraichissement
+		$('#destinataire_type,#destinataire_civilite').on('change', function () {
+			$section.trigger('refresh');
+		});
+
+		$('#devis-oui,#devis-non').closest('div').on('click', function () {
+			$section.trigger('refresh');
+		});
+
+		// Initialiser le formulaire
+		$section.trigger('refresh');
+	});
+
+	/**
+	 * Créer une quittance
+	 */
+
+	$("#creer-quittance-form").doOnce(function() {
+
+		var nb_min = 1;
+		var nb_max = 5;
+
+		$("#creer-quittance-form").on("refresh", function() {
+			var nb = parseInt($("#nb_locataires").val());
+			$("#creer-quittance-locataire-add").toggle(nb < nb_max);
+			$("#creer-quittance-locataire-remove").toggle(nb > nb_min);
+			$(".creer-quittance-locataire").each(function(k, v) {
+				$(this).toggle(k < nb);
+			});
+		});
+
+		$("#creer-quittance-locataire-add").on("click", function() {
+			var nb = parseInt($("#nb_locataires").val());
+			if (nb < nb_max)
+				$("#nb_locataires").val(++nb);
+			$("#creer-quittance-form").trigger("refresh");
+			return false;
+		});
+		$("#creer-quittance-locataire-remove").on("click", function() {
+			var nb = parseInt($("#nb_locataires").val());
+			if (nb > nb_min)
+				$("#nb_locataires").val(--nb);
+			$("#creer-quittance-form").trigger("refresh");
+			return false;
+		});
+
+		$("#creer-quittance-form").trigger("refresh");
+
+		$("#creer-quittance-signature-remove-link").on("click", function() {
+			$("#creer-quittance-signature").hide();
+			$("#signature-remove").val(1);
+			$("#creer-quittance-signature-add").show();
+			return false;
+		});
+
+	});
+
+	/*************************************************************************
+	 *** Edito
+	 *************************************************************************/
+
+	$('#covid-banner').doOnce(function () {
+		$("#covid-banner .btn-close").on("click", function () {
+			Cookies.set("covid-banner", 1);
+			$("#covid-banner").remove();
+		});
+	});
+
+	/**
+	 * Inscription Abonnement Newsletter Bailleur
+	 */
+
+	$('#inscription_abonnement_newsletter_bailleur').doOnce(function () {
+
+		var $form_newsletter_bailleur = $("#form_inscription_newsletter_bailleur");
+		var $erreurs = $form_newsletter_bailleur.find(".error-message");
+		var $email_saisi = $('input[name^=inscription_email]');
+		// Contrôle de l'adresse e-mail
+		$erreurs.hide();
+
+
+		$email_saisi.on('check', function () {
+			$(this).data('deferred', $.ajax({
+				url: "/json/email-check",
+				data: {"email": $(this).val()},
+				type: "post",
+				dataType: 'json',
+				async: false
+			}));
+		});
+
+
+		$form_newsletter_bailleur.on('enregistrement', function () {
+			$form_newsletter_bailleur.data("deferred", $.ajax({
+				url: $form_newsletter_bailleur.attr('action'),
+				type: $form_newsletter_bailleur.attr('method'),
+				data: $form_newsletter_bailleur.serialize(),
+				dataType: 'json',
+				async: false
+			}));
+		});
+
+		$("#inscription_abonnement_newsletter_bailleur .btn-close").on("click", function () {
+			Cookies.set("inscription_abonnement_newsletter_bailleur", 1, {"expires": 1});
+			$("#inscription_abonnement_newsletter_bailleur").remove();
+		});
+
+		$form_newsletter_bailleur.on('submit', function (e) {
+			$erreurs.hide();
+
+			// Contrôler l'e-mail
+			$email_saisi.trigger('check');
+			$email_saisi.data('deferred')
+				.done(function (res) {
+
+					if (!res.success) {
+						$erreurs.filter(".erreur-email-invalide").show();
+						return false;
+					}
+					else {
+						$form_newsletter_bailleur.trigger("enregistrement");
+						$form_newsletter_bailleur.data("deferred")
+							.done(function (res) {
+								if (!res.reponse) {
+									$erreurs.filter('.erreur-generale').show();
+									return false;
+								}
+
+								var d = new Date();
+								Cookies.set("inscription_abonnement_newsletter_bailleur", 1, {"expires": 20 * 365});
+								$("#inscription_abonnement_newsletter_bailleur").remove();
+							})
+							.fail(function (res) {
+								$erreurs.filter('.erreur-submit-default').show();
+							});
+					}
+				})
+				.fail(function (res) {
+					$erreurs.filter(".erreur-generale").show();
+				});
+			return false;
+		});
+	});
+
+	/**
+	 * Etimation gratuite
+	 */
+
+	/*$// Travaux prévus entrainant une majoration de loyer
+	$("#travaux_majoration_oui, #travaux_majoration_non").change(function () {
+		$("#bloc_travaux_majoration_nature, #bloc_travaux_majoration_modalites, #bloc_travaux_majoration_delai, #bloc_travaux_majoration_montant").toggle($("input[type=radio][name='travaux[majoration]']:checked").val() == 'oui');
+	});
+	$("#travaux_majoration_oui, #travaux_majoration_non").trigger('change');*/
+
+	/*$("#type_de_balcon_aucun, #type_de_balcon_balcon, #type_de_balcon_terrasse").change(function () {
+		$("#bloc_surface_balcon").toggle($("input[type=radio][name='type_de_balcon']:checked").val() == 'aucun');
+		$('#bloc_surface_balcon').trigger('change');
+	});
+	$("#type_de_balcon_aucun").trigger('change');*/
+
+	/**
+	 * Atelier en ligne
+	 */
+
+	$("#atelier-form").doOnce(function() {
+		
+		$form = $("#atelier-form");
+		$success = $("#atelier-success");
+
+		$form.on("submit", function() {
+
+			$form.find(".error-message").addClass("hidden");
+
+			$.post($form.attr("action"), $form.serialize(), function(json) {
+
+				console.log("success", json);
+				
+				for (const error of json.errors) {
+					$form.find("."+error).removeClass("hidden");
+				}
+
+				if (json.success) {
+					$("#dialog-atelier-inscription").dialog('close');
+					$("#dialog-atelier-confirmation").dialog('open');
+				}
+
+			}, 'json');
+
+			return false;
+		});
+		
+	});
+
+	/*************************************************************************
+	 *** Passage d'annonce
+	 *************************************************************************/
+
+	/**
+	 * Landing page du passage d'annonce
+	 */
+
+	/* Dialog de reprise de passage d'annonce */
+	$("#passer_une_annonce_landing").doOnce(function () {
+		// Efface le cookie si l'utilisateur ferme la dialog
+		$("#annonce-continuer").dialog({
+			close: function (event, ui) {
+				Cookies.set('session_pa_id', '', {expires: 0});
+				Cookies.set('session_pa_label', '', {expires: 0});
+			}
+		});
+
+		// Ouvre la dialog si elle est présente dans le code
+		$("#annonce-continuer").dialog('open');
+	});
+
+	$("#form-localisation").doOnce(function () {
+
+		$("#stats-marche").on("refresh", function() {
+			$("#stats-marche").load('/json/devis-get-marche?' + $.param({
+				"produit": $("#stats-marche").data('produit'),
+				"typebien": $("#stats-marche").data('typebien'),
+				"geo_objet_id":  $("#biens_geo_objet_id_selected").val()
+			}));
+		});
+
+		$('#biens_geo_objet_id_selected').on("change", function () {
+			$("#stats-marche").trigger("refresh");
+		});
+		$("#stats-marche").trigger("refresh");
+
+	});
+
+	$("#form-prix-vente").doOnce(function () {
+		$('#form-prix-vente #prix').on("input", function () {		
+			var prix_vente = parseInt($("#form-prix-vente #prix").val()) ;
+			var economie = 0 ; 
+			if (prix_vente > 1000) {
+				economie = Math.ceil(prix_vente * 4.8 / 100);
+			}
+			if (economie) {
+				$("#commission").html(economie + " € de frais d'agence !") ; 
+				$("#label-commission").show(4) ;
+			}
+			else
+			{
+				$("#label-commission").hide() ;
+			}
+		});
+	});
+	
+	/* Slider Calcul economie commission */
+	$("#price_slider").doOnce(function () {
+
+		var commission_agence = $('#form_calcul_commission').data('commission') / 100;
+		var prix_vente = $('#form_calcul_commission').data('prix');
+		var prix_vente_min = $('#form_calcul_commission').data('prix_min');
+		var prix_vente_max = $('#form_calcul_commission').data('prix_max');
+
+		if (prix_vente > 0) {
+			var valMap = [];
+			if (prix_vente_min && prix_vente_max) {
+				value_base = 0;
+				for (var i = (prix_vente_min / 1000); i <= (prix_vente_max / 1000); i++) {
+					valMap.push(i * 1000);
+					if (prix_vente > i * 1000) {
+						value_base++;
+					}
+				}
+			}
+			else {
+				if (prix_vente > 1000000)
+					pas = 10000;
+				else if (prix_vente > 500000)
+					pas = 5000;
+				else
+					pas = 2500;
+
+				var valMap = [
+					Math.round(prix_vente - 20 * pas),
+					Math.round(prix_vente - 19 * pas),
+					Math.round(prix_vente - 18 * pas),
+					Math.round(prix_vente - 17 * pas),
+					Math.round(prix_vente - 16 * pas),
+					Math.round(prix_vente - 15 * pas),
+					Math.round(prix_vente - 14 * pas),
+					Math.round(prix_vente - 13 * pas),
+					Math.round(prix_vente - 12 * pas),
+					Math.round(prix_vente - 11 * pas),
+					Math.round(prix_vente - 10 * pas),
+					Math.round(prix_vente -  9 * pas),
+					Math.round(prix_vente -  8 * pas),
+					Math.round(prix_vente -  7 * pas),
+					Math.round(prix_vente -  6 * pas),
+					Math.round(prix_vente -  5 * pas),
+					Math.round(prix_vente -  4 * pas),
+					Math.round(prix_vente -  3 * pas),
+					Math.round(prix_vente -  2 * pas),
+					Math.round(prix_vente -  1 * pas),
+					Math.round(prix_vente),
+					Math.round(prix_vente +  1 * pas),
+					Math.round(prix_vente +  2 * pas),
+					Math.round(prix_vente +  3 * pas),
+					Math.round(prix_vente +  4 * pas),
+					Math.round(prix_vente +  5 * pas),
+					Math.round(prix_vente +  6 * pas),
+					Math.round(prix_vente +  7 * pas),
+					Math.round(prix_vente +  8 * pas),
+					Math.round(prix_vente +  9 * pas),
+					Math.round(prix_vente + 10 * pas),
+					Math.round(prix_vente + 11 * pas),
+					Math.round(prix_vente + 12 * pas),
+					Math.round(prix_vente + 13 * pas),
+					Math.round(prix_vente + 14 * pas),
+					Math.round(prix_vente + 15 * pas),
+					Math.round(prix_vente + 16 * pas),
+					Math.round(prix_vente + 17 * pas),
+					Math.round(prix_vente + 18 * pas),
+					Math.round(prix_vente + 19 * pas),
+					Math.round(prix_vente + 20 * pas),
+				];
+				value_base = 20;
+			}
+
+		}
+		else {
+			var valMap = [40000, 60000, 80000, 100000, 120000, 140000, 160000, 180000, 200000, 220000, 230000, 240000, 260000,
+				280000, 300000, 320000, 340000, 360000, 380000, 400000, 420000, 440000, 460000, 480000, 500000, 550000,
+				600000, 650000, 700000, 750000, 800000, 850000, 900000, 950000, 1000000, 1100000, 1200000,
+				1300000, 1400000, 1500000, 1600000, 1700000, 1800000, 1900000, 2000000
+			];
+			value_base = 10;
+		}
+
+		//Formate les montants en euros
+		function formatMontantEuros(nStr) {
+			
+			nStr += '';
+			x = nStr.split('.');
+			x1 = x[0];
+			x2 = x.length > 1 ? '.' + x[1] : '';
+			var rgx = /(\d+)(\d{3})/;
+			while (rgx.test(x1)) {
+				x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+			}
+			return x1 + x2 + ' €';
+		}
+
+		function montant_sans_commission(value) {
+			return Math.ceil((value / (1 + commission_agence)));
+		}
+
+		$('#form_calcul_commission').on('refresh', function (event, montant_bien) {
+			var montantsanscommission = montant_sans_commission(montant_bien);
+			$("#montant_bien").val(formatMontantEuros(montant_bien));
+			$("#montant_avec_agence").val(formatMontantEuros(montantsanscommission));
+			$("#montant-commission").val(formatMontantEuros(montant_bien - montantsanscommission));
+			$("#montant_avec_pap").val(formatMontantEuros(montant_bien));
+		});
+
+
+		$("#price_slider").slider({
+			range: "min",
+			min: 1,
+			max: valMap.length - 1,
+			value: value_base,
+			//Evenement lorsque l'on bouge le curseur
+			slide: function (event, ui) {
+				$('#form_calcul_commission').trigger('refresh', [valMap[ui.value]]);
+			},
+			//Evenement a la creation
+			create: function (event, ui) {
+				$('#form_calcul_commission').trigger('refresh', [valMap[$("#price_slider").slider("value")]]);
+			},
+		});
+	});
+
+	$('.scrollto').on('click', function () {
+		var href = $(this).attr('href');
+		var $anchor = $("[name=" + href.slice(1) + "]");
+		history.replaceState(undefined, undefined, href)
+		$("html, body").stop().animate({
+			scrollTop: $anchor.offset().top - 70
+		}, 1000);
+		return false;
+	});
+
+	/**
+	 * Etapes du passage d'annonce
+	 */
+
+	$('#passer_une_annonce').doOnce(function () {
+
+		/**
+		 * Étape 1 : Où se situe votre bien ?
+		 */
+
+		$('#passer_une_annonce_ou_se_situe_votre_bien').doOnce(function() {
+			var $container                 = $(this);
+			var $geo_objet_id_pays         = $('#biens_geo_objet_id_pays');
+			var $code_postal               = $('#biens_code_postal');
+			var $geo_objet_id              = $('#biens_geo_objet_id');
+			var $geo_objet_id_selected     = $('#biens_geo_objet_id_selected');
+			var $adresse_saisie            = $('#biens_adresse_saisie');
+			var $jsIfPaysFrance            = $container.find('.js-if-pays-france');
+			var $jsIfCodePostal            = $container.find('.js-if-code_postal');
+			var $error_code_postal_default = $('#error_code_postal_default');
+			var $error_code_postal_invalid = $('#error_code_postal_invalid');
+			var $error_code_postal_nomatch = $('#error_code_postal_nomatch');
+
+			/** Dissimuler les champs inutiles si le bien est situé à l'étranger **/
+			$jsIfPaysFrance.on('refresh', function() {
+				$(this).toggle($geo_objet_id_pays.val() == 25);
+			});
+			$geo_objet_id_pays.on('change', function() {
+				$jsIfPaysFrance.trigger('refresh');
+			});
+			$jsIfPaysFrance.trigger('refresh');
+
+			/** Rafraîchir le sélecteur de commune d'après le code postal **/
+			/** Gérer les messages d'erreur du code postal en temps réel **/
+			$geo_objet_id.on('refresh', function() {
+
+				// Si la saisie n'est pas un code postal valide, aucune commune n'est proposée.
+				// Si la saisie n'est pas vide, et qu'on n'est pas en focus, on averti que la saisie
+				// n'est pas valide.
+				if (!$code_postal.val().match(/^[0-9]{5}$/g)) {
+					$geo_objet_id.empty();
+					$geo_objet_id[0].sumo.reload();
+					$geo_objet_id[0].sumo.disable();
+					$error_code_postal_default.hide();
+					$error_code_postal_invalid.toggle($code_postal.val() != '' && $code_postal.filter(':focus').length == 0);
+					$error_code_postal_nomatch.hide();
+					$geo_objet_id.data('codePostal', $code_postal.val());
+					$adresse_saisie.attr('disabled', true);
+					return;
+				}
+
+				// Si la saisie est un code postal valide, mais que les communes proposées
+				// correspondent déjà à ce code postal, alors aucun changement n'est nécessaire.
+				if ($code_postal.val() == $geo_objet_id.data('codePostal')) {
+					return;
+				}
+
+				// Appel AJAX
+				$.ajax({
+					url: '/json/code-postal-get',
+					type: 'get',
+					data: {'code-postal': $code_postal.val()},
+					dataType: 'json',
+					async: true,
+					cache: true,
+					success: function (data) {
+
+						// S'il n'y a pas de propositions, il faut prévenir l'utilisateur
+						if (data.nb_items == 0) {
+							$geo_objet_id.empty();
+							$geo_objet_id[0].sumo.reload();
+							$geo_objet_id[0].sumo.disable();
+							$error_code_postal_default.hide();
+							$error_code_postal_invalid.hide();
+							$error_code_postal_nomatch.show();
+							$geo_objet_id.data('codePostal', $code_postal.val());
+							$adresse_saisie.attr('disabled', true);
+							return;
+						}
+
+						// Renseigner les propositions
+						$.each(data._embedded.place, function(k, v) {
+							var $option = $('<option>');
+							$option.attr('value', v['id']);
+							$option.text(v['title']);
+							// Si l'option est celle dont l'identifiant a été sauvegardé, on la
+							// sélectionne
+							if (v['id'] == $geo_objet_id_selected.val()) {
+								$option.attr('selected', true);
+							}
+							$geo_objet_id.append($option);
+						})
+						$geo_objet_id[0].sumo.reload();
+						$geo_objet_id[0].sumo.enable();
+						$error_code_postal_default.hide();
+						$error_code_postal_invalid.hide();
+						$error_code_postal_nomatch.hide();
+						$geo_objet_id.data('codePostal', $code_postal.val());
+						$adresse_saisie.attr('disabled', false);
+
+						$geo_objet_id.trigger("change");
+
+					},
+
+					// Si l'AJAX ne réponds pas correctement, il faut demander à l'utilisateur
+					// de recommencer sa saisie
+					error: function () {
+						$geo_objet_id.empty();
+						$geo_objet_id[0].sumo.reload();
+						$geo_objet_id[0].sumo.disable();
+						$error_code_postal_default.show();
+						$error_code_postal_invalid.hide();
+						$error_code_postal_nomatch.hide();
+						$adresse_saisie.attr('disabled', true);
+					}
+
+				});
+
+			});
+			$code_postal.on('propertychange input blur', function() {
+				$geo_objet_id.trigger('refresh');
+			});
+			$geo_objet_id.trigger('refresh');
+
+			/** Sélection de la commune **/
+			$geo_objet_id.on('change', function() {
+				// Quand on sélectionne une commune, l'identifiant est sauvegardé.
+				// Si on vide, puis re-rempli le <select>, la valeur sauvegardée sera
+				// pré-selectionnée.
+				$geo_objet_id_selected.val($geo_objet_id.find('option:selected').attr('value'));
+				$geo_objet_id_selected.trigger("change");
+			});
+
+		});
+
+		/**
+		 * Étape 2 : Votre annonce
+		 */
+
+		/** Encadrement des loyers **/
+		$('#encadrement_loyer').doOnce(function () {
+			var encadrement_loyer = $('#encadrement_loyer');
+
+			encadrement_loyer.on('refresh', function () {
+
+				if ($("#plafond_loyer").val() > 0 && $("#loyer_hors_charges").val() > 0)
+				{
+					var plafond_loyer = $("#plafond_loyer").val() ; 
+					var loyer_hors_charges = $("#loyer_hors_charges").val() ; 
+					complement_loyer = loyer_hors_charges - plafond_loyer ;
+					if (complement_loyer > 0)
+					{
+						$('b#complement_loyer').html(complement_loyer + ' €');
+						$('#plafond-depasse').show();
+					}		
+					else
+					{
+						$('#plafond-depasse').hide();
+					}
+				}
+
+				if ($("#surface").val() > 0 && $("#nb_pieces").val() > 0 && $("#biens_encadrement_des_loyers_zone").val() > 0) {
+					$.ajax({
+						url: '/json/loyer-plafond-calcul',
+						type: 'GET',
+						data: {
+							'geo_objet_id': $("#biens_geo_objet_id").val(),
+							'biens_encadrement_des_loyers_zone': $("#biens_encadrement_des_loyers_zone").val(),
+							'typebien': $("#typebien").val(),
+							'surface': $("#surface").val(),
+							'nb_pieces': $("#nb_pieces").val(),
+							'epoque_construction': $("#epoque_construction").val(),
+							'type_location': ($('#tags_meuble:checked').length == 1) ? 'meuble' : 'vide',
+							'loyer_hors_charges': $("#loyer_hors_charges").val(),
+						},
+						dataType: 'json',
+						success: function (data) {
+							if (data.resultat == 1) {
+								$('b#plafond_loyer').html(data.loyer_reference_majore_final + ' €');
+								$('#plafond-inconnu').hide();
+								$('#plafond-connu').show();
+								
+								if (data.complement_loyer)
+								{
+									$('b#complement_loyer').html(data.complement_loyer + ' €');
+									$('#plafond-depasse').show();
+								}
+								else
+								{
+									$('#plafond-depasse').hide();
+								}
+							}
+							else {
+								$('#plafond-inconnu').show();
+								$('#plafond-connu').hide();
+								$('#plafond-depasse').hide();
+							}
+						}
+					});
+				}
+				else {
+					$('#plafond-inconnu').show();
+					$('#plafond-connu').hide();
+				}
+			});
+
+			$("#surface,#nb_pieces").on('keyup', function () {
+				encadrement_loyer.trigger('refresh');
+			});
+
+			$('#tags_meuble,#tags_vide').on('click', function () {
+				encadrement_loyer.trigger('refresh');
+			});
+
+			$('#epoque_construction').on('change', function () {
+				encadrement_loyer.trigger('refresh');
+			});
+
+			$('#loyer_hors_charges').on('keyup', function () {
+				encadrement_loyer.trigger('refresh');
+			});
+
+			encadrement_loyer.trigger('refresh');
+		});
+
+		/** Dépôt de garantie **/
+		$('#loyer_hors_charges').doOnce(function () {
+			var loyer_hors_charges = $('#loyer_hors_charges');
+
+			loyer_hors_charges.on('refresh', function () {
+				var montant = $(this).val();
+
+				if (montant.length > 2 && ($('#tags_meuble:checked').length == 1 || $('#tags_vide:checked').length == 1)) {
+					nb_mois_depot_garantie = ($('#tags_meuble:checked').length == 1) ? 2 : 1;
+					depot_garantie_max = nb_mois_depot_garantie * montant;
+					$('span#montant_depot_garantie_max').html(depot_garantie_max);
+					$('span#montant_depot_garantie_location_vide').toggle($('#tags_meuble:checked').length != 1);
+					$('span#montant_depot_garantie_location_meublee').toggle($('#tags_meuble:checked').length == 1);
+					$('span#montant_depot_garantie_bail_mobilite').toggle($('#tags_bail-mobilite:checked').length == 1);
+					$('p#montant_depot_garantie_connu').show();
+					$('p#montant_depot_garantie_inconnu').hide();
+				}
+				else {
+					$('p#montant_depot_garantie_connu').hide();
+					$('p#montant_depot_garantie_inconnu').show();
+				}
+
+			});
+
+			$('#tags_meuble').on('click', function () {
+				loyer_hors_charges.trigger('refresh');
+			});
+
+			$('#tags_vide').on('click', function () {
+				loyer_hors_charges.trigger('refresh');
+			});
+
+			$('#tags_bail-mobilite').on('click', function () {
+				loyer_hors_charges.trigger('refresh');
+			});
+
+			$('#loyer_hors_charges').on('change keyup', function () {
+				loyer_hors_charges.trigger('refresh');
+			});
+
+			loyer_hors_charges.trigger('refresh');
+
+		});
+
+		/**
+		 * Étape 4 : Votre visite virtuelle
+		 */
+
+		$('#passer_une_annonce_visite_virtuelle').doOnce(function() {
+			var $container = $(this);
+			var $dates = $('#js-wallmarket-dates');
+			var $times = $('#js-wallmarket-times');
+			var $selected_date = $('#wallmarket_date_rdv_photographe_date');
+			var $selected_time = $('#wallmarket_date_rdv_photographe_time');
+			var $selected_slot = $('#wallmarket_date_rdv_photographe');
+
+			$dates.on('refresh', function() {
+				var available_dates = $container.data('wallmarket').dates;
+				var selected_date = $selected_date.val();
+
+				$(this).find('.js-wallmarket-date').each(function () {
+					var current_date = $(this).data('wallmarket').date;
+					var current_date_is_selected = current_date == selected_date;
+					var current_date_is_available = current_date in available_dates;
+
+					$(this).toggleClass('selected', current_date_is_selected);
+					$(this).tooltipster(current_date_is_available ? 'disable' : 'enable');
+					$(this).toggleClass('date-passed', !current_date_is_available);
+				});
+				return false;
+			});
+
+			$times.on('refresh', function() {
+				var available_dates = $container.data('wallmarket').dates;
+				var selected_date = $selected_date.val();
+				var available_times = selected_date in available_dates ? available_dates[selected_date] : {};
+				var selected_time = $selected_time.val();
+
+				$(this).find('.js-wallmarket-time').each(function () {
+					var current_time = $(this).data('wallmarket').time;
+					var current_time_is_selected = current_time == selected_time;
+					var current_time_is_available = current_time in available_times;
+
+					$(this).toggleClass('selected', current_time_is_selected);
+					$(this).tooltipster(current_time_is_available ? 'disable' : 'enable');
+					$(this).toggleClass('date-passed', !current_time_is_available);
+				});
+				return false;
+			});
+
+			$selected_slot.on('refresh', function() {
+				var available_dates = $container.data('wallmarket').dates;
+				var selected_date = $selected_date.val();
+				var available_times = selected_date in available_dates ? available_dates[selected_date] : {};
+				var selected_time = $selected_time.val();
+				var slot = selected_time in available_times ? available_times[selected_time] : null;
+				$selected_slot.val(slot);
+			});
+
+			$container.on('refresh', function() {
+
+				// Ne pas relancer une requête sur l'adresse déjà en cours de recherche
+				if ($container.data('wallmarket').adresse == $('#wallmarket_adresse').val())
+					return false;
+				$container.data('wallmarket').adresse = $('#wallmarket_adresse').val();
+
+				// Masquer tous les blocs de résultat sauf le loader
+				$('.wallmarket_date_rdv_photographe-bloc').addClass('hidden');
+				$('#wallmarket_date_rdv_photographe-loading').removeClass('hidden');
+
+				// Lancer une requête sur l'adresse demandée
+				$.ajax({
+					url: '/json/wallmarket-get-slots',
+					type: 'get',
+					data: {"wallmarket_adresse": $container.data('wallmarket').adresse, "surface": $container.data('wallmarket').surface},
+					dataType: 'json',
+					async: true,
+					cache: false,
+					success: function (data) {
+
+						if (data.success) {
+
+							// Masquer tous les blocs de résultat sauf le calendrier
+							$('.wallmarket_date_rdv_photographe-bloc').addClass('hidden');
+							$('#wallmarket_date_rdv_photographe-ok').removeClass('hidden');
+
+							// Actualiser le calendrier
+							$container.data('wallmarket').dates = data.dates;
+							$dates.trigger('refresh');
+							$times.trigger('refresh');
+							$selected_slot.trigger('refresh');
+
+						} else {
+
+							// Masquer tous les blocs de résultat sauf le calendrier
+							$('.wallmarket_date_rdv_photographe-bloc').addClass('hidden');
+							$('#wallmarket_date_rdv_photographe-' + data.errors[0]).removeClass('hidden');
+
+							$('#suggestion_adresse_complete').text(data.suggestion_adresse_complete)
+
+						}
+
+					},
+					error: function() {
+
+						// Masquer tous les blocs de résultat sauf le message d'erreur
+						$('.wallmarket_date_rdv_photographe-bloc').addClass('hidden');
+						$('#wallmarket_date_rdv_photographe-erreur').removeClass('hidden');
+
+						// Vider l'adresse de référence du container pour permettre le rechargement
+						$container.data('wallmarket').adresse = '';
+					}
+				});
+
+				return false;
+			});
+
+			$('#wallmarket_adresse').on('change', function() {
+				$container.trigger('refresh');
+			});
+
+			$('.js-wallmarket-date').on('click', function() {
+				$selected_date.val($(this).data('wallmarket').date);
+				$dates.trigger('refresh');
+				$times.trigger('refresh');
+				$selected_slot.trigger('refresh');
+			});
+
+			$('.js-wallmarket-time').on('click', function() {
+				$selected_time.val($(this).data('wallmarket').time);
+				$dates.trigger('refresh');
+				$times.trigger('refresh');
+				$selected_slot.trigger('refresh');
+			});
+
+			$('#suggestion_adresse_complete-confirmer').on('click', function() {
+				$('#wallmarket_adresse').val($('#suggestion_adresse_complete').text());
+				$container.trigger('refresh');
+				return false;
+			});
+
+			$container.trigger('refresh');
+			$dates.trigger('refresh');
+			$times.trigger('refresh');
+			$selected_slot.trigger('refresh');
+
+		});
+
+		/**
+		 * Non classé...
+		 */
+
+		/* Afficher le mode de contact d'annonceur au passage d'annonce */
+		$("#choix_mode_de_contact").doOnce(function () {
+			$('div.panel-mode-de-contact').on('refresh', function () {
+				$(this).toggle($(this).hasClass('panel-mode-de-contact-' + $("input:radio[name='mode_de_contact']:checked").val()));
+			});
+			$('.options-group-radio .option input:radio').on('change', function () {
+				$('div.panel-mode-de-contact').trigger('refresh');
+			});
+			$('div.panel-mode-de-contact').trigger('refresh');
+		});
+
+		/* Compteur de mot */
+		$("#annonceur_compteur").doOnce(function () {
+			var max = $("#annonceur_compteur").data('max');
+			var compteurDeLettre = function () {
+				var newLines = $('#texte').val().match(/(\r\n|\n|\r)/g);
+				var addition = 0;
+
+				if (newLines != null) {
+					addition = newLines.length;
+				}
+				return addition + $('#texte').val().length;
+			}
+
+			$('#texte').on('refresh', function () {
+				var ttl_caracteres = compteurDeLettre();
+				if (ttl_caracteres) {
+					$('#annonceur_compteur_affiche').html(max - ttl_caracteres + ' / ' + max + ' caractères');
+				} else {
+					$('#annonceur_compteur_affiche').html(max + ' / ' + max + ' caractères');
+				}
+			});
+
+			$('#texte').on('keyup', function () {
+				$('#texte').trigger('refresh');
+			});
+
+			$('#texte').on('keypress', function () {
+				if (compteurDeLettre() >= max) {
+					return false;
+				}
+				$('#texte').trigger('refresh');
+			});
+
+			$('#texte').trigger('refresh');
+		});
+
+		/* Gestion de l'ajout d'un téléphone supplémentaire */
+		$("#add_phone").on("click", function () {
+			var $copie = $(".contact-telephone:last").clone();
+			$copie.insertAfter($(".contact-telephone:last"));
+			$(".contact-telephone:last").find("input[name^=contact_telephone]").val("");
+			$("#add_phone").toggle($(".contact-telephone").length < 3);
+		});
+
+		/* Gestion du changement du bien */
+		$('#typebien').change(function () {
+			$('.typebien').each(function () {
+				$(this).toggle($(this).hasClass('typebien-' + $('#typebien').val()));
+			});
+
+			if ($.inArray($("select[name^='typebien']").val(), ['bureaux', 'local-commercial', 'local-d-activite', 'garage-parking', 'terrain', 'divers', 'surface-a-amenager']) > -1) {
+				$("label[id^='label-surface']").text('Surface : ');
+			} else {
+				$("label[id^='label-surface']").text('Surface habitable : ');
+			}
+		});
+		$('#typebien').trigger('change');
+
+		/* Enregistrement des coordonnées à la volée */
+		//$('#contact_email, .telephones').blur(function () {
+		$('#client_email,#client_telephone').blur(function () {
+			$.get('/json/contacts-set', {
+				session: $('#session').val(),
+				email: $('#client_email').val(),
+				"telephones[]": $('#client_telephone').val(),
+				nom: $('#client_nom').val(),
+				prenom: $('#client_prenom').val(),
+				civilite: $('#client_civilite').val()
+			}, function () {
+				if ($('#client_email').val() || $('#client_telephone').val()) {
+					gtag('event', 'Coordonnees Annonce', {'event_category': 'PASSAGE ANNONCE', 'event_label': 'Enregistrer Coordonnees'});
+				}
+			});
+
+			$('input[name="contact_email"]').val($('#client_email').val());
+			$('#contact-tel-0').val($('#client_telephone').val());
+
+		});
+
+		/* Recapitulatif d'annonce */
+		$('#recapitulatif').doOnce(function () {
+
+			// Actualiser le répitulatif
+			$('#recapitulatif').on('refresh', function () {
+				$(this).load($(this).data("recapitulatif"), $(this).data("commande"));
+			});
+
+			// Initialiser le répitulatif
+			$('#recapitulatif').trigger('refresh');
+
+			// Gestion du code promo
+			$('#codepromo-submit').click(function (ev) {
+				// Supprimer le message d'avertissement
+				$('#form_codepromo .error-message').hide();
+				$.ajax({
+					url: '/json/code-promo-check',
+					data: $('#input_codepromo :input,#client_telephone,#client_email').serialize(),
+					success: function (res) {
+						// Si la validation a échoué
+						if (!res.success) {
+							if (res.erreur) {
+								// Message d'erreur
+								$('#form_codepromo').find('.' + res.erreur).show();
+							}
+							$('#code-promo').val("");
+						} else {
+							$('#recapitulatif').data('commande').codepromo = $('#code-promo').val();
+							$('#recapitulatif').trigger('refresh');
+						}
+					}
+				});
+				return false;
+			});
+		});
+
+	});
+
+	/*************************************************************************
+	 *** Modification / Réactivation
+	 *************************************************************************/
+
+	$('#modifier_une_annonce').doOnce(function () {
+
+		/* Gestion de l'ajout d'un téléphone supplémentaire */
+		$("#add_phone").on("click", function () {
+			var $copie = $(".contact-telephone:last").clone();
+			$copie.insertAfter($(".contact-telephone:last"));
+			$(".contact-telephone:last").find("input[name^=contact_telephone]").val("");
+			$("#add_phone").toggle($(".contact-telephone").length < 3);
+		});
+
+	});
+
+	/*************************************************************************
+	 *** Achater l'option 3D
+	 *************************************************************************/
+
+	$('#acheter_option_3d').doOnce(function () {
+
+		/* Test de la rue du bien */
+		$("#biens_adresse").doOnce(function() {
+
+			$('#form_acheter_option_3d').on('submit', function() {
+				var $form = $(this);
+				var url = $("#biens_adresse").data('correction').url;
+				var data = {
+					'biens_code_postal': $("#biens_code_postal").val(),
+					'biens_ville'      : $("#biens_ville"      ).val(),
+					'biens_adresse'    : $("#biens_adresse"    ).val()
+				}
+				$.ajax({
+					url: url,
+					type: "POST",
+					async: false,
+					data: data,
+					success: function(res) {
+						if (res.success) {
+							$("#biens_code_postal").val(res.suggestion.biens_code_postal);
+							$("#biens_ville"      ).val(res.suggestion.biens_ville      );
+							$("#biens_adresse"    ).val(res.suggestion.biens_adresse    );
+							$form.trigger('trueSubmit');
+						} else {
+							var $dialog = $('#' + res.dialog);
+							$dialog.find('.loader').hide();
+							$dialog.dialog('open');
+							if (res.suggestion) {
+								$dialog.find('.suggestion_biens_code_postal').text(res.suggestion.biens_code_postal);
+								$dialog.find('.suggestion_biens_ville'      ).text(res.suggestion.biens_ville      );
+								$dialog.find('.suggestion_biens_adresse'    ).text(res.suggestion.biens_adresse    );
+							}
+						}
+					}
+				});
+				return false;
+			});
+
+			$('.dialog-correction-adresse .dialog-close').on('click', function() {
+				$dialog = $(this).closest('.dialog-box-content');
+				$dialog.dialog('close');
+				return false;
+			});
+
+			$('.dialog-correction-adresse .dialog-submit').on('click', function() {
+				$form = $('#form_acheter_option_3d');
+				$dialog = $(this).closest('.dialog-box-content');
+				$dialog.find('.loader').show();
+				$dialog.find('.submit').hide();
+				$("#biens_code_postal").val($dialog.find('.suggestion_biens_code_postal').text());
+				$("#biens_ville"      ).val($dialog.find('.suggestion_biens_ville'      ).text());
+				$("#biens_adresse"    ).val($dialog.find('.suggestion_biens_adresse'    ).text());
+				$form.trigger('trueSubmit');
+				return false;
+			});
+
+		});
+
+		/* Dissimuler le champ prénom pour les SCI */
+		$('#client_civilite').on('change', function() {
+			$('#client_prenom').closest('.form-group').toggle($('#client_civilite').val() != 'sci');
+		});
+		$('#client_civilite').trigger('change');
+		$('#civilite').on('change', function() {
+			$('#prenom').closest('.form-group').toggle($('#civilite').val() != 'sci');
+		});
+		$('#civilite').trigger('change');
+
+		/* Sélection de l'horaire */
+		$('#rdv').on('refresh', function() {
+			// Sélectionner la date
+			$('.date').removeClass('rdv-item-checked');
+			$('#date_'+$('#selected_date_t').val()).addClass('rdv-item-checked');
+
+			// Sélectionner un moment
+			$('.moment').removeClass('rdv-item-checked');
+			$('#moment_'+$('#selected_moment_slug').val()).addClass('rdv-item-checked');
+
+			// Sélectionner une heure
+			$('.heure').removeClass('rdv-item-checked');
+			$('#heure_'+$('#selected_heure_t').val()).addClass('rdv-item-checked');
+
+			// Masquer les moments si aucune date n'est sélectionnée
+			$('#moments').toggle($('#selected_date_t').val() != '');
+
+			// Masquer les heures si aucune date ou aucun moment n'est sélectionné
+			$('#heures').toggle($('#selected_date_t').val() != '' && $('#selected_moment_slug').val() != '');
+
+			// Afficher le bloc d'heures correspondant à la date et au moment
+			$('.heures_date_moment').hide();
+			$('#heures_' + $('#selected_date_t').val() + '_' + $('#selected_moment_slug').val()).show();
+
+		});
+		$('.date').on('click', function() {
+			$('#selected_date_t').val($(this).data('rdv').date_t);
+			$('#rdv').trigger('refresh');
+			return false;
+		});
+		$('.moment').on('click', function() {
+			$('#selected_moment_slug').val($(this).data('rdv').moment_slug);
+			$('#rdv').trigger('refresh');
+			return false;
+		});
+		$('.heure').on('click', function() {
+			$('#selected_heure_t').val($(this).data('rdv').heure_t);
+			$('#wallmarket_date_rdv_photographe').val($(this).data('rdv').wallmarket_date_rdv_photographe);
+			$('#rdv').trigger('refresh');
+			return false;
+		});
+		$('#rdv').trigger('refresh');
+
+	});
+
+	/*************************************************************************
+	 *** Achat d'options
+	 *************************************************************************/
+
+	$('#operation_acheter_options').doOnce(function () {
+
+		/**
+		 * Be2Bill
+		 */
+
+		// Actualiser le formulaire de paiement Be2Bill
+		$(".acheter-option-paiement").on('refresh', function () {
+			if ($("#cgv:checked").length > 0) {
+				$("#js-payment-form").submit();
+				$(".acheter-option-paiement").show();
+			} else {
+				$(".acheter-option-paiement").hide();
+			}
+		});
+
+		// Si on intervient sur la coche des CGV
+		$('#cgv').on('change', function () {
+			$(".acheter-option-paiement").trigger('refresh');
+		});
+
+		// A l'initialisation de la page
+		$(".acheter-option-paiement").trigger('refresh');
+
+	});
+
+	/*************************************************************************
+	 *** Espace annonceur
+	 *************************************************************************/
+
+	/**
+	 * Page "Votre annonce"
+	 */
+
+	/* Evenement mobile menu */
+	$('#menu_mobile_select').doOnce(function () {
+		$(this).on('change', function () {
+			var gaq = $(this).find(':selected').data('gaq');
+			if (gaq) {
+				gtag('event', gaq.action, {'event_category': gaq.category, 'event_label': gaq.label});
+			}
+
+			window.location = $(this).find(':selected').val();
+		});
+	});
+
+	/* Gestion de l'affichage du prix au m2 ou du refus de démarchage */
+	$('#affiche_demarchage_refuse,#affiche_prix_m2,#appel_video_whatsapp,#appel_video_skype').doOnce(function () {
+		$('.options-group-checkbox .option input:checkbox').click(function () {
+			$.getJSON('/json/set-annonce-field', {
+				field: $(this).attr('id'),
+				value: $(this)[0].checked ? 1 : 0,
+				reference: $('#reference').val()
+			});
+		});
+
+	});
+
+	/* Gestion de l'ordre d'affichage des numéros de téléphone */
+	$('#ordre_telephones').doOnce(function () {
+		$("#sortable").sortable({
+			cursor: 'move',
+			update: function (event, ui) {
+				var order = $("#sortable").sortable("toArray");
+				$.ajax({
+					url: '/json/ordre_telephones',
+					data: {
+						annonce_id: $('#id_annonce').val(),
+						telephone1: $('#' + order[0]).data("telephone"),
+						telephone2: $('#' + order[1]).data("telephone"),
+						telephone3: $('#' + order[2]).data("telephone")
+					}
+				});
+			}
+		});
+	});
+
+	/**
+	 * Page Gestion des photos
+	 */
+
+	$('#gestion_photos').doOnce(function () {
+		browser.init();
+		//Variables DOM
+		var $gestion_photos = $('#gestion_photos');
+		var $file_upload_button = $(".fileupload-button");
+		var $file_upload_button_nophoto = $('.fileupload-button-no-photo');
+		var $popin_edit_target = $("#dialog-edit-photo");
+		var $bloc_first_photo = $('body #bloc-first-photo');
+		var $message_box = $('#message');
+		var $bloc_progress_bar = $('#bloc-progress-bar');
+		var $progress_bar = $("#progress .bar");
+		var $bloc_photos_online = $('body #bloc-photos-online');
+		var $blocs = $("body #gestion_photos");
+		var $bloc_photos_invalides = $('#bloc-photos-invalides');
+		var $file_upload = $('.file_upload');
+		var $compteur_photo_online = $('#bloc-photos-online .compteur-photo');
+		var $new_photo = $('.new-photo');
+
+		//Variables données
+		var config = {
+			delaiAffichages: 5000,
+			server: $gestion_photos.data("gestion-photos").server,
+			annonceReference: $gestion_photos.data("gestion-photos").annonceReference,
+			referenceDirectory: $gestion_photos.data("gestion-photos").annonceReference.substring(0, 3),
+			annonceId: $gestion_photos.data("gestion-photos").annonceId,
+			journal: $gestion_photos.data("gestion-photos").journal,
+			photosInternetMax: parseInt($gestion_photos.data("gestion-photos").photosInternet),
+			nbPhotos: parseInt($gestion_photos.data("gestion-photos").nbPhotos),
+			nbPhotosInvalides: parseInt($gestion_photos.data("gestion-photos").nbPhotosInvalides),
+			cdnUrl: $gestion_photos.data("gestion-photos").cdnUrl,
+		};
+
+
+		var gestionPhotos = {
+			getSrcImage: function (hash, thumb) {
+				if (thumb) {
+					return config.server + '/photos/' + config.referenceDirectory + '/' + hash + '.thumb.jpg';
+				}
+				return config.server + '/photos/' + config.referenceDirectory + '/' + hash + '.jpg';
+			},
+			getCargoSrcImage: function (alias, md5) {
+				return config.cdnUrl + '/' + alias + md5.charAt(0) + '-p2.jpg'
+			},
+			setOrdre: function (order_serial) {
+				/**
+				 * Ordre des photos
+				 */
+				$.ajax({
+					url: '/json/photo-update?action=order',
+					dataType: "json",
+					method: "POST",
+					data: {
+						reference: config.annonceReference,
+						order_serial: $.param({ phot: order_serial })
+					},
+					success: function (response) {
+						if (response.resultat != 0) {
+							$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('order', 0));
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('order', 1));
+					}
+				});
+			},
+			setDelete: function ($element, nom_unique) {
+				/**
+				 * Suppresion d'une photo
+				 */
+
+				var resultat = 0; // pour ie9
+				$.ajax({
+					url: '/json/photo-update?action=delete',
+					dataType: "json",
+					data: {
+						reference: config.annonceReference,
+						pho_nom_unique: nom_unique
+					},
+					success: function (data) {
+						resultat = data.resultat;
+						if (data.resultat == 0) {
+							$("#pho_" + nom_unique).remove();
+							config.nbPhotosInvalides = $("#bloc-photos-invalides div.box-photo").length;
+							config.nbPhotos = $("#bloc-photos-online div.box-photo").length;
+
+							$blocs.trigger('refresh');
+						}
+						$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('delete', data.resultat));
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						resultat = 1;
+						$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('delete', ajax_error));
+					}
+				});
+				//Si on supprime a partir de la boite de dialogue, on ferme la boite de dialogue
+				if (resultat == 0 && $("#dialog-edit-photo").dialog('isOpen') === true) {
+					$("#dialog-edit-photo").dialog('close');
+				}
+
+			},
+			setRotate: function (angle) {
+				/**
+				 * Rotation des photo selon l'angle envoyé
+				 */
+				$.ajax({
+					url: config.server + '/rotate.json.php?callback=?',
+					contentType: "application/json; charset=utf-8", 
+					dataType: "json", 
+					data: {
+						annonces_id: config.annonceId,
+						hash: $popin_edit_target.attr("data-nom"),
+						angle: angle
+					},
+					success: function (response_new_img) {
+						if (response_new_img.result_cdr == 0) {
+							$.ajax({
+								url: '/json/photo-update?action=rotate',
+								dataType: "json",
+								data: {
+									reference: config.annonceReference,
+									pho_nom_unique: response_new_img.hash,
+									pho_nom_unique_old: $popin_edit_target.attr("data-nom"),
+									pho_largeur: $popin_edit_target.attr("data-width"),
+									pho_hauteur: $popin_edit_target.attr("data-height"),
+									pho_journal: config.journal
+								},
+								success: function (data) {
+									if (data.resultat == 0) {
+										//Change les valeurs data et src de la nouvelle photo dans la liste
+										$("#" + $popin_edit_target.attr("data-id-element")).attr({
+											'data-nom': response_new_img.hash,
+											'data-width': response_new_img.width,
+											'data-height': response_new_img.height,
+											'data-alias': '',
+											'data-md5': ''
+										}).find('.src-photo').css('background-image', 'url(' + gestionPhotos.getSrcImage(response_new_img.hash, false) + ')');
+
+										//Change les valeurs data et src de la nouvelle photo dans la popin
+										$popin_edit_target.attr({
+											'data-nom': response_new_img.hash,
+											'data-width': response_new_img.width,
+											'data-height': response_new_img.height,
+											'data-alias': '',
+											'data-md5': ''
+										}).find('.photo_edit_target').attr('src', gestionPhotos.getSrcImage(response_new_img.hash, false));
+										//Rafraichit le plugin ImgLiquid pour eviter le display:none et ne pas afficher la photo apres upload
+
+									} else {
+										$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('rotate', data.message));
+									}
+								},
+								error: function (jqXHR, textStatus, errorThrown) {
+									$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('rotate', data.message));
+								}
+							});
+						} else {
+							$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('rotate', response_new_img.result_cdr));
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('rotate', textStatus));
+					}
+				});
+			}
+
+		};
+
+		var PAP_fileUpload = {
+			taillePhoto: 16000000,
+			fichiersAcceptes: /(\.|\/)(jpe?g|png)$/i,
+			listePhotos: [],
+			index: 0,
+			totalSize: 0,
+			totalProgress: 0,
+			active: false,
+			box_message: "",
+			box_progress: "",
+			progress_bar: "",
+			_handleComplete: function (size) {
+				PAP_fileUpload.totalProgress += size;
+
+				$progress_bar.trigger("refresh", [Math.floor((PAP_fileUpload.totalProgress / PAP_fileUpload.totalSize * 100))]);
+				$blocs.trigger("refresh");
+				PAP_fileUpload._start();
+			},
+			_handleProgress: function (event) {
+				$progress_bar.trigger("refresh", [Math.floor(((PAP_fileUpload.totalProgress + event.loaded) / PAP_fileUpload.totalSize * 100))]);
+			},
+			_start: function () {
+
+				if (!PAP_fileUpload.active && (PAP_fileUpload.active = (PAP_fileUpload.listePhotos.length > PAP_fileUpload.index))) {
+					if (config.nbPhotos >= config.photosInternetMax) {
+						$bloc_progress_bar.trigger('cache');
+						$blocs.trigger("refresh");
+						$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('insert', 5));
+
+						PAP_fileUpload.active = false;
+					}
+					else {
+						this._upload(PAP_fileUpload.listePhotos[PAP_fileUpload.index]);
+					}
+				}
+				else {
+
+					$bloc_progress_bar.trigger('cache');
+					$blocs.trigger("refresh");
+				}
+			},
+			_upload: function (file) {
+				formdata = new FormData();
+				formdata.append("Filedata", file);
+				formdata.append("annonces_id", config.annonceId);
+				url = config.server + '/upload-jquery-json.php';
+
+				$.ajax({
+					url: url,
+					type: "POST",
+					data: formdata,
+					crossDomain: true,
+					cache: false,
+					processData: false, // indique à jQuery de ne pas traiter les données
+					contentType: false, // indique à jQuery de ne pas configurer le contentType IMPORTANT
+					xhr: function () {
+						var xhr = $.ajaxSettings.xhr();
+						xhr.onload = function () {
+							PAP_fileUpload._handleComplete(file.size);
+						};
+						xhr.onerror = function () {
+							PAP_fileUpload._handleComplete(file.size);
+						};
+						xhr.upload.onprogress = function (event) {
+							PAP_fileUpload._handleProgress(event);
+						};
+						return xhr;
+					},
+					success: function (data) {
+						$.each(data.files, function (index, file) {
+							if (file.result_cdr != 0) {
+								$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('insert', file.result_cdr));
+								return;
+							}
+							PAP_fileUpload._saveBdd(file);
+
+							PAP_fileUpload.index++;
+							config.nbPhotos++;
+
+							PAP_fileUpload.active = false;
+						});
+					},
+					error: function (xhr, status) {
+						$bloc_progress_bar.trigger('cache');
+						$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('insert', status));
+					}
+				});
+			},
+			_saveBdd: function (file) {
+				//Enregistre la photo dans la bdd
+				$.ajax({
+					url: '/json/photo-update?action=insert',
+					dataType: 'json',
+					data: {
+						reference: config.annonceReference,
+						pho_nom_unique: file.hash,
+						pho_largeur: file.width,
+						pho_hauteur: file.height,
+						pho_journal: config.journal
+					},
+					success: function (response) {
+						//Actualisation de la liste de photos
+						$new_photo.trigger("add_photo", file);
+						//Actualisation des blocs
+						if (response.resultat != 0) {
+							$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('insert', response.message));
+						}
+
+						$blocs.trigger("refresh");
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('insert', ajax_error));
+					}
+				});
+			},
+			execute: function (files) {
+				var typesErrors = (config.nbPhotos >= config.photosInternetMax) ? 5 : false;
+
+				if (!files || !files.length || PAP_fileUpload.listePhotos.length) return;
+
+				PAP_fileUpload.totalSize = 0;
+				PAP_fileUpload.totalProgress = 0;
+
+				if (!typesErrors) {
+					for (i = 0; i < files.length; i++) {
+						file = files[i];
+						if (!PAP_fileUpload.fichiersAcceptes.test(file.type)) {
+							typesErrors = 4;
+							break;
+						}
+						else if (file.size > PAP_fileUpload.taillePhoto) {
+							typesErrors = 3;
+							break;
+						}
+						else {
+							PAP_fileUpload.listePhotos.push(file);
+							PAP_fileUpload.totalSize += file.size;
+						}
+					}
+				}
+
+				if (typesErrors) {
+					$bloc_progress_bar.trigger('cache');
+					$blocs.trigger("refresh");
+					$message_box.trigger("affiche_message", PAP_PhotosUpload_Message.get('insert', typesErrors));
+					return;
+				}
+
+				PAP_fileUpload._start();
+			}
+		};
+
+		/**
+		 * Réinitialise le tableau des fichiers et l'index à chaque ouverture du choix des fichiers - Utile surtout pour IE11
+		 */
+		$('input[type=file]').on("click", function (e) {
+			$(this).attr("value", "");
+			PAP_fileUpload.index = 0;
+			PAP_fileUpload.listePhotos = [];
+		});
+
+		$('input[type=file]').on("change", function (e) {
+			PAP_fileUpload.execute(this.files);
+			return false;
+		});
+
+		/**
+		 * Evenement pour cacher la barre de progression
+		 */
+		$bloc_progress_bar.on('cache', function () {
+			//On cache le bloc de la barre de progression
+			$(this).fadeOut(700).queue(function () {
+				$(this).hide().dequeue();
+			});
+		});
+
+		/**
+		 * Evènements pour la progress bar
+		 */
+		$progress_bar.on("refresh", function (e, progress) {
+			$bloc_progress_bar.show();
+			$bloc_progress_bar.find('.progress-text').text(progress);
+			$(this).css('width', progress + '%');
+		});
+
+
+		/**
+		 * Evenement pour rafraichir les 3 blocs principaux: bloc pas de photo, bloc photo invalide, bloc photo online
+		 */
+		$blocs.on("refresh", function () {
+			$compteur_photo_online.text(config.nbPhotos);
+			$bloc_first_photo.toggle(config.nbPhotos == 0 && config.nbPhotosInvalides == 0);
+
+			if (browser.name == "ie" && browser.version < 10) {
+				$('.old-browser').toggle(true);
+				$file_upload_button.toggle(false);
+				$file_upload_button_nophoto.toggle(false);
+			}
+			else {
+				$file_upload_button.toggle(config.photosInternetMax > config.nbPhotos);
+				$file_upload_button_nophoto.toggle(true);
+			}
+			$bloc_photos_online.toggle(config.nbPhotos > 0);
+			$bloc_photos_invalides.toggle(config.nbPhotosInvalides > 0);
+		});
+
+
+		/**
+		 * Evenement lors de l'affichage d'un message
+		 */
+		$message_box.on('affiche_message', function (e, slug_class) {
+			$(this).addClass('hidden').find(".error,.succes").hide();
+			if (!slug_class) {
+				return;
+			}
+
+			$(this).removeClass('hidden').find("." + slug_class).show().delay(config.delaiAffichages).fadeOut(600).queue(function () {
+				$(this).hide().dequeue();
+			});
+		});
+
+
+		/**
+		 * Evenement lors de l'ajout de photos
+		 */
+		$new_photo.on('add_photo', function (e, file) {
+			var $copie = $(this).clone();
+
+			$copie.attr({
+				'id': 'pho_' + file.hash,
+				'data-nom': file.hash,
+				'data-width': file.width,
+				'data-height': file.height
+			})
+			.find('.src-photo').css('background-image', 'url(' + gestionPhotos.getSrcImage(file.hash, true) + ')').end()
+			.removeClass('new-photo hidden').addClass('clearfix box-photo');
+			$copie.insertBefore($(this));
+		});
+
+		/**
+		 * Glisser/Deplacer des photos
+		 */
+
+		$(".photo-sortable").sortable({
+			handle: ".photo-sortable-handler",
+			update: function (event, ui) {
+				var order_serial = [];
+				$.each($("div[id^='pho_']"), function () {
+					order_serial.push($(this).data('nom'));
+				});
+				gestionPhotos.setOrdre(order_serial);
+			}
+		}).disableSelection();
+
+		/**
+		 * Popin pour toutes les images de la liste.
+		 */
+		$('body').on("click", 'a.dialog-box-handler-photo', function () {
+			var $dialog = $($(this).attr('href'));
+			var $photo_file = $(this).parents("div.box-photo");
+			var photo_nom = $photo_file.attr('data-nom');
+			var photo_alias = $photo_file.attr('data-alias');
+			var photo_md5 = $photo_file.attr('data-md5');
+
+			if (photo_alias) {
+				$popin_edit_target.attr({
+					'data-nom': photo_nom,
+					'data-pho-id': $photo_file.attr('data-pho-id'),
+					'data-alias': photo_alias,
+					'data-md5': photo_md5,
+					'data-width': $photo_file.attr('data-width'),
+					'data-height': $photo_file.attr('data-height'),
+					'data-first': $(this).find('div.premiere-photo-box').length,
+					'data-id-element': $photo_file.attr("id")
+				}).find('.photo_edit_target').attr('src', gestionPhotos.getCargoSrcImage(photo_alias, photo_md5));
+			} else {
+				$popin_edit_target.attr({
+					'data-nom': photo_nom,
+					'data-pho-id': $photo_file.attr('data-pho-id'),
+					'data-alias': photo_alias,
+					'data-md5': photo_md5,
+					'data-width': $photo_file.attr('data-width'),
+					'data-height': $photo_file.attr('data-height'),
+					'data-first': $(this).find('div.premiere-photo-box').length,
+					'data-id-element': $photo_file.attr("id")
+				}).find('.photo_edit_target').attr('src', gestionPhotos.getSrcImage(photo_nom, false));
+			}
+
+			//Ouverture de la popin
+			$dialog.dialog('open');
+			return false;
+		});
+
+		/**
+		 * Changement d'ordre des photos
+		 */
+		$('body #bloc-photos-online').on('click', '.picto-remonter, .picto-descendre', function () {
+			var $item = $(this).parents("div.box-photo");
+			var order_serial = [];
+			var is_click_down = $(this).hasClass("picto-descendre");
+			var $item_mobile = is_click_down ? $item.next() : $item.prev();
+			if ($item_mobile.length == 0) {
+				return;
+			}
+
+			$item_mobile.fadeTo("fast", 0.07).css('z-index', 999).css('position', 'relative').animate({ top: is_click_down ? '-' + $item.height() : $item.height() }, 250);
+			$item.fadeTo("fast", 0.07).css('z-index', 1000).css('position', 'relative').animate({ top: is_click_down ? $item_mobile.height() : '-' + $item_mobile.height() }, 300, function () {
+				$item_mobile.css('z-index', '').css('top', '').css('position', '');
+				$item.css('z-index', '').css('top', '').css('position', '');
+				if (is_click_down) {
+					$item.insertAfter($item_mobile);
+				} else {
+					$item.insertBefore($item_mobile);
+				}
+				$item.fadeTo("slow", 1);
+				$item_mobile.fadeTo("slow", 1);
+				$.each($("div[id^='pho_']"), function () {
+					order_serial.push($(this).data('nom'));
+				});
+				gestionPhotos.setOrdre(order_serial);
+			});
+			return false;
+		});
+
+		/**
+		 * Rotation
+		 */
+		$("#action-rotation").click(function () {
+			gestionPhotos.setRotate(90);
+			return false;
+		});
+
+		/**
+		 * Suppression photo valide/invalides
+		 * on pointe sur le body pour pouvoir retrouver les .actions-supprimer ajoutés dynamiquement
+		 */
+		$('body').on('click', '.action-supprimer', function () {
+			var obj = ($(this).parents("div.box-photo").data("nom")) ? $(this).parents("div.box-photo").data("nom") : $popin_edit_target.attr('data-nom');
+
+			if (!confirm("La photo va être supprimée. Continuer ?")) {
+				return false;
+			}
+
+			gestionPhotos.setDelete($(this), obj);
+			return false;
+		});
+
+		/**
+		 * Initialisation des blocs, des inputs et de l'ordre
+		 */
+		$blocs.trigger('refresh');
+	});
+
+	/**
+	 * Page "Mes contacts"
+	 */
+
+	$('#section-mes-contacts').doOnce(function () {
+
+		$('.dialog-box-handler').on('click', function () {
+			var $dialog = $($(this).attr('href'));
+			$dialog.find('input[name="utilisateurs_id"]').val($(this).closest('.conversation-item').data('utilisateurs_id'));
+		});
+
+	});
+
+	/*************************************************************************
+	 *** Abonnement bailleur
+	 *************************************************************************/
+
+	$('#saisie_abonnement_bailleur').doOnce(function () {
+
+		// Durée du bail
+		$("#infos_duree_bail").on('change', function () {
+			$("#bloc_infos_duree_bail_autres, #bloc_infos_motif_bail_autres").toggle($(this).val() == 'autres');
+		});
+		$("#infos_duree_bail").trigger('change');
+
+		// Nombre de colocataires et légende
+		$('#infos_locataire_nb').on('change', function () {
+			$('#legend_locataire .singulier').toggle($(this).val() == 1);
+			$('#legend_locataire .pluriel').toggle($(this).val() != 1);
+			$('.bloc_locataire').each(function () {
+				$(this).toggle($(this).data('nb') <= $('#infos_locataire_nb').val());
+			});
+			$('#bloc_infos_locataire_situation').toggle($(this).val() == 2);
+			$('#locataire_nouveau_numero').trigger('refresh');
+		});
+		$('#locataire_nouveau_numero').on('refresh', function () {
+			$self = $(this);
+			$self.trigger('donuts.destroy');
+			$self.empty();
+			$('.locataire-denomination:visible').each(function () {
+				var name = $(this).val();
+				if (!name) {
+					name = $self.data('denominationPlaceholder');
+				}
+				var numero = $(this).closest('.bloc_locataire').data('nb');
+				var $option = $('<option/>').text("Locataire n°" + numero + " : " + name).attr('value', numero);
+				if (numero == $self.data('value')) {
+					$option.attr('selected', 'selected');
+				}
+				$self.append($option);
+				$self[0].sumo.reload();
+			});
+			$self.trigger('donuts.init');
+		});
+		$('.locataire-denomination').on('change', function () {
+			$('#locataire_nouveau_numero').trigger('refresh');
+		});
+		$('#infos_locataire_nb').trigger('change');
+
+		// Détecteur de fumée
+		$("#bien_precision_detecteur_de_fumee").on('refresh', function() {
+			var show = $("#bien_equipement_detecteur-de-fumee").is(':checked');
+			$("#bien_precision_detecteur_de_fumee").toggle(show);
+		})
+		$("#bien_equipement_detecteur-de-fumee").on('change', function () {
+			$("#bien_precision_detecteur_de_fumee").trigger('refresh');
+		});
+		$("#bien_precision_detecteur_de_fumee").trigger('refresh');
+		
+		// Chaudière
+		$("#bloc_chaudiere").on('refresh', function () {
+			var show = $("#bien_equipement_chaudiere").is(':checked');
+			$("#bloc_chaudiere").toggle(show);
+		})
+		$("#bien_equipement_chaudiere").on('change', function () {
+			$("#bloc_chaudiere").trigger('refresh');
+		});
+		$("#bloc_chaudiere").trigger('refresh');
+
+		// Chauffage
+		$("#bien_production_chauffage").change(function () {
+			$("#bloc_bien_mode_repartition_chauffage").toggle($(this).val() == 'collectif');
+			$("#bloc_bien_mode_production_chauffage").toggle($(this).val() == 'individuel');
+		});
+		$("#bien_production_chauffage").trigger('change');
+
+		// Eau chaude
+		$("#bien_production_eau_chaude").change(function () {
+			$("#bloc_bien_repartition_eau_chaude").toggle($(this).val() == 'collectif');
+			$("#bloc_bien_production_eau_chaude").toggle($(this).val() == 'individuel');
+		});
+		$("#bien_production_eau_chaude").trigger('change');
+
+		// Assurance colocataire : Y a-t-il une assurance colocataire ?
+		$("#bloc_loyer_assurance_colocataire").on("refresh", function () {
+			var show = $("#infos_locataire_nb").val() > 2
+				||	(	$("#infos_locataire_nb").val() == 2
+					&&	$("#infos_locataire_situation").val() == "colocation"
+				);
+			$("#bloc_loyer_assurance_colocataire").toggle(show);
+		});
+		$("#infos_locataire_nb").on("change", function () {
+			$("#bloc_loyer_assurance_colocataire").trigger("refresh");
+		});
+		$("#infos_locataire_situation").on("change", function () {
+			$("#bloc_loyer_assurance_colocataire").trigger("refresh");
+		});
+		$("#bloc_loyer_assurance_colocataire").trigger("refresh");
+
+		// Assurance colocataire : Quel est le montant de l'assurance colocataire ?
+		$("#bloc_loyer_montant_assurance").on("refresh", function () {
+			var show = $("#loyer_assurance_colocataire_oui").is(":checked")
+				&&	$("#bloc_loyer_assurance_colocataire").is(":visible");
+			$("#bloc_loyer_montant_assurance").toggle(show);
+		});
+		$("#loyer_assurance_colocataire_oui, #loyer_assurance_colocataire_non").on("click", function () {
+			$("#bloc_loyer_montant_assurance").trigger("refresh");
+		});
+		$("#bloc_loyer_assurance_colocataire").on("refresh", function () {
+			$("#bloc_loyer_montant_assurance").trigger("refresh");
+		});
+		$("#bloc_loyer_montant_assurance").trigger("refresh");
+
+		// Travaux amélioration et confort
+		$("#travaux_precedent_locataire_oui, #travaux_precedent_locataire_non, #travaux_precedent_locataire").on("refresh", function () {
+			$("#bloc_travaux_montant_precedent_locataire, #bloc_travaux_nature_precedent_locataire").toggle($("input[type=radio][name='travaux[precedent_locataire]']:checked").val() == 'oui');
+		});
+
+		$("#travaux_precedent_locataire_oui, #travaux_precedent_locataire_non, #travaux_precedent_locataire").on("click", function () {
+			$("#travaux_precedent_locataire_oui, #travaux_precedent_locataire_non").trigger('refresh');
+		});
+		$("#travaux_precedent_locataire_oui, #travaux_precedent_locataire_non").trigger('refresh');
+
+		// Travaux 6 derniers mois
+		$("#travaux_derniers_mois_oui, #travaux_derniers_mois_non, #travaux_derniers_mois").on("refresh", function () {
+			$("#bloc_travaux_montant_derniers_mois, #bloc_travaux_nature_derniers_mois").toggle($("input[type=radio][name='travaux[derniers_mois]']:checked").val() == 'oui');
+		});
+		$("#travaux_derniers_mois_oui, #travaux_derniers_mois_non, #travaux_derniers_mois").on("click", function () {
+			$("#travaux_derniers_mois_oui, #travaux_derniers_mois_non").trigger('refresh');
+
+		});
+		$("#travaux_derniers_mois_oui, #travaux_derniers_mois_non").trigger('refresh');
+
+
+		// Travaux prévus entrainant une majoration de loyer
+		$("#travaux_majoration_oui, #travaux_majoration_non").on("refresh", function () {
+			$("#bloc_travaux_majoration_nature, #bloc_travaux_majoration_modalites, #bloc_travaux_majoration_delai, #bloc_travaux_majoration_montant").toggle($("input[type=radio][name='travaux[majoration]']:checked").val() == 'oui');
+		});
+		$("#travaux_majoration_oui, #travaux_majoration_non").on("click", function () {
+			$("#travaux_majoration_oui, #travaux_majoration_non").trigger('refresh');
+		});
+		$("#travaux_majoration_oui, #travaux_majoration_non").trigger('refresh');
+
+
+		// Travaux du locataire entrainant une minoration de loyer
+		$("#travaux_minoration_oui, #travaux_minoration_non").on("refresh", function () {
+			$("#bloc_travaux_minoration_nature, #bloc_travaux_minoration_montant, #bloc_travaux_minoration_duree, #bloc_travaux_minoration_modalites").toggle($("input[type=radio][name='travaux[minoration]']:checked").val() == 'oui');
+		});
+
+		$("#travaux_minoration_oui, #travaux_minoration_non").on("click", function () {
+			$("#travaux_minoration_oui, #travaux_minoration_non").trigger("refresh");
+		});
+
+		$("#travaux_minoration_oui, #travaux_minoration_non").trigger('refresh');
+
+		// Complément de loyer
+		$('#loyer_hors_charges, #loyer_reference_majore').change(function () {
+			$('#loyer_complement_resultat, #loyer_complement').hide();
+			var loyer_hors_charges = parseFloat($('#loyer_hors_charges').val().replace(/,/, '.'));
+			var surface = parseFloat($('#bien_surface').val());
+			if ($('#loyer_reference_majore').val()) {
+				var loyer_reference_majore = parseFloat($('#loyer_reference_majore').val().replace(/,/, '.'));
+				var loyer_base = loyer_reference_majore * surface;
+				if (loyer_hors_charges > 0 && loyer_reference_majore > 0) {
+					var complement_loyer = loyer_hors_charges - loyer_base;
+					if (complement_loyer > 0) {
+						$('#bloc_loyer_complement').after("<p id='loyer_complement_resultat'>"
+							+ "Etant donné la surface de " + surface.toFixed(2) + " m² de votre logement, votre loyer de "
+							+ "base s'élève à " + loyer_reference_majore.toFixed(2) + " x " + surface.toFixed(2) + " = <b>"
+							+ loyer_base.toFixed(2) + " &euro;</b>.<br/>Vous appliquez donc <b class=\"text-pink\">un complément de loyer de "
+							+ complement_loyer.toFixed(2) + " &euro;</b>.<br/>Indiquez ici les <b>caractéristiques de "
+							+ "localisation ou de confort</b> qui justifient ce complément. <br>"
+							+ "<b>Le complément de loyer ne se justifie que si le logement comporte des caractéristiques de confort ou de localisation exceptionnelles. Il peut être contesté dans les 3 mois de la signature</b> </p>");
+						$('#loyer_complement').show();
+					}
+				}
+			}
+			$('#loyer_precedent').trigger('change');
+		});
+		$("#loyer_hors_charges, #loyer_reference_majore").trigger('change');
+
+		// Loyer précédent
+		$('#loyer_precedent').change(function () {
+			var le_loyer_a_augmente = false;
+			var le_loyer_a_augmente_de_2_pourcent = false;
+			if ($('#loyer_precedent:visible').length) {
+				var loyer_hors_charges = parseFloat($('#loyer_hors_charges').val().replace(/,/, '.'));
+				var loyer_precedent = parseFloat($('#loyer_precedent').val().replace(/,/, '.'));
+				if (loyer_hors_charges && loyer_precedent) {
+					le_loyer_a_augmente = (loyer_hors_charges > loyer_precedent);
+					le_loyer_a_augmente_de_2_pourcent = (loyer_hors_charges > loyer_precedent * parseFloat($('#variation_irl2').val()));
+				}
+			}
+			// Affichage des blocs
+			$('.info-precedent-loyer').hide();
+			$('#bloc_travaux_precedent_locataire,#bloc_travaux_derniers_mois').toggle(le_loyer_a_augmente);
+			if (le_loyer_a_augmente_de_2_pourcent) {
+				$('.info-precedent-loyer').show();
+				$('#bloc_travaux_augmentation_2_pourcent .loyer-precedent').html(loyer_precedent + ' &euro;');
+				$('#bloc_travaux_augmentation_2_pourcent .loyer-hors-charges').html(loyer_hors_charges + ' &euro;');
+				$('#bloc_travaux_augmentation_2_pourcent .loyer-augmentation').html(((loyer_hors_charges - loyer_precedent) / loyer_precedent * 100).toFixed(1) + ' %');
+			}
+			$('#bloc_travaux_augmentation_2_pourcent').toggle(le_loyer_a_augmente_de_2_pourcent);
+		});
+		$('#loyer_precedent').trigger('change');
+
+		// Ancien locataire
+		$("#loyer_ancien_locataire, #loyer_ancien_locataire_oui, #loyer_ancien_locataire_non").on("refresh", function () {
+			$("#bloc_loyer_precedent, #bloc_loyer_date_dernier_versement, #bloc_loyer_date_revision").toggle($("input[type=radio][name='loyer[ancien_locataire]']:checked").val() == 'oui');
+
+		});
+		$("#loyer_ancien_locataire, #loyer_ancien_locataire_oui, #loyer_ancien_locataire_non").on("click", function () {
+			$("#loyer_ancien_locataire_oui, #loyer_ancien_locataire_non").trigger('refresh');
+		});
+		$("#loyer_ancien_locataire_oui, #loyer_ancien_locataire_non").trigger('refresh');
+
+		// Modalités de reglement des charges
+		$("#loyer_modalites_charges").change(function () {
+			$("#bloc_loyer_montant_charges").toggle($(this).val() != 'reel-sans-provision');
+		});
+		$("#loyer_modalites_charges").trigger('change');
+
+		// Remarques sur les pièces du bien / remarques sur le mobilier du bien
+		$('#bloc_pieces_remarques,#bloc_mobilier_remarques').on('click', '.bloc-remarque-handler-remove', function () {
+			$(this).closest('.bloc-remarque').remove();
+			return false;
+		});
+		$('.bloc-remarque-handler-add').on('click', function () {
+			var $i = $(this).data('counter');
+			$(this).data('counter', $i + 1);
+			var $el = $(this).data('template').clone().insertBefore($(this));
+			$el.find('select,input').each(function () {
+				$(this).attr('name', $(this).attr('name').replace(/numero/, $i));
+			});
+			$el.find('.single-select-new').trigger('donuts.init');
+			// Initialisation de l'autocomplete pour le mobilier
+			$el.find('.autocomplete-mobilier').autocomplete({ source: $('#bloc_mobilier_remarques').data('autocomplete') });
+			$('.SumoSelect ~ p').hide();
+			return false;
+		});
+		$('.bloc-remarque-handler-add').each(function () {
+			var $template = $(this).closest('.bloc-piece').find('.bloc-remarque:last()');
+			$template.find('.single-select-new').trigger('donuts.destroy');
+			$(this).data('template', $template);
+			$(this).data('counter', $(this).closest('.bloc-piece').find('.bloc-remarque').length);
+			$template.detach();
+		});
+
+	});
+
+	$('#configuration_abonnement_bailleur').doOnce(function () {
+
+		// Géolocalisation du bien
+		$('#bien_code_postal').on('refresh', function () {
+
+			// Est-ce que la valeur est éligible ?
+			if ($(this).val().length != 5) {
+				return;
+			}
+
+			// Est-ce que la valeur est nouvelle ?
+			var last = $('#bien_code_postal').data('last');
+			if ($(this).val() == last) {
+				return;
+			}
+			$('#bien_code_postal').data('last', $(this).val());
+
+			// Déclencher la requête ajax
+			$.ajax({
+				url: '/json/ac-geo-abonnement-bailleurs',
+				type: 'get',
+				data: {
+					'code_postal': $('#bien_code_postal').val()
+				},
+				dataType: 'json',
+				async: true,
+				cache: true,
+				success: function (data) {
+					$('#bien_geo_objet_id').empty();
+					if (data.success) {
+						$.each(data.results, function (k, v) {
+							$('#bien_geo_objet_id').append($('<option/>').val(k).text(v));
+						});
+						$('#bien_geo_objet_id').find('option[value="' + $('#bien_geo_objet_id').data('init') + '"]').prop('selected', true);
+						$('#bien_geo_objet_id')[0].sumo.reload();
+						$('#ajax_error_bien_code_postal').hide();
+						$('#ajax_error_bien_geo_objet_id').hide();
+					} else {
+						$('#ajax_error_bien_code_postal').empty().append('<p/>').addClass('error-message').text(data.errors[0]).show();
+					}
+				}
+			});
+
+		});
+		$('#bien_code_postal').on('keyup', function () {
+			$('#bien_code_postal').trigger('refresh');
+		});
+		$('#bien_code_postal').trigger('refresh')
+
+		// Étage, bâtiment, porte, pièces annexes, locaux à usage privatif
+		$("#bien_typebien").change(function () {
+			$("#bloc_bien_localisation_details").toggle($(this).val() == 'appartement');
+			$("#bloc_bien_services_immeuble_usage_privatif").toggle($(this).val() == 'appartement');
+			$(".bien-typebien-appartement").toggle($(this).val() == 'appartement');
+			$(".bien-typebien-maison").toggle($(this).val() == 'maison');
+		});
+		$("#bien_typebien").trigger('change');
+
+	});
+
+	/*************************************************************************
+	 *** Groupe
+	 *************************************************************************/
+
+	/**
+	 * France Info
+	 */
+
+	$('#france-info-playlist').doOnce(function () {
+		function init() {
+			var current = 0;
+			var audio = $('#audio');
+			var playlist = $('#playlist');
+			var tracks = playlist.find('li a.listen-file');
+			var len = tracks.length - 1;
+			audio[0].volume = .10;
+			playlist.on('click', 'a.listen-file', function (e) {
+				e.preventDefault();
+				link = $(this);
+				current = link.parent().index();
+				run(link, audio[0]);
+			});
+			audio[0].addEventListener('ended', function (e) {
+				current++;
+				if (current == len) {
+					current = 0;
+					link = playlist.find('a.listen-file')[0];
+				} else {
+					link = playlist.find('a.listen-file')[current];
+				}
+				run($(link), audio[0]);
+			});
+		}
+
+		function run(link, player) {
+			player.src = link.attr('href');
+			par = link.parent();
+			par.addClass('active').siblings().removeClass('active');
+			player.load();
+			player.play();
+		}
+		init();
+	});
+
+	/*************************************************************************
+	 *** Utilisé sur plusieurs pages sur le site
+	 *** Doit être exécuté à la fin
+	 *************************************************************************/
+
+	$('.close-dialog').on('click', function () {
+		$(this).closest('.ui-dialog-content').dialog('close');
+	});
+
+	/* Scroller jusqu'à la première erreur visible sur la page */
+	$(".form-group:has(.error-message:visible,.alert-box:visible)").doOnce(function () {
+		var scrollTop = $(this).offset().top - 100;
+		$("html, body").animate({
+			scrollTop: scrollTop
+		}, 1500);
+	});
+
+});
