@@ -1,0 +1,908 @@
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 280000 	size: 34.00	link: /annonces/appartement-issy-les-moulineaux-92130-r447900227	detail: <div class="item-description margin-bottom-30">
+<h2 class="margin-bottom-8">Issy-les-Moulineaux (92130)</h2>
+<ul class="item-tags margin-bottom-20">
+<li>
+<strong>2 pièces</strong>
+</li>
+<li>
+<strong>1 chambre</strong>
+</li>
+<li>
+<strong>34 m²</strong>
+</li>
+</ul>
+<a class="btn btn-outline margin-bottom-20 dialog-box-handler-carte" href="#dialog_carte" onclick="gtag('event', 'Ouvrir Carte Mappy Adresse', {'event_category': 'DETAIL VENTE', 'event_label': 'Content'});">
+<span class="icon icon-locate"></span> Voir l'adresse du bien sur une carte
+	</a>
+<div class="margin-bottom-30">
+<p>2 pièces 34 m² dans l'immeuble Belvédère résidence phare de l'éco-quartier "Fort d'Issy" construit en 2013 au sein d'un bel espace paysager - Construction aux normes BBC  (Bâtiment Basse Consommation) et RT 2012. Etage 1/6 côté verger.<br/>
+Appartement en parfait état composé d'un séjour avec coin cuisine aménagé, d'une chambre et d'une salle de bains avec wc - Parquet chêne dans le séjour et la chambre - Equipement domotique (écran de contrôle tactile), volets roulants motorisés, fibre optique... Chauffage collectif au sol par géothermie et pompe à chaleur (sèche serviette électrique dans la salle de bain). Collecte pneumatique des déchets.  Place de parking en sous-sol inclus.<br/>
+<br/>
+A proximité immédiate des commerces, des écoles, d'installations sportives et des transports (bus 169, Tuvim transport urbain d'Issy gratuit, métro ligne 12 "Mairie d'Issy", gare de Clamart, future ligne 15 Grand Paris).</p>
+<p></p>
+</div>
+<ul class="item-transports"><li><span class="label">Clamart</span> <span class="icon train-0"></span> <span class="icon train-n"></span></li></ul><ul class="item-transports"><li><span class="label">Issy</span> <span class="icon rer-0"></span> <span class="icon rer-c"></span></li></ul><ul class="item-transports"><li><span class="label">Mairie d'Issy</span> <span class="icon metro-0"></span> <span class="icon metro-12"></span></li></ul>
+<hr/>
+<div class="row">
+<div class="col-1-2">
+<div class="energy-indice">
+<div class="item-title">
+				Classe énergie
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li class="active">C</li>
+<li>D</li>
+<li>E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+<div class="col-1-2">
+<div class="ges-indice">
+<div class="item-title">
+				GES
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li class="active">C</li>
+<li>D</li>
+<li>E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+</div>
+<hr/>
+</div>	monthly_simu : 921 €	ref: 
+						E79/0227 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : NA	elevator : NA	balcon : NA	cave : NA	parking : NA	floor : NA	warming : NA	window : NA	mngt_fee : NA	ppt_tax : NA	shower : NA	bedroom_desc : NAchambre	livroom_desc : NA	kitchen_desc : NA
+Extract city: Créteil	post_code: 94000	piece: 2	badrooms: 1	price: 245000 	size: 49.92	link: /annonces/appartement-creteil-94000-r447400266	detail: <div class="item-description margin-bottom-30">
+<h2 class="margin-bottom-8">Créteil (94000)</h2>
+<ul class="item-tags margin-bottom-20">
+<li>
+<strong>2 pièces</strong>
+</li>
+<li>
+<strong>1 chambre</strong>
+</li>
+<li>
+<strong>49,92 m²</strong>
+</li>
+</ul>
+<a class="btn btn-outline margin-bottom-20 dialog-box-handler-carte" href="#dialog_carte" onclick="gtag('event', 'Ouvrir Carte Mappy Adresse', {'event_category': 'DETAIL VENTE', 'event_label': 'Content'});">
+<span class="icon icon-locate"></span> Voir l'adresse du bien sur une carte
+	</a>
+<div class="margin-bottom-30">
+<p>F2 rénové de 49,92 m² au 3ème étage sur 18 Créteil Préfecture / Place de la marie / Les Philipines<br/>
+<br/>
+Appartement en excellent état composé d'une entrée avec cuisine américaine, un séjour d'environ 20 m² lumineux donnant sur balcon (3 m²) avec vue dégagée, chambre de 13 m² avec grand placard, salle d'eau et couloir avec grand placard + cave.<br/>
+<br/>
+Ascenseur Chauffage et eau chaude collectifs.<br/>
+<br/>
+Proche de toutes commodités : transports en commun (à 5 minutes du métro ligne 8 Créteil Préfecture, desservi par de nombreux bus), proche écoles (de la maternelle à l'université), centre commercial/carrefour, la Poste, la Mairie et des loisirs (restaurants, cinémas, bibliothèque, salle de sport).</p>
+<p></p>
+</div>
+<ul class="item-transports"><li><span class="label">Créteil - Préfecture (Hôtel de Ville)</span> <span class="icon metro-0"></span> <span class="icon metro-8"></span></li></ul><ul class="item-transports"><li><span class="label">Créteil - Université</span> <span class="icon metro-0"></span> <span class="icon metro-8"></span></li></ul><ul class="item-transports"><li><span class="label">Créteil - Pointe du Lac</span> <span class="icon metro-0"></span> <span class="icon metro-8"></span></li></ul> <p class="margin-top-20">
+<img src="/images/icons/icon-whatsapp.png" width="30"/> 
+					  J'utilise Whatsapp. Vous pouvez proposer un appel vidéo pour visiter le logement.
+	</p>
+<hr/>
+<div class="row">
+<div class="col-1-2">
+<div class="energy-indice">
+<div class="item-title">
+				Classe énergie
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li class="active">C</li>
+<li>D</li>
+<li>E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+<div class="col-1-2">
+<div class="ges-indice">
+<div class="item-title">
+				GES
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li class="active">B</li>
+<li>C</li>
+<li>D</li>
+<li>E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+</div>
+<hr/>
+</div>	monthly_simu : 786 €	ref: 
+						E74/0266 	updated_at:   27 juin 2023													ce : C	ges : B	trasports : NA	elevator : NA	balcon : NA	cave : NAcave.	parking : NA	floor : NA	warming : NA	window : NA	mngt_fee : NA	ppt_tax : NA	shower : NA	bedroom_desc : NAchambre	livroom_desc : NA	kitchen_desc : NA
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 254900 	size: 31.50	link: /annonces/appartement-issy-les-moulineaux-92130-r447203123	detail: <div class="item-description margin-bottom-30">
+<h2 class="margin-bottom-8">Issy-les-Moulineaux (92130)</h2>
+<ul class="item-tags margin-bottom-20">
+<li>
+<strong>2 pièces</strong>
+</li>
+<li>
+<strong>1 chambre</strong>
+</li>
+<li>
+<strong>31,50 m²</strong>
+</li>
+<li>
+<strong>8.092 € le m²</strong>
+</li>
+</ul>
+<a class="btn btn-outline margin-bottom-20 dialog-box-handler-carte" href="#dialog_carte" onclick="gtag('event', 'Ouvrir Carte Mappy Adresse', {'event_category': 'DETAIL VENTE', 'event_label': 'Content'});">
+<span class="icon icon-locate"></span> Voir l'adresse du bien sur une carte
+	</a>
+<div class="margin-bottom-30">
+<p><b class="txt-pink">Idéal investisseur 5% de rentabilité garantis</b>. Situé à 3 min à pied de la gare RER C Issy, à 5 min à pied des arrêts de bus et du tramway ligne T2, et 10 min du métro. Cet appartement de 31,5 m2 (carrez)  est composé : d'une entrée, d'un séjour avec kitchenette aménagée et équipée et d'une chambre de 13 m2  avec salle d'eau et wc. Pas de vis à vis<br/>
+Proche écoles, transports et commerces de proximité, cet appartement est situé au 5ème étage sans ascenseur d'une petite copropriété.<br/>
+Double vitrage dans l'ensemble de l'appartement et électricité refaite à neuf également.<br/>
+Ce bien est proposé avec une cave au sous-sol.<br/>
+La présente annonce immobilière vise 1 lot situé dans une copropriété formant 20 lots au total ne faisant l'objet d'aucune procédure en cours et d'un montant de charges d'environ 100 € par mois (soit 1200 € annuel) Information d'affichage énergétique sur ce bien : classe Energie E indice 328 et classe Climat E indice 50.</p>
+<p>Contact : à tout moment avant 22h00</p>
+</div>
+<ul class="item-transports"><li><span class="label">Issy</span> <span class="icon rer-0"></span> <span class="icon rer-c"></span></li></ul><ul class="item-transports"><li><span class="label">Jacques Henri Lartigue</span> <span class="icon tram-0"></span> <span class="icon tram-2"></span></li></ul><ul class="item-transports"><li><span class="label">Les Moulineaux</span> <span class="icon tram-0"></span> <span class="icon tram-2"></span></li></ul> <p class="margin-top-20">
+<img src="/images/icons/icon-whatsapp.png" width="30"/>
+<img src="/images/icons/icon-skype.png" width="26"/> 
+					  J'utilise Whatsapp et Skype. Vous pouvez proposer un appel vidéo pour visiter le logement.
+	</p>
+<hr/>
+<div class="row">
+<div class="col-1-2">
+<div class="energy-indice">
+<div class="item-title">
+				Classe énergie
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li>C</li>
+<li>D</li>
+<li class="active">E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+<div class="col-1-2">
+<div class="ges-indice">
+<div class="item-title">
+				GES
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li>C</li>
+<li>D</li>
+<li class="active">E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+</div>
+<hr/>
+</div>	monthly_simu : 824 €	ref: 
+						E72/3123 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : NA	elevator : NA	balcon : NA	cave : NA	parking : NA	floor : NA	warming : NA	window : NA	mngt_fee : NAcharge	ppt_tax : NA	shower : NA	bedroom_desc : NAchambre	livroom_desc : NA	kitchen_desc : NA
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 270000 	size: 45.74	link: /annonces/appartement-saint-maur-des-fosses-94100-r446600099	detail: <div class="item-description margin-bottom-30">
+<h2 class="margin-bottom-8">Saint-Maur-des-Fossés (94100)</h2>
+<ul class="item-tags margin-bottom-20">
+<li>
+<strong>2 pièces</strong>
+</li>
+<li>
+<strong>1 chambre</strong>
+</li>
+<li>
+<strong>45,74 m²</strong>
+</li>
+<li>
+<strong>5.903 € le m²</strong>
+</li>
+</ul>
+<a class="btn btn-outline margin-bottom-20 dialog-box-handler-carte" href="#dialog_carte" onclick="gtag('event', 'Ouvrir Carte Mappy Adresse', {'event_category': 'DETAIL VENTE', 'event_label': 'Content'});">
+<span class="icon icon-locate"></span> Voir l'adresse du bien sur une carte
+	</a>
+<a class="margin-left-10 sm-no-margin-left margin-bottom-20 btn btn-outline btn-fullwidth btn-indigo" data-fancybox="" data-type="iframe" href="https://my.matterport.com/show/?m=RjqFvzWZQHU&amp;brand=0" onclick="gtag('event', 'Ouvrir Visite Virtuel Desktop', {'event_category': 'DETAIL VENTE', 'event_label': 'Content'});">
+<span class="icon icon-tour-3d"></span> Voir la visite virtuelle
+	</a>
+<div class="margin-bottom-30">
+<p>Centre ville. Idéalement situé. A proximité immédiate de la gare RER A Le Parc-De-Saint-Maur (140 m), proche de tous commerces, commodités, mairie etc...<br/>
+<br/>
+Au 3ème et dernier étage sans ascenseur d'une petite copropriété ancienne (mais en très bon état : ravalement récent).<br/>
+<br/>
+Appartement 2 pièces de 45,74 m2 en très bon état, très lumineux avec vue dégagée il se compose d'une petite entrée indépendante desservant : un wc suspendu séparé, une cuisine aménagée séparée, d'une pièce de vie principale avec rangement ainsi qu'une chambre avec rangement également et salle de bains avec baignoire et lavabo. Dressing aménagé.<br/>
+<br/>
+Parquet salon et chambre. Carrelage pièces humides. Chauffage au gaz. Double vitrage.<br/>
+<br/>
+Une cave complète ce bien. Interphone, digicode. Porte immeuble en cours de remplacement (travaux votés en 2022)<br/>
+<br/>
+Charges de copropriété : 1400 €<br/>
+Taxe foncière 2022 : 881 €</p>
+<p></p>
+</div>
+<ul class="item-transports"><li><span class="label">Le Parc de Saint-Maur</span> <span class="icon rer-0"></span> <span class="icon rer-a"></span></li></ul><ul class="item-transports"><li><span class="label">Saint-Maur - Créteil</span> <span class="icon rer-0"></span> <span class="icon rer-a"></span></li></ul><ul class="item-transports"><li><span class="label">Champigny</span> <span class="icon rer-0"></span> <span class="icon rer-a"></span></li></ul>
+<div class="chip bg-green"><span class="bg-green">Prix validé par PAP</span></div>
+<small><a class="dialog-box-handler txt-grey-4 a-underline" href="#prix-valide">Qu'est-ce que ça veut dire ?</a></small>
+<hr/>
+<div class="row">
+<div class="col-1-2">
+<div class="energy-indice">
+<div class="item-title">
+				Classe énergie
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li>C</li>
+<li>D</li>
+<li class="active">E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+<div class="col-1-2">
+<div class="ges-indice">
+<div class="item-title">
+				GES
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li>C</li>
+<li>D</li>
+<li class="active">E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+</div>
+<hr/>
+</div>	monthly_simu : 882 €	ref: 
+						E66/0099 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : NA	elevator : NA	balcon : NA	cave : NA	parking : NA	floor : NA	warming : NA	window : NA	mngt_fee : NACharge	ppt_tax : NA	shower : NA	bedroom_desc : NAchambrechambre	livroom_desc : NA	kitchen_desc : NA
+Extract city: Vanves	post_code: 92170	piece: 2	badrooms: 1	price: 260000 	size: 39.30	link: /annonces/appartement-vanves-92170-r447100124	detail: <div class="item-description margin-bottom-30">
+<h2 class="margin-bottom-8">Vanves (92170)</h2>
+<ul class="item-tags margin-bottom-20">
+<li>
+<strong>2 pièces</strong>
+</li>
+<li>
+<strong>1 chambre</strong>
+</li>
+<li>
+<strong>39,30 m²</strong>
+</li>
+<li>
+<strong>6.616 € le m²</strong>
+</li>
+</ul>
+<a class="btn btn-outline margin-bottom-20 dialog-box-handler-carte" href="#dialog_carte" onclick="gtag('event', 'Ouvrir Carte Mappy Adresse', {'event_category': 'DETAIL VENTE', 'event_label': 'Content'});">
+<span class="icon icon-locate"></span> Voir l'adresse du bien sur une carte
+	</a>
+<a class="margin-left-10 sm-no-margin-left margin-bottom-20 btn btn-outline btn-fullwidth btn-indigo" data-fancybox="" data-type="iframe" href="https://my.matterport.com/show/?m=bYNPJzDFh2j&amp;brand=0" onclick="gtag('event', 'Ouvrir Visite Virtuel Desktop', {'event_category': 'DETAIL VENTE', 'event_label': 'Content'});">
+<span class="icon icon-tour-3d"></span> Voir la visite virtuelle
+	</a>
+<div class="margin-bottom-30">
+<p><b class="txt-pink">BIEN SOUS OFFRE</b><br/>
+<br/>
+Situé dans un quartier agréable, à proximité des commerces, services et jardins, Proche des transports, en bas de l'immeuble bus 89, à 7 mn à pied du métro Malakoff-plateau de Vanves ( L13) et à 10 mn à pied de la gare Vanves Malakoff,<br/>
+<br/>
+Appartement fonctionnel de 39,3 m2, situé au 2 ème étage d'un petit immeuble de 5 étages, lumineux et exposé Sud-est, il se compose d'une entrée, 1 séjour,1 chambre, une cuisine, une salle de bains et un wc indépendant<br/>
++ 1 cave.<br/>
+<br/>
+Rénovation énergétique réalisée en 2022<br/>
+Diagnostics effectués : classé C (performance énergétique) et C (émission de gaz).<br/>
+Rafraîchissement à prévoir<br/>
+Copropriété sympathique et bien gérée avec des charges faibles ( environ 1 300 € par an), un Local  à vélo et l'accès à la fibre optique.</p>
+<p></p>
+</div>
+<ul class="item-transports"><li><span class="label">Malakoff - Plateau de Vanves</span> <span class="icon metro-0"></span> <span class="icon metro-13"></span></li></ul><ul class="item-transports"><li><span class="label">Vanves - Malakoff</span> <span class="icon train-0"></span> <span class="icon train-n"></span></li></ul><ul class="item-transports"><li><span class="label">Georges Brassens</span> <span class="icon tram-0"></span> <span class="icon tram-3a"></span></li></ul>
+<hr/>
+<div class="row">
+<div class="col-1-2">
+<div class="energy-indice">
+<div class="item-title">
+				Classe énergie
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li class="active">C</li>
+<li>D</li>
+<li>E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+<div class="col-1-2">
+<div class="ges-indice">
+<div class="item-title">
+				GES
+				<span class="tooltip tooltipstered"></span>
+</div>
+<ul>
+<li>A</li>
+<li>B</li>
+<li class="active">C</li>
+<li>D</li>
+<li>E</li>
+<li>F</li>
+<li>G</li>
+</ul>
+</div>
+</div>
+</div>
+<hr/>
+</div>	monthly_simu : 844 €	ref: 
+						E71/0124 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : NA	elevator : NA	balcon : NA	cave : NAcave.	parking : NA	floor : NAétages	warming : NA	window : NA	mngt_fee : NAcharge	ppt_tax : NA	shower : NA	bedroom_desc : NAchambrechambre	livroom_desc : NAséjour,.	kitchen_desc : NAcuisine. 
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447900227
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447900227
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 280000 	size: 34.00	link: /annonces/appartement-issy-les-moulineaux-92130-r447900227	detail: 
+Issy-les-Moulineaux (92130)
+
+
+2 pièces
+
+
+1 chambre
+
+
+34 m²
+
+
+
+ Voir l'adresse du bien sur une carte
+	
+
+2 pièces 34 m² dans l'immeuble Belvédère résidence phare de l'éco-quartier "Fort d'Issy" construit en 2013 au sein d'un bel espace paysager - Construction aux normes BBC  (Bâtiment Basse Consommation) et RT 2012. Etage 1/6 côté verger.
+Appartement en parfait état composé d'un séjour avec coin cuisine aménagé, d'une chambre et d'une salle de bains avec wc - Parquet chêne dans le séjour et la chambre - Equipement domotique (écran de contrôle tactile), volets roulants motorisés, fibre optique... Chauffage collectif au sol par géothermie et pompe à chaleur (sèche serviette électrique dans la salle de bain). Collecte pneumatique des déchets.  Place de parking en sous-sol inclus.
+
+A proximité immédiate des commerces, des écoles, d'installations sportives et des transports (bus 169, Tuvim transport urbain d'Issy gratuit, métro ligne 12 "Mairie d'Issy", gare de Clamart, future ligne 15 Grand Paris).
+
+
+Clamart  Issy  Mairie d'Issy  
+
+
+
+
+
+				Classe énergie
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+
+				GES
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+	monthly_simu : ,9,2,1, ,€,	ref: 
+						E79/0227 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-creteil-94000-r447400266
+Extract city: Créteil	post_code: 94000	piece: 2	badrooms: 1	price: 245000 	size: 49.92	link: /annonces/appartement-creteil-94000-r447400266	detail: 
+Créteil (94000)
+
+
+2 pièces
+
+
+1 chambre
+
+
+49,92 m²
+
+
+
+ Voir l'adresse du bien sur une carte
+	
+
+F2 rénové de 49,92 m² au 3ème étage sur 18 Créteil Préfecture / Place de la marie / Les Philipines
+
+Appartement en excellent état composé d'une entrée avec cuisine américaine, un séjour d'environ 20 m² lumineux donnant sur balcon (3 m²) avec vue dégagée, chambre de 13 m² avec grand placard, salle d'eau et couloir avec grand placard + cave.
+
+Ascenseur Chauffage et eau chaude collectifs.
+
+Proche de toutes commodités : transports en commun (à 5 minutes du métro ligne 8 Créteil Préfecture, desservi par de nombreux bus), proche écoles (de la maternelle à l'université), centre commercial/carrefour, la Poste, la Mairie et des loisirs (restaurants, cinémas, bibliothèque, salle de sport).
+
+
+Créteil - Préfecture (Hôtel de Ville)  Créteil - Université  Créteil - Pointe du Lac   
+ 
+					  J'utilise Whatsapp. Vous pouvez proposer un appel vidéo pour visiter le logement.
+	
+
+
+
+
+
+				Classe énergie
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+
+				GES
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+	monthly_simu : ,7,8,6, ,€,	ref: 
+						E74/0266 	updated_at:   27 juin 2023													ce : C	ges : B	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447203123
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 254900 	size: 31.50	link: /annonces/appartement-issy-les-moulineaux-92130-r447203123	detail: 
+Issy-les-Moulineaux (92130)
+
+
+2 pièces
+
+
+1 chambre
+
+
+31,50 m²
+
+
+8.092 € le m²
+
+
+
+ Voir l'adresse du bien sur une carte
+	
+
+Idéal investisseur 5% de rentabilité garantis. Situé à 3 min à pied de la gare RER C Issy, à 5 min à pied des arrêts de bus et du tramway ligne T2, et 10 min du métro. Cet appartement de 31,5 m2 (carrez)  est composé : d'une entrée, d'un séjour avec kitchenette aménagée et équipée et d'une chambre de 13 m2  avec salle d'eau et wc. Pas de vis à vis
+Proche écoles, transports et commerces de proximité, cet appartement est situé au 5ème étage sans ascenseur d'une petite copropriété.
+Double vitrage dans l'ensemble de l'appartement et électricité refaite à neuf également.
+Ce bien est proposé avec une cave au sous-sol.
+La présente annonce immobilière vise 1 lot situé dans une copropriété formant 20 lots au total ne faisant l'objet d'aucune procédure en cours et d'un montant de charges d'environ 100 € par mois (soit 1200 € annuel) Information d'affichage énergétique sur ce bien : classe Energie E indice 328 et classe Climat E indice 50.
+Contact : à tout moment avant 22h00
+
+Issy  Jacques Henri Lartigue  Les Moulineaux   
+
+ 
+					  J'utilise Whatsapp et Skype. Vous pouvez proposer un appel vidéo pour visiter le logement.
+	
+
+
+
+
+
+				Classe énergie
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+
+				GES
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+	monthly_simu : ,8,2,4, ,€,	ref: 
+						E72/3123 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94100-r446600099
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 270000 	size: 45.74	link: /annonces/appartement-saint-maur-des-fosses-94100-r446600099	detail: 
+Saint-Maur-des-Fossés (94100)
+
+
+2 pièces
+
+
+1 chambre
+
+
+45,74 m²
+
+
+5.903 € le m²
+
+
+
+ Voir l'adresse du bien sur une carte
+	
+
+ Voir la visite virtuelle
+	
+
+Centre ville. Idéalement situé. A proximité immédiate de la gare RER A Le Parc-De-Saint-Maur (140 m), proche de tous commerces, commodités, mairie etc...
+
+Au 3ème et dernier étage sans ascenseur d'une petite copropriété ancienne (mais en très bon état : ravalement récent).
+
+Appartement 2 pièces de 45,74 m2 en très bon état, très lumineux avec vue dégagée il se compose d'une petite entrée indépendante desservant : un wc suspendu séparé, une cuisine aménagée séparée, d'une pièce de vie principale avec rangement ainsi qu'une chambre avec rangement également et salle de bains avec baignoire et lavabo. Dressing aménagé.
+
+Parquet salon et chambre. Carrelage pièces humides. Chauffage au gaz. Double vitrage.
+
+Une cave complète ce bien. Interphone, digicode. Porte immeuble en cours de remplacement (travaux votés en 2022)
+
+Charges de copropriété : 1400 €
+Taxe foncière 2022 : 881 €
+
+
+Le Parc de Saint-Maur  Saint-Maur - Créteil  Champigny  
+Prix validé par PAP
+Qu'est-ce que ça veut dire ?
+
+
+
+
+
+				Classe énergie
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+
+				GES
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+	monthly_simu : ,8,8,2, ,€,	ref: 
+						E66/0099 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-vanves-92170-r447100124
+Extract city: Vanves	post_code: 92170	piece: 2	badrooms: 1	price: 260000 	size: 39.30	link: /annonces/appartement-vanves-92170-r447100124	detail: 
+Vanves (92170)
+
+
+2 pièces
+
+
+1 chambre
+
+
+39,30 m²
+
+
+6.616 € le m²
+
+
+
+ Voir l'adresse du bien sur une carte
+	
+
+ Voir la visite virtuelle
+	
+
+BIEN SOUS OFFRE
+
+Situé dans un quartier agréable, à proximité des commerces, services et jardins, Proche des transports, en bas de l'immeuble bus 89, à 7 mn à pied du métro Malakoff-plateau de Vanves ( L13) et à 10 mn à pied de la gare Vanves Malakoff,
+
+Appartement fonctionnel de 39,3 m2, situé au 2 ème étage d'un petit immeuble de 5 étages, lumineux et exposé Sud-est, il se compose d'une entrée, 1 séjour,1 chambre, une cuisine, une salle de bains et un wc indépendant
++ 1 cave.
+
+Rénovation énergétique réalisée en 2022
+Diagnostics effectués : classé C (performance énergétique) et C (émission de gaz).
+Rafraîchissement à prévoir
+Copropriété sympathique et bien gérée avec des charges faibles ( environ 1 300 € par an), un Local  à vélo et l'accès à la fibre optique.
+
+
+Malakoff - Plateau de Vanves  Vanves - Malakoff  Georges Brassens  
+
+
+
+
+
+				Classe énergie
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+
+				GES
+				
+
+
+A
+B
+C
+D
+E
+F
+G
+
+
+
+
+
+	monthly_simu : ,8,4,4, ,€,	ref: 
+						E71/0124 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : étages	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : séjour,.	kitchen_desc : cuisine. 
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447900227
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 280000 	size: 34.00	link: /annonces/appartement-issy-les-moulineaux-92130-r447900227	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre34 m² Voir l'adresse du bien sur une carte	2 pièces 34 m² dans l'immeuble Belvédère résidence phare de l'éco-quartier "Fort d'Issy" construit en 2013 au sein d'un bel espace paysager - Construction aux normes BBC  (Bâtiment Basse Consommation) et RT 2012. Etage 1/6 côté verger.Appartement en parfait état composé d'un séjour avec coin cuisine aménagé, d'une chambre et d'une salle de bains avec wc - Parquet chêne dans le séjour et la chambre - Equipement domotique (écran de contrôle tactile), volets roulants motorisés, fibre optique... Chauffage collectif au sol par géothermie et pompe à chaleur (sèche serviette électrique dans la salle de bain). Collecte pneumatique des déchets.  Place de parking en sous-sol inclus.A proximité immédiate des commerces, des écoles, d'installations sportives et des transports (bus 169, Tuvim transport urbain d'Issy gratuit, métro ligne 12 "Mairie d'Issy", gare de Clamart, future ligne 15 Grand Paris).Clamart  Issy  Mairie d'Issy  				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : ,9,2,1, ,€,	ref: 
+						E79/0227 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-creteil-94000-r447400266
+Extract city: Créteil	post_code: 94000	piece: 2	badrooms: 1	price: 245000 	size: 49.92	link: /annonces/appartement-creteil-94000-r447400266	detail: Créteil (94000)2 pièces1 chambre49,92 m² Voir l'adresse du bien sur une carte	F2 rénové de 49,92 m² au 3ème étage sur 18 Créteil Préfecture / Place de la marie / Les PhilipinesAppartement en excellent état composé d'une entrée avec cuisine américaine, un séjour d'environ 20 m² lumineux donnant sur balcon (3 m²) avec vue dégagée, chambre de 13 m² avec grand placard, salle d'eau et couloir avec grand placard + cave.Ascenseur Chauffage et eau chaude collectifs.Proche de toutes commodités : transports en commun (à 5 minutes du métro ligne 8 Créteil Préfecture, desservi par de nombreux bus), proche écoles (de la maternelle à l'université), centre commercial/carrefour, la Poste, la Mairie et des loisirs (restaurants, cinémas, bibliothèque, salle de sport).Créteil - Préfecture (Hôtel de Ville)  Créteil - Université  Créteil - Pointe du Lac    					  J'utilise Whatsapp. Vous pouvez proposer un appel vidéo pour visiter le logement.					Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : ,7,8,6, ,€,	ref: 
+						E74/0266 	updated_at:   27 juin 2023													ce : C	ges : B	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447203123
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 254900 	size: 31.50	link: /annonces/appartement-issy-les-moulineaux-92130-r447203123	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre31,50 m²8.092 € le m² Voir l'adresse du bien sur une carte	Idéal investisseur 5% de rentabilité garantis. Situé à 3 min à pied de la gare RER C Issy, à 5 min à pied des arrêts de bus et du tramway ligne T2, et 10 min du métro. Cet appartement de 31,5 m2 (carrez)  est composé : d'une entrée, d'un séjour avec kitchenette aménagée et équipée et d'une chambre de 13 m2  avec salle d'eau et wc. Pas de vis à visProche écoles, transports et commerces de proximité, cet appartement est situé au 5ème étage sans ascenseur d'une petite copropriété.Double vitrage dans l'ensemble de l'appartement et électricité refaite à neuf également.Ce bien est proposé avec une cave au sous-sol.La présente annonce immobilière vise 1 lot situé dans une copropriété formant 20 lots au total ne faisant l'objet d'aucune procédure en cours et d'un montant de charges d'environ 100 € par mois (soit 1200 € annuel) Information d'affichage énergétique sur ce bien : classe Energie E indice 328 et classe Climat E indice 50.Contact : à tout moment avant 22h00Issy  Jacques Henri Lartigue  Les Moulineaux    					  J'utilise Whatsapp et Skype. Vous pouvez proposer un appel vidéo pour visiter le logement.					Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : ,8,2,4, ,€,	ref: 
+						E72/3123 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94100-r446600099
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 270000 	size: 45.74	link: /annonces/appartement-saint-maur-des-fosses-94100-r446600099	detail: Saint-Maur-des-Fossés (94100)2 pièces1 chambre45,74 m²5.903 € le m² Voir l'adresse du bien sur une carte	 Voir la visite virtuelle	Centre ville. Idéalement situé. A proximité immédiate de la gare RER A Le Parc-De-Saint-Maur (140 m), proche de tous commerces, commodités, mairie etc...Au 3ème et dernier étage sans ascenseur d'une petite copropriété ancienne (mais en très bon état : ravalement récent).Appartement 2 pièces de 45,74 m2 en très bon état, très lumineux avec vue dégagée il se compose d'une petite entrée indépendante desservant : un wc suspendu séparé, une cuisine aménagée séparée, d'une pièce de vie principale avec rangement ainsi qu'une chambre avec rangement également et salle de bains avec baignoire et lavabo. Dressing aménagé.Parquet salon et chambre. Carrelage pièces humides. Chauffage au gaz. Double vitrage.Une cave complète ce bien. Interphone, digicode. Porte immeuble en cours de remplacement (travaux votés en 2022)Charges de copropriété : 1400 €Taxe foncière 2022 : 881 €Le Parc de Saint-Maur  Saint-Maur - Créteil  Champigny  Prix validé par PAPQu'est-ce que ça veut dire ?				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : ,8,8,2, ,€,	ref: 
+						E66/0099 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-vanves-92170-r447100124
+Extract city: Vanves	post_code: 92170	piece: 2	badrooms: 1	price: 260000 	size: 39.30	link: /annonces/appartement-vanves-92170-r447100124	detail: Vanves (92170)2 pièces1 chambre39,30 m²6.616 € le m² Voir l'adresse du bien sur une carte	 Voir la visite virtuelle	BIEN SOUS OFFRESitué dans un quartier agréable, à proximité des commerces, services et jardins, Proche des transports, en bas de l'immeuble bus 89, à 7 mn à pied du métro Malakoff-plateau de Vanves ( L13) et à 10 mn à pied de la gare Vanves Malakoff,Appartement fonctionnel de 39,3 m2, situé au 2 ème étage d'un petit immeuble de 5 étages, lumineux et exposé Sud-est, il se compose d'une entrée, 1 séjour,1 chambre, une cuisine, une salle de bains et un wc indépendant+ 1 cave.Rénovation énergétique réalisée en 2022Diagnostics effectués : classé C (performance énergétique) et C (émission de gaz).Rafraîchissement à prévoirCopropriété sympathique et bien gérée avec des charges faibles ( environ 1 300 € par an), un Local  à vélo et l'accès à la fibre optique.Malakoff - Plateau de Vanves  Vanves - Malakoff  Georges Brassens  				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : ,8,4,4, ,€,	ref: 
+						E71/0124 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : étages	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : séjour,.	kitchen_desc : cuisine. 
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447900227
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 280000 	size: 34.00	link: /annonces/appartement-issy-les-moulineaux-92130-r447900227	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre34 m² Voir l'adresse du bien sur une carte	2 pièces 34 m² dans l'immeuble Belvédère résidence phare de l'éco-quartier 'Fort d'Issy' construit en 2013 au sein d'un bel espace paysager - Construction aux normes BBC  (Bâtiment Basse Consommation) et RT 2012. Etage 1/6 côté verger.Appartement en parfait état composé d'un séjour avec coin cuisine aménagé, d'une chambre et d'une salle de bains avec wc - Parquet chêne dans le séjour et la chambre - Equipement domotique (écran de contrôle tactile), volets roulants motorisés, fibre optique... Chauffage collectif au sol par géothermie et pompe à chaleur (sèche serviette électrique dans la salle de bain). Collecte pneumatique des déchets.  Place de parking en sous-sol inclus.A proximité immédiate des commerces, des écoles, d'installations sportives et des transports (bus 169, Tuvim transport urbain d'Issy gratuit, métro ligne 12 'Mairie d'Issy', gare de Clamart, future ligne 15 Grand Paris).Clamart  Issy  Mairie d'Issy  				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 921 €	ref: 
+E79/0227 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-creteil-94000-r447400266
+Extract city: Créteil	post_code: 94000	piece: 2	badrooms: 1	price: 245000 	size: 49.92	link: /annonces/appartement-creteil-94000-r447400266	detail: Créteil (94000)2 pièces1 chambre49,92 m² Voir l'adresse du bien sur une carte	F2 rénové de 49,92 m² au 3ème étage sur 18 Créteil Préfecture / Place de la marie / Les PhilipinesAppartement en excellent état composé d'une entrée avec cuisine américaine, un séjour d'environ 20 m² lumineux donnant sur balcon (3 m²) avec vue dégagée, chambre de 13 m² avec grand placard, salle d'eau et couloir avec grand placard + cave.Ascenseur Chauffage et eau chaude collectifs.Proche de toutes commodités : transports en commun (à 5 minutes du métro ligne 8 Créteil Préfecture, desservi par de nombreux bus), proche écoles (de la maternelle à l'université), centre commercial/carrefour, la Poste, la Mairie et des loisirs (restaurants, cinémas, bibliothèque, salle de sport).Créteil - Préfecture (Hôtel de Ville)  Créteil - Université  Créteil - Pointe du Lac    					  J'utilise Whatsapp. Vous pouvez proposer un appel vidéo pour visiter le logement.					Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 786 €	ref: 
+E74/0266 	updated_at:   27 juin 2023													ce : C	ges : B	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447203123
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 254900 	size: 31.50	link: /annonces/appartement-issy-les-moulineaux-92130-r447203123	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre31,50 m²8.092 € le m² Voir l'adresse du bien sur une carte	Idéal investisseur 5% de rentabilité garantis. Situé à 3 min à pied de la gare RER C Issy, à 5 min à pied des arrêts de bus et du tramway ligne T2, et 10 min du métro. Cet appartement de 31,5 m2 (carrez)  est composé : d'une entrée, d'un séjour avec kitchenette aménagée et équipée et d'une chambre de 13 m2  avec salle d'eau et wc. Pas de vis à visProche écoles, transports et commerces de proximité, cet appartement est situé au 5ème étage sans ascenseur d'une petite copropriété.Double vitrage dans l'ensemble de l'appartement et électricité refaite à neuf également.Ce bien est proposé avec une cave au sous-sol.La présente annonce immobilière vise 1 lot situé dans une copropriété formant 20 lots au total ne faisant l'objet d'aucune procédure en cours et d'un montant de charges d'environ 100 € par mois (soit 1200 € annuel) Information d'affichage énergétique sur ce bien : classe Energie E indice 328 et classe Climat E indice 50.Contact : à tout moment avant 22h00Issy  Jacques Henri Lartigue  Les Moulineaux    					  J'utilise Whatsapp et Skype. Vous pouvez proposer un appel vidéo pour visiter le logement.					Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 824 €	ref: 
+E72/3123 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94100-r446600099
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 270000 	size: 45.74	link: /annonces/appartement-saint-maur-des-fosses-94100-r446600099	detail: Saint-Maur-des-Fossés (94100)2 pièces1 chambre45,74 m²5.903 € le m² Voir l'adresse du bien sur une carte	 Voir la visite virtuelle	Centre ville. Idéalement situé. A proximité immédiate de la gare RER A Le Parc-De-Saint-Maur (140 m), proche de tous commerces, commodités, mairie etc...Au 3ème et dernier étage sans ascenseur d'une petite copropriété ancienne (mais en très bon état : ravalement récent).Appartement 2 pièces de 45,74 m2 en très bon état, très lumineux avec vue dégagée il se compose d'une petite entrée indépendante desservant : un wc suspendu séparé, une cuisine aménagée séparée, d'une pièce de vie principale avec rangement ainsi qu'une chambre avec rangement également et salle de bains avec baignoire et lavabo. Dressing aménagé.Parquet salon et chambre. Carrelage pièces humides. Chauffage au gaz. Double vitrage.Une cave complète ce bien. Interphone, digicode. Porte immeuble en cours de remplacement (travaux votés en 2022)Charges de copropriété : 1400 €Taxe foncière 2022 : 881 €Le Parc de Saint-Maur  Saint-Maur - Créteil  Champigny  Prix validé par PAPQu'est-ce que ça veut dire ?				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 882 €	ref: 
+E66/0099 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-vanves-92170-r447100124
+Extract city: Vanves	post_code: 92170	piece: 2	badrooms: 1	price: 260000 	size: 39.30	link: /annonces/appartement-vanves-92170-r447100124	detail: Vanves (92170)2 pièces1 chambre39,30 m²6.616 € le m² Voir l'adresse du bien sur une carte	 Voir la visite virtuelle	BIEN SOUS OFFRESitué dans un quartier agréable, à proximité des commerces, services et jardins, Proche des transports, en bas de l'immeuble bus 89, à 7 mn à pied du métro Malakoff-plateau de Vanves ( L13) et à 10 mn à pied de la gare Vanves Malakoff,Appartement fonctionnel de 39,3 m2, situé au 2 ème étage d'un petit immeuble de 5 étages, lumineux et exposé Sud-est, il se compose d'une entrée, 1 séjour,1 chambre, une cuisine, une salle de bains et un wc indépendant+ 1 cave.Rénovation énergétique réalisée en 2022Diagnostics effectués : classé C (performance énergétique) et C (émission de gaz).Rafraîchissement à prévoirCopropriété sympathique et bien gérée avec des charges faibles ( environ 1 300 € par an), un Local  à vélo et l'accès à la fibre optique.Malakoff - Plateau de Vanves  Vanves - Malakoff  Georges Brassens  				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 844 €	ref: 
+E71/0124 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : étages	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : séjour,.	kitchen_desc : cuisine. 
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447900227
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 280000 	size: 34.00	link: /annonces/appartement-issy-les-moulineaux-92130-r447900227	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre34 m² Voir l'adresse du bien sur une carte	2 pièces 34 m² dans l'immeuble Belvédère résidence phare de l'éco-quartier 'Fort d'Issy' construit en 2013 au sein d'un bel espace paysager - Construction aux normes BBC  (Bâtiment Basse Consommation) et RT 2012. Etage 1/6 côté verger.Appartement en parfait état composé d'un séjour avec coin cuisine aménagé, d'une chambre et d'une salle de bains avec wc - Parquet chêne dans le séjour et la chambre - Equipement domotique (écran de contrôle tactile), volets roulants motorisés, fibre optique... Chauffage collectif au sol par géothermie et pompe à chaleur (sèche serviette électrique dans la salle de bain). Collecte pneumatique des déchets.  Place de parking en sous-sol inclus.A proximité immédiate des commerces, des écoles, d'installations sportives et des transports (bus 169, Tuvim transport urbain d'Issy gratuit, métro ligne 12 'Mairie d'Issy', gare de Clamart, future ligne 15 Grand Paris).Clamart  Issy  Mairie d'Issy  				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 921 €	ref: 
+E79/0227 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-creteil-94000-r447400266
+Extract city: Créteil	post_code: 94000	piece: 2	badrooms: 1	price: 245000 	size: 49.92	link: /annonces/appartement-creteil-94000-r447400266	detail: Créteil (94000)2 pièces1 chambre49,92 m² Voir l'adresse du bien sur une carte	F2 rénové de 49,92 m² au 3ème étage sur 18 Créteil Préfecture / Place de la marie / Les PhilipinesAppartement en excellent état composé d'une entrée avec cuisine américaine, un séjour d'environ 20 m² lumineux donnant sur balcon (3 m²) avec vue dégagée, chambre de 13 m² avec grand placard, salle d'eau et couloir avec grand placard + cave.Ascenseur Chauffage et eau chaude collectifs.Proche de toutes commodités : transports en commun (à 5 minutes du métro ligne 8 Créteil Préfecture, desservi par de nombreux bus), proche écoles (de la maternelle à l'université), centre commercial/carrefour, la Poste, la Mairie et des loisirs (restaurants, cinémas, bibliothèque, salle de sport).Créteil - Préfecture (Hôtel de Ville)  Créteil - Université  Créteil - Pointe du Lac    					  J'utilise Whatsapp. Vous pouvez proposer un appel vidéo pour visiter le logement.					Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 786 €	ref: 
+E74/0266 	updated_at:   27 juin 2023													ce : C	ges : B	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447203123
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 254900 	size: 31.50	link: /annonces/appartement-issy-les-moulineaux-92130-r447203123	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre31,50 m²8.092 € le m² Voir l'adresse du bien sur une carte	Idéal investisseur 5% de rentabilité garantis. Situé à 3 min à pied de la gare RER C Issy, à 5 min à pied des arrêts de bus et du tramway ligne T2, et 10 min du métro. Cet appartement de 31,5 m2 (carrez)  est composé : d'une entrée, d'un séjour avec kitchenette aménagée et équipée et d'une chambre de 13 m2  avec salle d'eau et wc. Pas de vis à visProche écoles, transports et commerces de proximité, cet appartement est situé au 5ème étage sans ascenseur d'une petite copropriété.Double vitrage dans l'ensemble de l'appartement et électricité refaite à neuf également.Ce bien est proposé avec une cave au sous-sol.La présente annonce immobilière vise 1 lot situé dans une copropriété formant 20 lots au total ne faisant l'objet d'aucune procédure en cours et d'un montant de charges d'environ 100 € par mois (soit 1200 € annuel) Information d'affichage énergétique sur ce bien : classe Energie E indice 328 et classe Climat E indice 50.Contact : à tout moment avant 22h00Issy  Jacques Henri Lartigue  Les Moulineaux    					  J'utilise Whatsapp et Skype. Vous pouvez proposer un appel vidéo pour visiter le logement.					Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 824 €	ref: 
+E72/3123 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94100-r446600099
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 270000 	size: 45.74	link: /annonces/appartement-saint-maur-des-fosses-94100-r446600099	detail: Saint-Maur-des-Fossés (94100)2 pièces1 chambre45,74 m²5.903 € le m² Voir l'adresse du bien sur une carte	 Voir la visite virtuelle	Centre ville. Idéalement situé. A proximité immédiate de la gare RER A Le Parc-De-Saint-Maur (140 m), proche de tous commerces, commodités, mairie etc...Au 3ème et dernier étage sans ascenseur d'une petite copropriété ancienne (mais en très bon état : ravalement récent).Appartement 2 pièces de 45,74 m2 en très bon état, très lumineux avec vue dégagée il se compose d'une petite entrée indépendante desservant : un wc suspendu séparé, une cuisine aménagée séparée, d'une pièce de vie principale avec rangement ainsi qu'une chambre avec rangement également et salle de bains avec baignoire et lavabo. Dressing aménagé.Parquet salon et chambre. Carrelage pièces humides. Chauffage au gaz. Double vitrage.Une cave complète ce bien. Interphone, digicode. Porte immeuble en cours de remplacement (travaux votés en 2022)Charges de copropriété : 1400 €Taxe foncière 2022 : 881 €Le Parc de Saint-Maur  Saint-Maur - Créteil  Champigny  Prix validé par PAPQu'est-ce que ça veut dire ?				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 882 €	ref: 
+E66/0099 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-vanves-92170-r447100124
+Extract city: Vanves	post_code: 92170	piece: 2	badrooms: 1	price: 260000 	size: 39.30	link: /annonces/appartement-vanves-92170-r447100124	detail: Vanves (92170)2 pièces1 chambre39,30 m²6.616 € le m² Voir l'adresse du bien sur une carte	 Voir la visite virtuelle	BIEN SOUS OFFRESitué dans un quartier agréable, à proximité des commerces, services et jardins, Proche des transports, en bas de l'immeuble bus 89, à 7 mn à pied du métro Malakoff-plateau de Vanves ( L13) et à 10 mn à pied de la gare Vanves Malakoff,Appartement fonctionnel de 39,3 m2, situé au 2 ème étage d'un petit immeuble de 5 étages, lumineux et exposé Sud-est, il se compose d'une entrée, 1 séjour,1 chambre, une cuisine, une salle de bains et un wc indépendant+ 1 cave.Rénovation énergétique réalisée en 2022Diagnostics effectués : classé C (performance énergétique) et C (émission de gaz).Rafraîchissement à prévoirCopropriété sympathique et bien gérée avec des charges faibles ( environ 1 300 € par an), un Local  à vélo et l'accès à la fibre optique.Malakoff - Plateau de Vanves  Vanves - Malakoff  Georges Brassens  				Classe énergie				ABCDEFG				GES				ABCDEFG	monthly_simu : 844 €	ref: 
+E71/0124 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : étages	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : séjour,.	kitchen_desc : cuisine. 
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447900227
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 280000 	size: 34.00	link: /annonces/appartement-issy-les-moulineaux-92130-r447900227	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre34 m² Voir l'adresse du bien sur une carte2 pièces 34 m² dans l'immeuble Belvédère résidence phare de l'éco-quartier 'Fort d'Issy' construit en 2013 au sein d'un bel espace paysager - Construction aux normes BBC  (Bâtiment Basse Consommation) et RT 2012. Etage 1/6 côté verger.Appartement en parfait état composé d'un séjour avec coin cuisine aménagé, d'une chambre et d'une salle de bains avec wc - Parquet chêne dans le séjour et la chambre - Equipement domotique (écran de contrôle tactile), volets roulants motorisés, fibre optique... Chauffage collectif au sol par géothermie et pompe à chaleur (sèche serviette électrique dans la salle de bain). Collecte pneumatique des déchets.  Place de parking en sous-sol inclus.A proximité immédiate des commerces, des écoles, d'installations sportives et des transports (bus 169, Tuvim transport urbain d'Issy gratuit, métro ligne 12 'Mairie d'Issy', gare de Clamart, future ligne 15 Grand Paris).Clamart  Issy  Mairie d'Issy  Classe énergieABCDEFGGESABCDEFG	monthly_simu : 921 €	ref: 
+E79/0227 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-creteil-94000-r447400266
+Extract city: Créteil	post_code: 94000	piece: 2	badrooms: 1	price: 245000 	size: 49.92	link: /annonces/appartement-creteil-94000-r447400266	detail: Créteil (94000)2 pièces1 chambre49,92 m² Voir l'adresse du bien sur une carteF2 rénové de 49,92 m² au 3ème étage sur 18 Créteil Préfecture / Place de la marie / Les PhilipinesAppartement en excellent état composé d'une entrée avec cuisine américaine, un séjour d'environ 20 m² lumineux donnant sur balcon (3 m²) avec vue dégagée, chambre de 13 m² avec grand placard, salle d'eau et couloir avec grand placard + cave.Ascenseur Chauffage et eau chaude collectifs.Proche de toutes commodités : transports en commun (à 5 minutes du métro ligne 8 Créteil Préfecture, desservi par de nombreux bus), proche écoles (de la maternelle à l'université), centre commercial/carrefour, la Poste, la Mairie et des loisirs (restaurants, cinémas, bibliothèque, salle de sport).Créteil - Préfecture (Hôtel de Ville)  Créteil - Université  Créteil - Pointe du Lac  J'utilise Whatsapp. Vous pouvez proposer un appel vidéo pour visiter le logement.Classe énergieABCDEFGGESABCDEFG	monthly_simu : 786 €	ref: 
+E74/0266 	updated_at:   27 juin 2023													ce : C	ges : B	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447203123
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 254900 	size: 31.50	link: /annonces/appartement-issy-les-moulineaux-92130-r447203123	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre31,50 m²8.092 € le m² Voir l'adresse du bien sur une carteIdéal investisseur 5% de rentabilité garantis. Situé à 3 min à pied de la gare RER C Issy, à 5 min à pied des arrêts de bus et du tramway ligne T2, et 10 min du métro. Cet appartement de 31,5 m2 (carrez)  est composé : d'une entrée, d'un séjour avec kitchenette aménagée et équipée et d'une chambre de 13 m2  avec salle d'eau et wc. Pas de vis à visProche écoles, transports et commerces de proximité, cet appartement est situé au 5ème étage sans ascenseur d'une petite copropriété.Double vitrage dans l'ensemble de l'appartement et électricité refaite à neuf également.Ce bien est proposé avec une cave au sous-sol.La présente annonce immobilière vise 1 lot situé dans une copropriété formant 20 lots au total ne faisant l'objet d'aucune procédure en cours et d'un montant de charges d'environ 100 € par mois (soit 1200 € annuel) Information d'affichage énergétique sur ce bien : classe Energie E indice 328 et classe Climat E indice 50.Contact : à tout moment avant 22h00Issy  Jacques Henri Lartigue  Les Moulineaux  J'utilise Whatsapp et Skype. Vous pouvez proposer un appel vidéo pour visiter le logement.Classe énergieABCDEFGGESABCDEFG	monthly_simu : 824 €	ref: 
+E72/3123 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94100-r446600099
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 270000 	size: 45.74	link: /annonces/appartement-saint-maur-des-fosses-94100-r446600099	detail: Saint-Maur-des-Fossés (94100)2 pièces1 chambre45,74 m²5.903 € le m² Voir l'adresse du bien sur une carte Voir la visite virtuelleCentre ville. Idéalement situé. A proximité immédiate de la gare RER A Le Parc-De-Saint-Maur (140 m), proche de tous commerces, commodités, mairie etc...Au 3ème et dernier étage sans ascenseur d'une petite copropriété ancienne (mais en très bon état : ravalement récent).Appartement 2 pièces de 45,74 m2 en très bon état, très lumineux avec vue dégagée il se compose d'une petite entrée indépendante desservant : un wc suspendu séparé, une cuisine aménagée séparée, d'une pièce de vie principale avec rangement ainsi qu'une chambre avec rangement également et salle de bains avec baignoire et lavabo. Dressing aménagé.Parquet salon et chambre. Carrelage pièces humides. Chauffage au gaz. Double vitrage.Une cave complète ce bien. Interphone, digicode. Porte immeuble en cours de remplacement (travaux votés en 2022)Charges de copropriété : 1400 €Taxe foncière 2022 : 881 €Le Parc de Saint-Maur  Saint-Maur - Créteil  Champigny  Prix validé par PAPQu'est-ce que ça veut dire ?Classe énergieABCDEFGGESABCDEFG	monthly_simu : 882 €	ref: 
+E66/0099 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-vanves-92170-r447100124
+Extract city: Vanves	post_code: 92170	piece: 2	badrooms: 1	price: 260000 	size: 39.30	link: /annonces/appartement-vanves-92170-r447100124	detail: Vanves (92170)2 pièces1 chambre39,30 m²6.616 € le m² Voir l'adresse du bien sur une carte Voir la visite virtuelleBIEN SOUS OFFRESitué dans un quartier agréable, à proximité des commerces, services et jardins, Proche des transports, en bas de l'immeuble bus 89, à 7 mn à pied du métro Malakoff-plateau de Vanves ( L13) et à 10 mn à pied de la gare Vanves Malakoff,Appartement fonctionnel de 39,3 m2, situé au 2 ème étage d'un petit immeuble de 5 étages, lumineux et exposé Sud-est, il se compose d'une entrée, 1 séjour,1 chambre, une cuisine, une salle de bains et un wc indépendant+ 1 cave.Rénovation énergétique réalisée en 2022Diagnostics effectués : classé C (performance énergétique) et C (émission de gaz).Rafraîchissement à prévoirCopropriété sympathique et bien gérée avec des charges faibles ( environ 1 300 € par an), un Local  à vélo et l'accès à la fibre optique.Malakoff - Plateau de Vanves  Vanves - Malakoff  Georges Brassens  Classe énergieABCDEFGGESABCDEFG	monthly_simu : 844 €	ref: 
+E71/0124 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : étages	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : séjour,.	kitchen_desc : cuisine. 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94100-r448500126
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 213000 	size: 44.00	link: /annonces/appartement-saint-maur-des-fosses-94100-r448500126	detail: Saint-Maur-des-Fossés (94100)2 pièces1 chambre44 m²4.841 € le m² Voir l'adresse du bien sur une carteAppartement à Saint Maur des Fossés dans le quartier d'Adamville (rue Ledru Rollin), dans un immeuble des années 60 de seulement 8 lots.L'appartement est en bon état général il fait environ 44 m2 en rez-de-chaussée avec une place de parking à l'arrière du bâtiment.La cuisine est aménagée : four, hotte, le chauffage est au gaz de ville (chaudière bien entretenue installée en 20217 certificats d'entretien disponibles)Les charges sont d'environ 1500 euros et la taxe foncière de 782 euros.Il ne se situe pas loin de la place Kennedy.Prix : 213 000 Euros.Frederic BRIARDLe Parc de Saint-Maur  La Varenne - Chennevières  Saint-Maur - Créteil  Classe énergieABCDEFGGESABCDEFG	monthly_simu : 663 €	ref: 
+E85/0126 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-boulogne-billancourt-92100-r448003492
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers
+To collect 15 ads on the current page.
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447900227
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 280000 	size: 34.00	link: /annonces/appartement-issy-les-moulineaux-92130-r447900227	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre34 m² Voir l'adresse du bien sur une carte2 pièces 34 m² dans l'immeuble Belvédère résidence phare de l'éco-quartier 'Fort d'Issy' construit en 2013 au sein d'un bel espace paysager - Construction aux normes BBC  (Bâtiment Basse Consommation) et RT 2012. Etage 1/6 côté verger.Appartement en parfait état composé d'un séjour avec coin cuisine aménagé, d'une chambre et d'une salle de bains avec wc - Parquet chêne dans le séjour et la chambre - Equipement domotique (écran de contrôle tactile), volets roulants motorisés, fibre optique... Chauffage collectif au sol par géothermie et pompe à chaleur (sèche serviette électrique dans la salle de bain). Collecte pneumatique des déchets.  Place de parking en sous-sol inclus.A proximité immédiate des commerces, des écoles, d'installations sportives et des transports (bus 169, Tuvim transport urbain d'Issy gratuit, métro ligne 12 'Mairie d'Issy', gare de Clamart, future ligne 15 Grand Paris).Clamart  Issy  Mairie d'Issy  Classe énergieABCDEFGGESABCDEFG	monthly_simu : 921 €	ref: E79/0227 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-creteil-94000-r447400266
+Extract city: Créteil	post_code: 94000	piece: 2	badrooms: 1	price: 245000 	size: 49.92	link: /annonces/appartement-creteil-94000-r447400266	detail: Créteil (94000)2 pièces1 chambre49,92 m² Voir l'adresse du bien sur une carteF2 rénové de 49,92 m² au 3ème étage sur 18 Créteil Préfecture / Place de la marie / Les PhilipinesAppartement en excellent état composé d'une entrée avec cuisine américaine, un séjour d'environ 20 m² lumineux donnant sur balcon (3 m²) avec vue dégagée, chambre de 13 m² avec grand placard, salle d'eau et couloir avec grand placard + cave.Ascenseur Chauffage et eau chaude collectifs.Proche de toutes commodités : transports en commun (à 5 minutes du métro ligne 8 Créteil Préfecture, desservi par de nombreux bus), proche écoles (de la maternelle à l'université), centre commercial/carrefour, la Poste, la Mairie et des loisirs (restaurants, cinémas, bibliothèque, salle de sport).Créteil - Préfecture (Hôtel de Ville)  Créteil - Université  Créteil - Pointe du Lac      J'utilise Whatsapp. Vous pouvez proposer un appel vidéo pour visiter le logement.Classe énergieABCDEFGGESABCDEFG	monthly_simu : 786 €	ref: E74/0266 	updated_at:   27 juin 2023													ce : C	ges : B	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : 	warming : 	window : 	mngt_fee : 	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-issy-les-moulineaux-92130-r447203123
+Extract city: Issy-Les-Moulineaux	post_code: 92130	piece: 2	badrooms: 1	price: 254900 	size: 31.50	link: /annonces/appartement-issy-les-moulineaux-92130-r447203123	detail: Issy-les-Moulineaux (92130)2 pièces1 chambre31,50 m²8.092 € le m² Voir l'adresse du bien sur une carteIdéal investisseur 5% de rentabilité garantis. Situé à 3 min à pied de la gare RER C Issy, à 5 min à pied des arrêts de bus et du tramway ligne T2, et 10 min du métro. Cet appartement de 31,5 m2 (carrez)  est composé : d'une entrée, d'un séjour avec kitchenette aménagée et équipée et d'une chambre de 13 m2  avec salle d'eau et wc. Pas de vis à visProche écoles, transports et commerces de proximité, cet appartement est situé au 5ème étage sans ascenseur d'une petite copropriété.Double vitrage dans l'ensemble de l'appartement et électricité refaite à neuf également.Ce bien est proposé avec une cave au sous-sol.La présente annonce immobilière vise 1 lot situé dans une copropriété formant 20 lots au total ne faisant l'objet d'aucune procédure en cours et d'un montant de charges d'environ 100 € par mois (soit 1200 € annuel) Information d'affichage énergétique sur ce bien : classe Energie E indice 328 et classe Climat E indice 50.Contact : à tout moment avant 22h00Issy  Jacques Henri Lartigue  Les Moulineaux      J'utilise Whatsapp et Skype. Vous pouvez proposer un appel vidéo pour visiter le logement.Classe énergieABCDEFGGESABCDEFG	monthly_simu : 824 €	ref: E72/3123 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94100-r446600099
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 270000 	size: 45.74	link: /annonces/appartement-saint-maur-des-fosses-94100-r446600099	detail: Saint-Maur-des-Fossés (94100)2 pièces1 chambre45,74 m²5.903 € le m² Voir l'adresse du bien sur une carte Voir la visite virtuelleCentre ville. Idéalement situé. A proximité immédiate de la gare RER A Le Parc-De-Saint-Maur (140 m), proche de tous commerces, commodités, mairie etc...Au 3ème et dernier étage sans ascenseur d'une petite copropriété ancienne (mais en très bon état : ravalement récent).Appartement 2 pièces de 45,74 m2 en très bon état, très lumineux avec vue dégagée il se compose d'une petite entrée indépendante desservant : un wc suspendu séparé, une cuisine aménagée séparée, d'une pièce de vie principale avec rangement ainsi qu'une chambre avec rangement également et salle de bains avec baignoire et lavabo. Dressing aménagé.Parquet salon et chambre. Carrelage pièces humides. Chauffage au gaz. Double vitrage.Une cave complète ce bien. Interphone, digicode. Porte immeuble en cours de remplacement (travaux votés en 2022)Charges de copropriété : 1400 €Taxe foncière 2022 : 881 €Le Parc de Saint-Maur  Saint-Maur - Créteil  Champigny  Prix validé par PAPQu'est-ce que ça veut dire ?Classe énergieABCDEFGGESABCDEFG	monthly_simu : 882 €	ref: E66/0099 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-vanves-92170-r447100124
+Extract city: Vanves	post_code: 92170	piece: 2	badrooms: 1	price: 260000 	size: 39.30	link: /annonces/appartement-vanves-92170-r447100124	detail: Vanves (92170)2 pièces1 chambre39,30 m²6.616 € le m² Voir l'adresse du bien sur une carte Voir la visite virtuelleBIEN SOUS OFFRESitué dans un quartier agréable, à proximité des commerces, services et jardins, Proche des transports, en bas de l'immeuble bus 89, à 7 mn à pied du métro Malakoff-plateau de Vanves ( L13) et à 10 mn à pied de la gare Vanves Malakoff,Appartement fonctionnel de 39,3 m2, situé au 2 ème étage d'un petit immeuble de 5 étages, lumineux et exposé Sud-est, il se compose d'une entrée, 1 séjour,1 chambre, une cuisine, une salle de bains et un wc indépendant+ 1 cave.Rénovation énergétique réalisée en 2022Diagnostics effectués : classé C (performance énergétique) et C (émission de gaz).Rafraîchissement à prévoirCopropriété sympathique et bien gérée avec des charges faibles ( environ 1 300 € par an), un Local  à vélo et l'accès à la fibre optique.Malakoff - Plateau de Vanves  Vanves - Malakoff  Georges Brassens  Classe énergieABCDEFGGESABCDEFG	monthly_simu : 844 €	ref: E71/0124 	updated_at:   27 juin 2023													ce : C	ges : C	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : étages	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : séjour,.	kitchen_desc : cuisine. 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94100-r448500126
+Extract city: Saint-Maur-Des-Fossés	post_code: 94100	piece: 2	badrooms: 1	price: 213000 	size: 44.00	link: /annonces/appartement-saint-maur-des-fosses-94100-r448500126	detail: Saint-Maur-des-Fossés (94100)2 pièces1 chambre44 m²4.841 € le m² Voir l'adresse du bien sur une carteAppartement à Saint Maur des Fossés dans le quartier d'Adamville (rue Ledru Rollin), dans un immeuble des années 60 de seulement 8 lots.L'appartement est en bon état général il fait environ 44 m2 en rez-de-chaussée avec une place de parking à l'arrière du bâtiment.La cuisine est aménagée : four, hotte, le chauffage est au gaz de ville (chaudière bien entretenue installée en 20217 certificats d'entretien disponibles)Les charges sont d'environ 1500 euros et la taxe foncière de 782 euros.Il ne se situe pas loin de la place Kennedy.Prix : 213 000 Euros.Frederic BRIARDLe Parc de Saint-Maur  La Varenne - Chennevières  Saint-Maur - Créteil  Classe énergieABCDEFGGESABCDEFG	monthly_simu : 663 €	ref: E85/0126 	updated_at:   27 juin 2023													ce : E	ges : E	trasports : 	elevator : 	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-boulogne-billancourt-92100-r448003492
+Extract city: Boulogne-Billancourt	post_code: 92100	piece: 2	badrooms: 1	price: 252000 	size: 32.27	link: /annonces/appartement-boulogne-billancourt-92100-r448003492	detail: Boulogne-Billancourt (92100)2 pièces1 chambre32,27 m²7.809 € le m² Voir l'adresse du bien sur une carteAppartement 2 pièces situé en rez-de-chaussée  d’un petit immeuble ancien dans le quartier Escudier, à proximitéde toutes commodités ainsi que du métro Boulogne-Jean Jaurès et du marché Escudier.Ce joli appartement dispose d'un séjour, côté rue, exposé à l'Est, un dégagement, une salle d'eau, wc  séparés, une cuisine entièrement équipée  refait à neuf en août 2021  ainsi qu’une chambre sur cour, exposée à l'Ouest.Peinture de l appartement refaite.Copropriété de 20 lots Charges annuelles : 938 euros.Comprend également une cave.Boulogne - Jean Jaurès  Boulogne - Pont de Saint-Cloud (Rhin et Danube)  Parc de Saint-Cloud  Classe énergieABCDEFG	monthly_simu : 813 €	ref: E80/3492 	updated_at:   26 juin 2023													ce : E	ges : 	trasports : 	elevator : 	balcon : 	cave : cave.	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : séjour.	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-nanterre-92000-r444502659
+Extract city: Nanterre	post_code: 92000	piece: 2	badrooms: 1	price: 250000 	size: 47.00	link: /annonces/appartement-nanterre-92000-r444502659	detail: Nanterre (92000)2 pièces1 chambre47 m²5.319 € le m² Voir l'adresse du bien sur une carteNanterre Préfecture Parc André MalrauxAppartement de 47 m², idéalement positionné à 3mn du RER A et à proximité de la Défense.  Situé au 5e étage avec ascenseur, cet appartement calme comprend une chambre, une entrée, une sdb et un salon/cuisine. Très lumineux, il est situé dans un immeuble avec accès direct au superbe Parc André Malraux. Rare : deux box fermés en sous-sol.Gardien et toutes commodités à proximité (A pied, 3min RER A, 5min RER E Nanterre La folie, (ouverture prévue en 2023) , 7min Nanterre Arena, Crèche, Ecole maternelle et élémentaire).Charges de copropriété annuelles 2400 euros env.Idéal 1er achat ou investissement locatif !Nanterre - Préfecture  Nanterre - Université    La Défense         Classe énergieABCDEFGGESABCDEFG	monthly_simu : 805 €	ref: E45/2659 	updated_at:   26 juin 2023													ce : E	ges : D	trasports : 	elevator : ascenseur	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambrechambre	livroom_desc : 	kitchen_desc : salon/cuisine. 
+Collecting detail page from https://www.pap.fr/annonces/appartement-fontenay-aux-roses-92260-r445800893
+Extract city: Fontenay-Aux-Roses	post_code: 92260	piece: 2	badrooms: 1	price: 255000 	size: 50.00	link: /annonces/appartement-fontenay-aux-roses-92260-r445800893	detail: Fontenay-aux-Roses (92260)2 pièces1 chambre50 m² Voir l'adresse du bien sur une carteAppartement 2 pièces de 50m2, en très bon état, lumineux dans un petit immeuble de 4 étages dans une résidence de Haut standing calme et verdoyante.Le bien vient accompagné d'une grande cave de 10m2 et d'une place de stationnement privative dans un parking en sous sol couvert et sécurisé.L'immeuble est équipé d'un ascenseur et vous permettra d'accéder à votre étage.Dans l'appartement, un grand Hall d'entrée vient desservir les différentes pièces :-   Une chambre de 11m2.-   Un grand séjour de 17m2 donnant sur le Balcon.-   Une cuisine aménagée et équipée de 6,5m2-   Une salle de Bain de 5m2-   Un grand balcon de 6m2 avec vue sur Jardin.De nombreux placards de rangement viennent compléter l'intérieur de l'appartement.Appartement rafraîchi. Aucuns travaux à prévoir.A propos de la copropriété : Aucune procédure en cours.Le montant des charges de copropriétés : 210€/ moisMontant estimé des dépenses annuelles d'énergie pour un usage standard : 649€ par an. Prix moyens des énergies indexés sur l'année 2009-2010-2011 (abonnements compris).N'hésitez pas à me contacter si vous souhaitez obtenir des informations, obtenir des photos supplémentaires ou programmer une visite.Pas de démarchage commercial svp.Robinson  Fontenay-aux-Roses  Division Leclerc  Classe énergieABCDEFGGESABCDEFG	monthly_simu : 824 €	ref: E58/0893 	updated_at:   26 juin 2023													ce : D	ges : E	trasports : 	elevator : 	balcon : Balcon.	cave : 	parking : 	floor : étageétage.	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-colombes-92700-r447001921
+Extract city: Colombes	post_code: 92700	piece: 2	badrooms: 1	price: 225000 	size: 38.75	link: /annonces/appartement-colombes-92700-r447001921	detail: Colombes (92700)2 pièces1 chambre38,75 m²5.806 € le m² Voir l'adresse du bien sur une carteDans le quartier de l'Europe avec autour beaucoup d'immeubles neufs et les commerces au pied de l'immeuble (supermarché, pharmacie, boulangerie…), notre appartement de 38,75m2 a été refait à neuf en Octobre 2020. Situé au 4e étage il donne entièrement sur l'arrière sans aucune rue ou nuisances, très lumineux, orienté au Sud-Sud-Ouest.Cet appartement offre :- une vaste entrée comportant un placard avec 2 portes miroir,- un salon donnant sur un vaste bacon (4,7m2) très calme offrant une vue aérée,- une cuisine ouverte, récemment refaite à neuf avec des meubles Ikea blanc,- une salle de bain avec baignoire et toilettes,- une chambre lumineuse avec un placard 2 vantaux.Idéal pour pied à terre, couple ou investissement locatif. Rendement locatif : 750€ / mois.Immeuble livré en 2006.1 ascenseur.1 place de parking en sous-sol, accès avec un sas d'1 grille et 1 porte pour plus de sécurité.Visiophone.Chauffage électrique individuel récent - Octobre 2020 pour les pièces et Janvier 2021 pour le chauffe serviettes.Chauffe-eau électrique neuf – changé en Septembre 2022.Parquet chêne massif.DPE estimé après travaux : CCharges : eau froide - entretien parties communes >> 350€/trimestre – soit 116€/mois.Transports en commun :10min à pied du centre de ColombesBus 235 (Métro 13), 304, 164 et 157Train : ligne J et L (18min à pied/10min en bus de la Gare Colombes ou de la Gare du Stade)Tramway (T2) Parc Pierre LagravèreTramway (T1) extension prévu de passer devant l'immeubleNous restons à votre disposition par mail ou par tel après 18h.Agences s'abstenir. Merci.NB : Le propriétaire refuse le démarchage commercial.Ile Marante  Stade Yves du Manoir  Charles Péguy  Classe énergieABCDEFG	monthly_simu : 709 €	ref: E70/1921 	updated_at:   18 juin 2023													ce : C	ges : 	trasports : 	elevator : ascenseur.	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : Charge	ppt_tax : 	shower : 	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-courbevoie-92400-r430001229
+Extract city: Courbevoie	post_code: 92400	piece: 2	badrooms: 1	price: 315000 	size: 45.00	link: /annonces/appartement-courbevoie-92400-r430001229	detail: Courbevoie (92400)2 pièces1 chambre45 m²7.000 € le m² Voir l'adresse du bien sur une carteAppartement 2 pièces (avec cave), au 6e étage sur 7 avec ascenseur.Il comprend : une cuisine ouverte sur salon, une chambre avec grand placard intégré( 2m75 de large sur 2m75 hauteur), une salle d eau avec grande douche (1m30×90), toilettes séparées et autre grand placard dans couloir (2m50).L'électroménager (plaque, frigo, lave vaisselle, four) est vendu avec.Situé à proximité de la gare de Courbevoie (10mn de Paris St Lazare) et des rues commerçantes.À 10mn à pied de La Défense.Parking public payant à 200 m.Les charges sont de 2100 euros annuelles et comprennent le gardien, ascenseur, chauffage et eau.D'autres photos sur demande.Courbevoie  Faubourg de l'Arche  Les Fauvelles  Classe énergieABCDEFGGESABCDEFG	monthly_simu : 1.055 €	ref: D00/1229 	updated_at:   22 juin 2023													ce : E	ges : E	trasports : 	elevator : ascenseur.ascenseur	balcon : 	cave : cave)	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : douch	bedroom_desc : chambre	livroom_desc : 	kitchen_desc : 
+Collecting detail page from https://www.pap.fr/annonces/appartement-saint-maur-des-fosses-94210-r443502012
+Extract city: Saint-Maur-Des-Fossés	post_code: 94210	piece: 2	badrooms: 1	price: 299000 	size: 47.00	link: /annonces/appartement-saint-maur-des-fosses-94210-r443502012	detail: Saint-Maur-des-Fossés (94100)2 pièces1 chambre47 m²6.362 € le m² Voir l'adresse du bien sur une carteSitué dans le quartier des Mûriers à St-Maur-des-Fossés, à proximité immédiate des bords de marne (5 minutes à pied), je vous invite à découvrir ce beau T2 d'une superficie de 47 m².L'appartement est situé au 4ème et dernier étage de l'immeuble, accessible à l'aide d'un ascenseur.Il se compose d'une petite entrée donnant sur un grand salon avec une cuisine ouverte, bien aménagée et entièrement équipée (lave-vaisselle, four, four à micro-onde, et plaques de cuisson).Surplombant la ville, un grand balcon filant de 10 m² vous donnera accès à une vue dégagée sur les toits de la ville de Saint-Maur.Au fond de la pièce se trouve l'espace nuit avec une salle d'eau comportant une belle et grande douche à l'italienne (toilettes séparées).Attenante à la salle de bain, vous trouverez une chambre comportant un grand placard intégré et avec un accès sur le balcon filant. L'appartement étant situé en bout d'immeuble, il n'y a pas de voisin côté chambre.Niveau exposition, il vous sera possible d'assister à de magnifiques couchés de soleil tous les soirs, l'appartement est très lumineux jusqu'à 21h30 -22h en été.L'appartement a été rénové en 2018, il n'y a pas de travaux à prévoir dans l'immédiat. Le bien comporte également une cave de 4 m².Pour pouvoir facilement vous stationner, il est également possible d'acheter un box de 15 m² situé dans le parking souterrain de la copropriété (en supplément).L'immeuble se situe également à moins d'une minute à pied d'un arrêt de bus (ligne 117) qui vous dépose en 9 minutes à la gare du RER A de Champigny afin de pouvoir rejoindre Paris facilement.Les charges de copropriété sont de 325 euros par mois (entretien de l'immeuble, eau chaude, eau froide et chauffage inclus).Un ravalement intégral de l'immeuble a été effectué durant le premier semestre de l'année 2023, celui-ci a été totalement payé (300 000 euros au total).A visiter sans tarder !La Varenne - Chennevières  Le Parc de Saint-Maur  Sucy - Bonneuil      J'utilise Whatsapp. Vous pouvez proposer un appel vidéo pour visiter le logement.Classe énergieABCDEFGGESABCDEFGLogement à consommation énergétique excessive : classe F	monthly_simu : 994 €	ref: E35/2012 	updated_at:   24 juin 2023													ce : F	ges : F	trasports : 	elevator : ascenseur.	balcon : 	cave : 	parking : 	floor : 	warming : 	window : 	mngt_fee : charge	ppt_tax : 	shower : douch	bedroom_desc : chambrechambre.	livroom_desc : 	kitchen_desc : 
+process shutting down
+running all "atexit" finalizers with priority >= 0
+running the remaining "atexit" finalizers

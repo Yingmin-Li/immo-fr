@@ -7,7 +7,7 @@ conda create -n immo-fr python=3.8
 conda init bash # restart shell window
 conda activate immo-fr
 
-conda install -c conda-forge pydrive  dateparser beautifulsoup4 selenium lxml
+conda install -c conda-forge pydrive  dateparser beautifulsoup4 selenium lxml PIL
 
 # python3 -m venv facture-approchement
 
