@@ -23,7 +23,7 @@ class ScrapLogger():
     @classmethod
     def get_logger(self, logger_name):
         logger = multiprocessing.get_logger()
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.INFO)
         logger.addHandler(self.get_console_handler())
         logger.addHandler(self.get_file_handler(logger_name+'.log'))
         logger.propagate = False

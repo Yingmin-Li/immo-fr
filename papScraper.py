@@ -24,9 +24,18 @@ import re
 
 from setupLogger import ScrapLogger
 
+# Download image
+DOWNLOAD_IMG=True
+
+# Page limit
+PAGE_LIMIT=200
+
 # Define urls
 PAP_URL='https://www.pap.fr/annonce/vente-appartements-hauts-de-seine-92-g456g43343g43706-2-pieces-a-partir-de-1-chambres-jusqu-a-330000-euros-entre-30-et-50-m2'
 PAP_BASE_URL='https://www.pap.fr'
+PAP_STATIS_BASE_URL='https://static.pap.fr'
+PAP_CDN_BASE_URL='https://cdn.pap.fr'
+PAP_UPLOAD_BASE_URL='https://upload.pap.fr'
 
 # Defind pap html page
 PAP_ADS_HTML_FILE='html/PAP_ADS_0.html'
@@ -50,6 +59,7 @@ class AdContainer(object):
 
         self.city = city
         self.post_code = post_code
+        self.insee_code = insee_code
         self.piece = piece
         self.badrooms = badrooms
         self.price = price
@@ -91,7 +101,9 @@ class AdContainerWithDetail(AdContainer):
         self.updated_at=''
         self.ce = ''
         self.ges = ''
-        self.trasports = ''
+        self.transports = ''
+        self.contact = ''
+
 
         # init extra info field
         self.elevator = ''
@@ -109,23 +121,27 @@ class AdContainerWithDetail(AdContainer):
         self.kitchen_desc  = ''
 
 
+
         self.extractInfoFromDetail()
         self.extractExtraInfoFromDetailText()
-        self.downloadImages()
+        if DOWNLOAD_IMG:
+            self.downloadImages()
 
 
     def downloadImages(self):
         page_soup = BeautifulSoup(self.detail_html,features="lxml")
         regex_img_tags = re.compile('owl-thumb-item.*')
         img_parent_tags = page_soup.findAll("a", {"class":regex_img_tags})
-        self.log.debug("Found "+str(len(img_parent_tags)))
+        self.log.debug("Found "+str(len(img_parent_tags))+" images")
         index=0
         if img_parent_tags is not None:
             for img_parent_tag in img_parent_tags:
                 index += 1
                 img_tag = img_parent_tag.find("img")
                 img_url = img_tag['src']
-                self.log.debug("Downloading img from "+img_url)
+                if not PAP_BASE_URL in img_url and not PAP_STATIS_BASE_URL in img_url and not PAP_CDN_BASE_URL in img_url and not PAP_UPLOAD_BASE_URL in img_url:
+                    img_url =PAP_BASE_URL+img_url
+                self.log.info("Downloading img from "+img_url)
                 img_path = urlparse(img_url)
                 img_name = os.path.basename(img_path.path)
                 img_dir = self.ref.replace('/','-')
@@ -142,7 +158,6 @@ class AdContainerWithDetail(AdContainer):
 
     def extractExtraInfoFromDetailText(self):
         html_list=self.detail_tag.get_text(strip=True, separator='\n').splitlines()
-        self.log.debug("Detail text: "+self.detail_tag.get_text(strip=True, separator='\n'))
         text_list = []
         for html_ele in html_list:
             #list_one_line = re.split(';|,|.', html_ele)
@@ -150,9 +165,9 @@ class AdContainerWithDetail(AdContainer):
             text_list += list_one_line
 
 
-        for line in self.detail_tag.get_text(strip=True, separator='\n'):
-            line=line.strip()
-            #self.log.debug('Analyzing detail line: '+line)
+        for line in re.split(';|\.', self.detail_tag.text):
+            line=line.strip().replace('\n','').replace(',','').replace('"','')
+            self.log.debug('Analyzing detail line: '+line)
             if 'ascenseur'.lower() in line.lower():
                 self.elevator += line.strip()
             if 'balcon'.lower() in line.lower() or 'terasse' in line:
@@ -204,17 +219,23 @@ class AdContainerWithDetail(AdContainer):
 
         if container.findAll("ul", {"class":"item-transports"}) is not None:
             transport_tags = container.findAll("ul", {"class":"item-transports"})
+            self.log.debug("Transport tags: "+ str(transport_tags[0].attrs))
             for transport_tag in transport_tags:
-                transport_label = transport_tag.find("span", {"class":"label"}).text+':'
-                self.transports = transport_label
-                regex_transport_lines = re.compile('icon .*')
-                transport_lines = transport_tag.findAll("span", {"class":regex_transport_lines})
-                for line_tag in transport_lines:
-                    self.transports += line_tag['class'][0]+','
-                self.transports +=';'
+                transport_label_tag = transport_tag.find("span", {"class":"label"})
+                if transport_label_tag is not None:
+                    transport_label = transport_label_tag.text+':'
+                    self.transports = transport_label
+                    regex_transport_lines = re.compile('icon .*')
+                    transport_lines = transport_tag.findAll("span", {"class":regex_transport_lines})
+                    for line_tag in transport_lines:
+                        self.transports += line_tag['class'][1]+','
+                    self.transports +=';'
+                    self.log.debug("All transport tags : "+ self.transports)
+        if container.find("p", {"class":"h3 txt-indigo"}) is not None:
+            self.contact = container.find("p", {"class":"h3 txt-indigo"}).text.replace(" ",'').replace("\.",'').replace("\t",'').replace("\n",'')
 
     def dump(self):
-        print("City: " + str(self.city) + "\tpost_code: " + str(self.post_code) + "\tpiece: " + str(self.piece) + "\tbadrooms: " + str(self.badrooms) + "\tprice: " + str(self.price)  + "\tsize: " + str(self.size) + "\tlink: " + str(self.link)  + " detail: " + str(self.detail) + " monthly_simu : " + str(self.monthly_simu) + " ref: " + str(self.ref) + " updated_at: " + str(self.updated_at) + " ce : " + str(self.ce) + " ges : " + str(self.ges) + " trasports : " + str(self.trasports) + " elevator : " + str(self.elevator) + " balcon : " + str(self.balcon) + " cave : " + str(self.cave) + " parking : " + str(self.parking) + " floor : " + str(self.floor) + " warming : " + str(self.warming) + " window : " + str(self.window) + " mngt_fee : " + str(self.mngt_fee) + " ppt_tax : " + str(self.ppt_tax) + " shower : " + str(self.shower) + " bedroom_desc : " + str(self.bedroom_desc) + " livroom_desc : " + str(self.livroom_desc) + " kitchen_desc : " + str(self.kitchen_desc))
+        print("City: " + str(self.city) + "\tpost_code: " + str(self.post_code) + "\tpiece: " + str(self.piece) + "\tbadrooms: " + str(self.badrooms) + "\tprice: " + str(self.price)  + "\tsize: " + str(self.size) + "\tlink: " + str(self.link)  + " detail: " + str(self.detail) + " monthly_simu : " + str(self.monthly_simu) + " ref: " + str(self.ref) + " updated_at: " + str(self.updated_at) + " ce : " + str(self.ce) + " ges : " + str(self.ges) + " transports : " + str(self.transports)+ " contact : " + str(self.contact) + " elevator : " + str(self.elevator) + " balcon : " + str(self.balcon) + " cave : " + str(self.cave) + " parking : " + str(self.parking) + " floor : " + str(self.floor) + " warming : " + str(self.warming) + " window : " + str(self.window) + " mngt_fee : " + str(self.mngt_fee) + " ppt_tax : " + str(self.ppt_tax) + " shower : " + str(self.shower) + " bedroom_desc : " + str(self.bedroom_desc) + " livroom_desc : " + str(self.livroom_desc) + " kitchen_desc : " + str(self.kitchen_desc))
 
     def toString(self):
         return "city: " + str(self.city) + "\tpost_code: " + str(self.post_code) \
@@ -223,7 +244,8 @@ class AdContainerWithDetail(AdContainer):
         + "\tlink: " + str(self.link) + "\tdetail: " + str(self.detail) \
         + "\tmonthly_simu : " + str(self.monthly_simu) + "\tref: " + str(self.ref) \
         + "\tupdated_at: " + str(self.updated_at) + "\tce : " + str(self.ce) \
-        + "\tges : " + str(self.ges) + "\ttrasports : " + str(self.trasports) \
+        + "\tges : " + str(self.ges) + "\ttransports : " + str(self.transports) \
+        + "\tcontact : " + str(self.contact) \
         + "\televator : " + str(self.elevator) + "\tbalcon : " + str(self.balcon) \
         + "\tcave : " + str(self.cave) + "\tparking : " + str(self.parking) \
         + "\tfloor : " + str(self.floor) + "\twarming : " + str(self.warming) \
@@ -233,15 +255,16 @@ class AdContainerWithDetail(AdContainer):
         + "\tkitchen_desc : " + str(self.kitchen_desc)
 
     def to_tuple(self):
-        return (self.city, self.post_code, self.piece, self.badrooms, self.link, self.desc, \
+        return (self.city, self.post_code, self.piece, self.badrooms, \
+            self.price, self.size,self.link, self.desc, \
             self.detail, self.monthly_simu, self.ref, self.updated_at, self.ce, self.ges, \
-            self.trasports, self.elevator, self.balcon, self.cave, self.parking, self.floor, \
-            self.warming, self.window, self.mngt_fee, self.ppt_tax, self.shower, \
+            self.transports,self.contact, self.elevator, self.balcon, self.cave, self.parking,\
+            self.floor, self.warming, self.window, self.mngt_fee, self.ppt_tax, self.shower, \
             self.bedroom_desc, self.livroom_desc, self.kitchen_desc)
 
 
     def to_csv(self):
-        with open(PAP_APPT_ON_SALE_CSV, "a") as stream:
+        with open(PAP_APPT_ON_SALE_CSV, "a", newline='') as stream:
             writer = csv.writer(stream)
             writer.writerow(self.to_tuple())
 
@@ -270,14 +293,15 @@ class PAPScrapper():
         r = file.read()
         return (soup(r, "html.parser"))
 
-    def scrap_summary_html(self):
+    def scrap_one_summary_html(self,url,check_cookie=False):
 
         # Load the page with JavaScript and cookies requirement
-        self.driver.get(PAP_URL)
+        self.driver.get(url)
 
         # Continue without accepting cookie
-        cookie_deny = self.driver.find_element(By.CLASS_NAME, "sd-cmp-3ScGE")
-        cookie_deny.click()
+        if check_cookie:
+            cookie_deny = self.driver.find_element(By.CLASS_NAME, "sd-cmp-3ScGE")
+            cookie_deny.click()
 
         # Save html content to file
         with open(PAP_ADS_HTML_FILE, "w", encoding='utf-8') as f:
@@ -286,6 +310,16 @@ class PAPScrapper():
         # parse ads
         html = self.driver.page_source
         return html
+
+    def scrap_all_summary(self):
+        html=self.scrap_one_summary_html(PAP_URL,True)
+        self.parseAdsPnOnePage(html)
+
+        for i in range(2,PAGE_LIMIT):
+            url=PAP_URL+'-'+str(i)
+            self.log.info("Collecting from "+url)
+            html=self.scrap_one_summary_html(url)
+            self.parseAdsPnOnePage(html)
 
     def scrap_detail_html(self,link):
         print(PAP_BASE_URL+link)
@@ -306,7 +340,7 @@ class PAPScrapper():
             return data
         return None
 
-    def parseAds(self,html):
+    def parseAdsPnOnePage(self,html):
         page_soup = BeautifulSoup(html,features="lxml")
         ads = []
 
@@ -349,9 +383,9 @@ class PAPScrapper():
                         elif ( " m2" in tag.text ):
                             surface = tag.text.replace(' m2','')
 
-                price = container.find("span", {"class":"item-price"}).text.split('(')[0].strip().replace('€','').replace('.','')
+                price = container.find("span", {"class":"item-price"}).text.split('(')[0].strip().replace('€','').replace('.','').replace(' ','')
                 link = container.find("a", {"class":"item-title"})['href']
-                desc = container.find("p", {"class":"item-description"}).text.replace('\n', '').replace('"',"'")
+                desc = container.find("p", {"class":"item-description"}).text.replace('\n', '').replace('\t', '').replace('"',"'")
 
                 # get detail html of one ad
                 detail_html = self.scrap_detail_html(link)
@@ -369,6 +403,6 @@ class PAPScrapper():
 
 if __name__ == "__main__":
     papScrapper = PAPScrapper()
-    html=papScrapper.scrap_summary_html()
-    #html=papScrapper.getPageHtmlFromFile(
-    papScrapper.parseAds(html)
+    papScrapper.scrap_all_summary()
+
+
