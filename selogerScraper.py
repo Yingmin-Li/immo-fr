@@ -31,7 +31,7 @@ DOWNLOAD_IMG=True
 PAGE_LIMIT=200
 
 # Define urls
-SELOGER_URL='https://www.seloger.com/list.htm?projects=2,5&types=1&natures=1,2,4&places=[{%22subDivisions%22:[%2292%22]},{%22subDivisions%22:[%2294%22]},{%22subDivisions%22:[%2275%22]}]&price=150000/330000&surface=30/50&bedrooms=1&rooms=2&mandatorycommodities=0&enterprise=0&qsVersion=1.0&m=search_refine-redirection-search_results'
+SELOGER_URL='https://www.seloger.com/list.htm?projects=2,5&types=1&natures=1,2,4&places=[{"subDivisions":["92"]},{"subDivisions":["94"]},{"subDivisions":["75"]}]&price=150000/330000&surface=30/50&bedrooms=1&rooms=2&mandatorycommodities=0&enterprise=0&qsVersion=1.0'
 SELOGER_BASE_URL='https://www.seloger.fr'
 SELOGER_STATIS_BASE_URL='https://v.seloger.com'
 SELOGER_CDN_BASE_URL='https://cdn.seloger.com'
@@ -85,7 +85,7 @@ class AdContainer(object):
 
 
 class AdContainerWithDetail(AdContainer):
-    def __init__(self,city, post_code, piece, badrooms, price,surface,link, desc, detail_html):
+    def __init__(self,city, post_code, piece, badrooms, price,surface,link, desc, detail_html,floor_info):
         super().__init__(city, post_code, piece, badrooms, price,surface,link,desc)
 
         # Setup logger
@@ -105,12 +105,12 @@ class AdContainerWithDetail(AdContainer):
         self.contact = ''
 
 
-        # init extra info field
+        # init pap extra info fields
         self.elevator = ''
         self.balcon = ''
         self.cave = ''
         self.parking = ''
-        self.floor = ''
+        self.floor = floor_info+ ' '
         self.warming = ''
         self.window = ''
         self.mngt_fee = ''
@@ -121,6 +121,14 @@ class AdContainerWithDetail(AdContainer):
         self.kitchen_desc  = ''
 
 
+        # init seloger extra info fields
+        self.built_at = ''
+        self.cadre_situation = ''
+        self.service_accessibility = ''
+        self.kitch = ''
+        self.hygiene = ''
+        self.prieces_to_live = ''
+        self.coproperty = ''
 
         self.extractInfoFromDetail()
         self.extractExtraInfoFromDetailText()
@@ -196,46 +204,65 @@ class AdContainerWithDetail(AdContainer):
 
     def extractInfoFromDetail(self):
         page_soup = BeautifulSoup(self.detail_html,features="lxml")
-        container = page_soup.find("div", {"class":"wrapper"})
+        container = page_soup.find("div", {"data-test":"main-content"})
 
-        self.detail_tag = page_soup.find("div", {"class":"margin-bottom-30"}).find('p')
+        regex_detail_lines = re.compile('ShowMoreText__.*')
+        self.detail_tag = page_soup.find("div", {"class":regex_detail_lines}).find('p')
         self.detail = self.detail_tag.text.replace('\n', '').replace('\t','').replace('"',"'")
 
-        self.monthly_simu = container.find("span", {"class":"item-mensualite-prix"}).text.replace(' €','').replace(',','')
+        # simulate per month
+        simu_container=page_soup.find("div", {"data-test":"calculator-container"})
+        simu_tag = simu_container.find("span", {"style":"font-size: xx-large; font-weight: bold;"})
+        if simu_tag is not None:
+            self.monthly_simu = simu_tag.text.replace(' €','').replace('','')
 
-        ref_date = container.find("p", {"class":"item-date"}).text
-        if ref_date is not None:
-            ref_date_list = ref_date.split("/")
-            self.ref = ref_date_list[0].replace("Réf. : ","").replace('\t','').replace('\n','')+"/"+ref_date_list[1]
-            self.ref = self.ref.replace(' ','')
-            self.updated_at = ref_date_list[2].replace('\t','').strip()
+        self.built_at = page_soup.xpath('//*[@id="showcase-description"]/div[2]/div[1]/div/div/div/div[2]')[0].text
 
-        if container.findAll("div", {"class":"energy-indice"}) is not None:
-            if container.find("div", {"class":"energy-indice"}) is not None:
-                    self.ce = container.find("div", {"class":"energy-indice"}).find("li", {"class":"active"}).text
-        if container.findAll("div", {"class":"ges-indice"}) is not None:
-            if container.find("div", {"class":"ges-indice"}) is not None:
-                    self.ges = container.find("div", {"class":"ges-indice"}).find("li", {"class":"active"}).text
 
-        if container.findAll("ul", {"class":"item-transports"}) is not None:
-            transport_tags = container.findAll("ul", {"class":"item-transports"})
-            self.log.debug("Transport tags: "+ str(transport_tags[0].attrs))
-            for transport_tag in transport_tags:
-                transport_label_tag = transport_tag.find("span", {"class":"label"})
-                if transport_label_tag is not None:
-                    transport_label = transport_label_tag.text+':'
-                    self.transports = transport_label
-                    regex_transport_lines = re.compile('icon .*')
-                    transport_lines = transport_tag.findAll("span", {"class":regex_transport_lines})
-                    for line_tag in transport_lines:
-                        self.transports += line_tag['class'][1]+','
-                    self.transports +=';'
-                    self.log.debug("All transport tags : "+ self.transports)
-        if container.find("p", {"class":"h3 txt-indigo"}) is not None:
-            self.contact = container.find("p", {"class":"h3 txt-indigo"}).text.replace(" ",'').replace("\.",'').replace("\t",'').replace("\n",'')
+        feature_tag_list = container.findAll("div", {"class": "feature-title"})
+        if feature_tag_list is not None:
+            for feature_tag in feature_tag_list:
+                if ('Cadre et situation' in feature_tag.text):
+                    parent_tag = feature_tag.parent
+                    self.cadre_situation = parent_tag.get_text(separator=' ')
+
+                if ('Services et accessibilité' in feature_tag.text):
+                    parent_tag = feature_tag.parent
+                    self.service_accessibility = parent_tag.get_text(separator=' ')
+
+                if ('Cuisine' in feature_tag.text):
+                    parent_tag = feature_tag.parent
+                    self.kitch = parent_tag.get_text(separator=' ')
+
+                if ('Hygiène' in feature_tag.text):
+                    parent_tag = feature_tag.parent
+                    self.hygiene = parent_tag.get_text(separator=' ')
+
+                if ('Pièces à vivre' in feature_tag.text):
+                    parent_tag = feature_tag.parent
+                    self.prieces_to_live = parent_tag.get_text(separator=' ')
+
+        engergy_feature_tag = container.findAll("div", {"data-test": "energy-features"})
+        if engergy_feature_tag is not None:
+            self.warming = engergy_feature_tag.text
+
+        dpe_tag = container.find("div", {"data-test":"diagnostics-preview-bar-energy"})
+        if dpe_tag is not None:
+            self.ce = dpe_tag.text
+        ges_tag = container.find("div", {"data-test":"diagnostics-preview-bar-emission"})
+        if ges_tag is not None:
+            self.ges = ges_tag.text
+
+        coproprety_tag = container.find("p", {"data-test":"lots-number"})
+        if coproprety_tag is not None:
+            self.coproperty = coproprety_tag.text
+
+        charge_tag = container.find("p", {"data-test":"charges-prev"})
+        if charge_tag is not None:
+            self.mgnt_fee = charge_tag.text
 
     def dump(self):
-        print("City: " + str(self.city) + "\tpost_code: " + str(self.post_code) + "\tpiece: " + str(self.piece) + "\tbadrooms: " + str(self.badrooms) + "\tprice: " + str(self.price)  + "\tsize: " + str(self.size) + "\tlink: " + str(self.link)  + " detail: " + str(self.detail) + " monthly_simu : " + str(self.monthly_simu) + " ref: " + str(self.ref) + " updated_at: " + str(self.updated_at) + " ce : " + str(self.ce) + " ges : " + str(self.ges) + " transports : " + str(self.transports)+ " contact : " + str(self.contact) + " elevator : " + str(self.elevator) + " balcon : " + str(self.balcon) + " cave : " + str(self.cave) + " parking : " + str(self.parking) + " floor : " + str(self.floor) + " warming : " + str(self.warming) + " window : " + str(self.window) + " mngt_fee : " + str(self.mngt_fee) + " ppt_tax : " + str(self.ppt_tax) + " shower : " + str(self.shower) + " bedroom_desc : " + str(self.bedroom_desc) + " livroom_desc : " + str(self.livroom_desc) + " kitchen_desc : " + str(self.kitchen_desc))
+        print("City: " + str(self.city) + "\tpost_code: " + str(self.post_code) + "\tpiece: " + str(self.piece) + "\tbadrooms: " + str(self.badrooms) + "\tprice: " + str(self.price)  + "\tsize: " + str(self.size) + "\tlink: " + str(self.link)  + " detail: " + str(self.detail) + " monthly_simu : " + str(self.monthly_simu) + " ref: " + str(self.ref) + " updated_at: " + str(self.updated_at) + " ce : " + str(self.ce) + " ges : " + str(self.ges) + " transports : " + str(self.transports)+ " contact : " + str(self.contact) + " elevator : " + str(self.elevator) + " balcon : " + str(self.balcon) + " cave : " + str(self.cave) + " parking : " + str(self.parking) + " floor : " + str(self.floor) + " warming : " + str(self.warming) + " window : " + str(self.window) + " mngt_fee : " + str(self.mngt_fee) + " ppt_tax : " + str(self.ppt_tax) + " shower : " + str(self.shower) + " bedroom_desc : " + str(self.bedroom_desc) + " livroom_desc : " + str(self.livroom_desc) + " kitchen_desc : " + str(self.kitchen_desc) + " build_at : " + str(self.build_at) + " cadre_situation : " + str(self.cadre_situation) + " service_accessibility : " + str(self.service_accessibility) + " kitch : " + str(self.kitch) + " hygiene : " + str(self.hygiene) + " prieces_to_live : " + str(self.prieces_to_live) + " coproperty : " + str(self.coproperty))
 
     def toString(self):
         return "city: " + str(self.city) + "\tpost_code: " + str(self.post_code) \
@@ -252,7 +279,11 @@ class AdContainerWithDetail(AdContainer):
         + "\twindow : " + str(self.window) + "\tmngt_fee : " + str(self.mngt_fee) \
         + "\tppt_tax : " + str(self.ppt_tax) + "\tshower : " + str(self.shower) \
         + "\tbedroom_desc : " + str(self.bedroom_desc) + "\tlivroom_desc : "+ str(self.livroom_desc) \
-        + "\tkitchen_desc : " + str(self.kitchen_desc)
+        + "\tkitchen_desc : " + str(self.kitchen_desc) + "\tbuilt_at : " + str(self.built_at) \
+        + "\tcadre_situation : " + str(self.cadre_situation) \
+        + "\tservice_accessibility : " + str(self.service_accessibility) \
+        + "\tkitch : " + str(self.kitch) + "\thygiene : " + str(self.hygiene) \
+        + "\tprieces_to_live : " + str(self.prieces_to_live) + "\tcoproperty : " + str(self.coproperty)
 
     def to_tuple(self):
         return (self.city, self.post_code, self.piece, self.badrooms, \
@@ -260,14 +291,15 @@ class AdContainerWithDetail(AdContainer):
             self.detail, self.monthly_simu, self.ref, self.updated_at, self.ce, self.ges, \
             self.transports,self.contact, self.elevator, self.balcon, self.cave, self.parking,\
             self.floor, self.warming, self.window, self.mngt_fee, self.ppt_tax, self.shower, \
-            self.bedroom_desc, self.livroom_desc, self.kitchen_desc)
+            self.bedroom_desc, self.livroom_desc, self.kitchen_desc, self.built_at, \
+            self.cadre_situation, self.service_accessibility, self.kitch, self.hygiene, \
+            self.prieces_to_live, self.coproperty)
 
 
     def to_csv(self):
         with open(SELOGER_APPT_ON_SALE_CSV, "a", newline='') as stream:
             writer = csv.writer(stream)
             writer.writerow(self.to_tuple())
-
 
 
 class SelogerScrapper():
@@ -293,7 +325,7 @@ class SelogerScrapper():
         r = file.read()
         return (soup(r, "html.parser"))
 
-    def scrap_one_summary_html(self,url,check_cookie=False):
+    def scrap_one_summary_by_url(self,url,check_cookie=False):
 
         # Load the page with JavaScript and cookies requirement
         self.driver.get(url)
@@ -312,13 +344,22 @@ class SelogerScrapper():
         return html
 
     def scrap_all_summary(self):
-        html=self.scrap_one_summary_html(SELOGER_URL,True)
+        html=self.scrap_one_summary_by_url(SELOGER_URL,True)
         self.parseAdsPnOnePage(html)
 
+        # Iterate over all pages
         for i in range(2,PAGE_LIMIT):
-            url=SELOGER_URL+'-'+str(i)
+            page_soup = BeautifulSoup(html,features="lxml")
+            next_button = page_soup.find("div", {"data-testid":"gsl.uilib.Paging.nextButton.Icon"})
+            next_button.click()
+            url=SELOGER_URL+'&LISTING-LISTpg='+str(i)
             self.log.info("Collecting from "+url)
-            html=self.scrap_one_summary_html(url)
+
+            # Load the page with JavaScript and cookies requirement
+            self.driver.get(url)
+            # parse ads
+            html = self.driver.page_source
+
             self.parseAdsPnOnePage(html)
 
     def scrap_detail_html(self,link):
@@ -345,33 +386,32 @@ class SelogerScrapper():
         ads = []
 
         #print(page_soup)
-        containers = page_soup.find("div", {"class":"row row-large-gutters page-item"}).findAll("div", {"class":"search-list-item-alt"})
+        containers = page_soup.find("div", {"data-test":"sl.page-de-list"}).findAll("div", {"data-test":"sl.explore.card-containe"})
         self.log.debug("To collect "+str(len(containers))+ " ads on the current page.")
 
         for container in containers:
 
             #print(container)
+            price = 0
             city = ""
             post_code = 0
             badrooms=0
             piece=0
             surface=0
 
-            price = container.findAll("span", {"class":"item-price"})
+            floor_info=''
+            community=''
+
+
+            price_tag = container.find("div", {"data-test":"sl.price-label"})
+            if price_tag is not None:
+                price=price_tag.text.replace("€", '').replace(' ','')
 
             # determin if container is a real ad
-            if ("€" in price[0].text ):
-                # city + post code in title
-                city_pc = container.find("a", {"class":"item-title"}).find("span", {"class":"h1"}).text
-                # city name
-                city = city_pc.split("(")[0].strip()
-
-                if len(city_pc.split("(")) >1:
-                    # post code
-                    post_code = city_pc.split("(")[1].split(")")[0].strip()
+            if ("€" in price_tag.text ):
 
                 # get other info
-                tags_parent = container.findAll("ul", {"class":"item-tags"})
+                tags_parent = container.findAll("div", {"data-test":"sl.tagsLine"})
 
                 if len(tags_parent) >0 :
                     tags = tags_parent[0].findAll("li")
@@ -380,17 +420,26 @@ class SelogerScrapper():
                             piece = tag.text.replace(' pièces','')
                         elif ( " chambre" in tag.text):
                             badrooms = tag.text.replace(' chambre','')
-                        elif ( " m2" in tag.text ):
-                            surface = tag.text.replace(' m2','')
+                        elif ( " m²" in tag.text ):
+                            surface = tag.text.replace(' m²','')
+                        elif ('Étage ' in tag.text ):
+                            floor_info = tag.text.replace('Étage ')
 
-                price = container.find("span", {"class":"item-price"}).text.split('(')[0].strip().replace('€','').replace('.','').replace(' ','')
-                link = container.find("a", {"class":"item-title"})['href']
-                desc = container.find("p", {"class":"item-description"}).text.replace('\n', '').replace('\t', '').replace('"',"'")
+
+                link = container.find("a", {"data-testid":"sl.explore.agencyLogo"})['href']
+                adddr_tag = container.find("div", {"data-test":"sl.address"})
+                if adddr_tag is not None:
+                    adddr = adddr_tag.text # La Chapelle-Marx Dormoy à Paris 18ème (75018)
+                    community = adddr.split(" à ")[0]
+                    city_post_code = adddr.split(" à ")[1]
+                    city = city_post_code.split(" (")[0]
+                    post_code = city_post_code.split(" (")[1].split(")")[0]
+                desc = container.find("div", {"data-testid":"sl.explore.card-description"}).text.replace('\n', '').replace('\t', '').replace('"',"'")
 
                 # get detail html of one ad
                 detail_html = self.scrap_detail_html(link)
                 if detail_html is not None:
-                    adContainer = AdContainerWithDetail(city, post_code, piece, badrooms, price,surface,link, desc, detail_html)
+                    adContainer = AdContainerWithDetail(city, post_code, piece, badrooms, price,surface,link, desc, detail_html, floor_info)
 
                     self.log.debug("Extract "+ adContainer.toString())
                     adContainer.to_csv()
