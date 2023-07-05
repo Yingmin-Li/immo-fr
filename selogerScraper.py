@@ -6,6 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from selenium.webdriver import ActionChains
+
 from bs4 import BeautifulSoup as soup
 from bs4 import BeautifulSoup
 import requests
@@ -315,6 +317,7 @@ class SelogerScrapper():
         self.chrome_options = Options()
         self.userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36"
         self.chrome_options.add_argument(f'user-agent={self.userAgent},referer={SELOGER_URL}')
+        self.chrome_options.add_argument("--enable-javascript")
 
         # Create a new Chrome driver instance
         self.service = Service(executable_path=webdriver_path)
@@ -325,15 +328,39 @@ class SelogerScrapper():
         r = file.read()
         return (soup(r, "html.parser"))
 
+    def byPassPuzzleCaptcha(self):
+
+        actions = ActionChains(self.driver)
+
+        slider_container = self.driver.find_element(By.ID,'captcha__frame')
+        slider = driver.find_element(By.CLASS_NAME, 'slider')
+
+        # Perform sliding action
+        for x in range(10000):
+            actions.move_to_element(slider).click_and_hold().move_by_offset(x, 0).release().perform()
+            time.sleep(0.1)
+
+
     def scrap_one_summary_by_url(self,url,check_cookie=False):
 
         # Load the page with JavaScript and cookies requirement
         self.driver.get(url)
 
+        print(self.driver.page_source)
+
+        # Check if I am blocked
+        while 'You have been blocked' in self.driver.page_source or '你被封锁了' in self.driver.page_source :
+            # Sleep to avoid robot forbidden
+            time.sleep(5)
+
+            self.bypassPuzzleCaptcha()
+            self.driver.get(url)
+
         # Continue without accepting cookie
         if check_cookie:
             cookie_deny = self.driver.find_element(By.CLASS_NAME, "didomi-continue-without-agreeing")
-            cookie_deny.click()
+            if cookie_deny is not None:
+                cookie_deny.click()
 
         # Save html content to file
         with open(SELOGER_ADS_HTML_FILE, "w", encoding='utf-8') as f:
